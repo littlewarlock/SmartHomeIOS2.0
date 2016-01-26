@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9060" systemVersion="15B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9051"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MWPhotoBrowser">
+            <connections>
+                <outlet property="titleLabel" destination="n4B-U9-yZV" id="DJe-cW-LTg"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" restorationIdentifier="photoDlnaView" id="iN0-l3-epB" customClass="photoDlnaView">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Mrd-s9-lRB">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                    <subviews>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TzJ-GX-Fdv">
+                            <rect key="frame" x="13" y="11" width="22" height="22"/>
+                            <animations/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="22" id="wWC-r4-eaW"/>
+                                <constraint firstAttribute="height" constant="22" id="zcI-ay-LW3"/>
+                            </constraints>
+                            <state key="normal" image="return_icon"/>
+                            <connections>
+                                <action selector="back:" destination="-1" eventType="touchUpInside" id="kxz-2b-3oQ"/>
+                            </connections>
+                        </button>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="n4B-U9-yZV">
+                            <rect key="frame" x="166.5" y="11.5" width="42" height="20.5"/>
+                            <animations/>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                    </subviews>
+                    <animations/>
+                    <color key="backgroundColor" red="0.88235294117647056" green="0.93725490196078431" blue="0.95686274509803915" alpha="1" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="44" id="9M5-aK-tK4"/>
+                        <constraint firstItem="TzJ-GX-Fdv" firstAttribute="leading" secondItem="Mrd-s9-lRB" secondAttribute="leading" constant="13" id="Pax-Ad-8Es"/>
+                        <constraint firstItem="n4B-U9-yZV" firstAttribute="centerY" secondItem="Mrd-s9-lRB" secondAttribute="centerY" id="UQ9-vc-lwG"/>
+                        <constraint firstItem="TzJ-GX-Fdv" firstAttribute="centerY" secondItem="Mrd-s9-lRB" secondAttribute="centerY" id="ieh-cy-c0L"/>
+                        <constraint firstItem="n4B-U9-yZV" firstAttribute="centerX" secondItem="Mrd-s9-lRB" secondAttribute="centerX" id="psX-qy-flB"/>
+                    </constraints>
+                </view>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="photo_icon" translatesAutoresizingMaskIntoConstraints="NO" id="RKS-qH-tHv">
+                    <rect key="frame" x="146" y="297" width="83.5" height="72"/>
+                    <animations/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="72" id="XRe-KX-klD"/>
+                        <constraint firstAttribute="width" constant="83.5" id="Xay-Dh-djF"/>
+                    </constraints>
+                </imageView>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VSG-4L-ZXS">
+                    <rect key="frame" x="22" y="319" width="30" height="30"/>
+                    <animations/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="30" id="L2w-q4-1VG"/>
+                        <constraint firstAttribute="width" constant="30" id="vxw-Nj-Cfv"/>
+                    </constraints>
+                    <state key="normal" image="left arrow"/>
+                    <connections>
+                        <action selector="prevButtonDidPush:" destination="-1" eventType="touchUpInside" id="Zif-mA-4qA"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ePS-It-DFO">
+                    <rect key="frame" x="323" y="319" width="30" height="30"/>
+                    <animations/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="30" id="E4E-S4-hv6"/>
+                        <constraint firstAttribute="height" constant="30" id="anm-2q-zbX"/>
+                    </constraints>
+                    <state key="normal" image="right arrow"/>
+                    <connections>
+                        <action selector="nextButtondidPush:" destination="-1" eventType="touchUpInside" id="dwM-Gp-yk7"/>
+                    </connections>
+                </button>
+            </subviews>
+            <animations/>
+            <color key="backgroundColor" red="0.91764705882352937" green="0.97254901960784312" blue="0.99215686274509807" alpha="1" colorSpace="calibratedRGB"/>
+            <constraints>
+                <constraint firstItem="VSG-4L-ZXS" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="1wl-8b-HkQ"/>
+                <constraint firstAttribute="trailing" secondItem="Mrd-s9-lRB" secondAttribute="trailing" id="6EQ-rp-g4R"/>
+                <constraint firstItem="RKS-qH-tHv" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="Di1-J1-iFw"/>
+                <constraint firstItem="VSG-4L-ZXS" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="22" id="GaH-QB-TH3"/>
+                <constraint firstItem="Mrd-s9-lRB" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="Gu6-25-K1k"/>
+                <constraint firstItem="ePS-It-DFO" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="csH-qi-vKb"/>
+                <constraint firstAttribute="trailing" secondItem="ePS-It-DFO" secondAttribute="trailing" constant="22" id="gnO-FV-uFM"/>
+                <constraint firstItem="Mrd-s9-lRB" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="khA-lY-yZl"/>
+                <constraint firstItem="RKS-qH-tHv" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="y5O-U0-Wfd"/>
+            </constraints>
+            <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
+            <point key="canvasLocation" x="328.5" y="322.5"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="left arrow" width="13" height="16"/>
+        <image name="photo_icon" width="167" height="144"/>
+        <image name="return_icon" width="44" height="44"/>
+        <image name="right arrow" width="13" height="16"/>
+    </resources>
+</document>

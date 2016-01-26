@@ -1,0 +1,32 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "f3d83b9a-97c9-4b4a-8455-deac071021ae",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+    "f3d83b9a-97c9-4b4a-8455-deac071021ae" : {
+
+    }
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "f3d83b9a-97c9-4b4a-8455-deac071021ae" : 0,
+    "6D3F791367E3EC64693A2548D668431B1FC117BF" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "04ADA842-892C-461D-8BFE-1126A18938AF",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "f3d83b9a-97c9-4b4a-8455-deac071021ae" : "SmartHomeIOS\/",
+    "6D3F791367E3EC64693A2548D668431B1FC117BF" : "SmartHomeIOS244\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "SmartHomeForIOS",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "SmartHomeForIOS.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/littlewarlock\/SmartHomeIOS244.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "6D3F791367E3EC64693A2548D668431B1FC117BF"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/172.16.10.239\/svn\/SmartHomeIOS",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Subversion",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "f3d83b9a-97c9-4b4a-8455-deac071021ae"
+    }
+  ]
+}

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9046" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9035"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="196" id="KGk-i7-Jjw" customClass="TestTableViewCell">
+            <rect key="frame" x="0.0" y="0.0" width="352" height="237"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="352" height="236.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="11G-Ne-U71">
+                        <rect key="frame" x="24" y="24" width="304" height="200"/>
+                    </imageView>
+                    <imageView userInteractionEnabled="NO" alpha="0.29999999999999999" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="N2g-IB-3Q6">
+                        <rect key="frame" x="24" y="142" width="304" height="64"/>
+                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="64" id="g0X-6u-R9N"/>
+                        </constraints>
+                    </imageView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8NX-ll-W3x">
+                        <rect key="frame" x="34" y="148" width="41" height="30"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="23"/>
+                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1Cq-71-MXc">
+                        <rect key="frame" x="83" y="147" width="30" height="30"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="30" id="Qr1-eO-lyh"/>
+                            <constraint firstAttribute="height" constant="30" id="b06-q8-VLo"/>
+                        </constraints>
+                        <state key="normal" image="list-setting"/>
+                        <connections>
+                            <action selector="chooseAppAction:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="D0D-Lk-ILI"/>
+                        </connections>
+                    </button>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="rec" translatesAutoresizingMaskIntoConstraints="NO" id="snc-ke-ad8">
+                        <rect key="frame" x="270" y="37" width="48" height="23"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="23" id="5aV-dc-gSN"/>
+                            <constraint firstAttribute="width" constant="48" id="UbM-0x-3EQ"/>
+                        </constraints>
+                    </imageView>
+                    <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5Bt-j7-NdR">
+                        <rect key="frame" x="126" y="148" width="30" height="30"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="30" id="y1x-j9-YRd"/>
+                            <constraint firstAttribute="height" constant="30" id="zXK-67-QxT"/>
+                        </constraints>
+                        <state key="normal" image="alarm-open"/>
+                        <connections>
+                            <action selector="buttonAlarmPressed:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="XLW-Xl-U0X"/>
+                        </connections>
+                    </button>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="at_home" translatesAutoresizingMaskIntoConstraints="NO" id="Usp-7H-JVM">
+                        <rect key="frame" x="34" y="37" width="37" height="37"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="37" id="4SD-54-KKf"/>
+                            <constraint firstAttribute="height" constant="37" id="kQT-Sv-4ny"/>
+                        </constraints>
+                    </imageView>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="snc-ke-ad8" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="14" id="0vd-fr-Tl7"/>
+                    <constraint firstItem="Usp-7H-JVM" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="14" id="6Ss-kM-pUD"/>
+                    <constraint firstItem="1Cq-71-MXc" firstAttribute="leading" secondItem="8NX-ll-W3x" secondAttribute="trailing" constant="21" id="DyK-Hq-cyT"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="N2g-IB-3Q6" secondAttribute="bottom" constant="4" id="J9A-Hh-jnB"/>
+                    <constraint firstItem="Usp-7H-JVM" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="14" id="L3k-i1-Zn0"/>
+                    <constraint firstItem="11G-Ne-U71" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="LCg-Yp-tMR"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="N2g-IB-3Q6" secondAttribute="trailing" id="Udf-HF-SHg"/>
+                    <constraint firstItem="8NX-ll-W3x" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="32" id="c35-hm-pJe"/>
+                    <constraint firstAttribute="trailingMargin" relation="greaterThanOrEqual" secondItem="5Bt-j7-NdR" secondAttribute="trailing" constant="14" id="e3j-35-0gL"/>
+                    <constraint firstItem="5Bt-j7-NdR" firstAttribute="leading" secondItem="1Cq-71-MXc" secondAttribute="trailing" constant="21" id="eGA-Ph-qq2"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="11G-Ne-U71" secondAttribute="bottom" constant="4" id="fP0-8Q-B4a"/>
+                    <constraint firstItem="11G-Ne-U71" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="4" id="fSv-Ld-aZR"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="snc-ke-ad8" secondAttribute="trailing" constant="14" id="gib-jT-Gh0"/>
+                    <constraint firstItem="11G-Ne-U71" firstAttribute="trailing" secondItem="H2p-sc-9uM" secondAttribute="trailingMargin" id="yFW-xw-nxx"/>
+                    <constraint firstItem="N2g-IB-3Q6" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="yRI-0O-M9e"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="button" destination="1Cq-71-MXc" id="hem-al-cDf"/>
+                <outlet property="buttonAlarm" destination="5Bt-j7-NdR" id="nEM-GG-sZO"/>
+                <outlet property="imageModeRec" destination="Usp-7H-JVM" id="pcK-lR-a2w"/>
+                <outlet property="imageRec" destination="snc-ke-ad8" id="Xmr-Qh-2eG"/>
+                <outlet property="imagetest" destination="11G-Ne-U71" id="nFm-nd-RNK"/>
+                <outlet property="label" destination="8NX-ll-W3x" id="nPg-wc-Br5"/>
+            </connections>
+            <point key="canvasLocation" x="254" y="363.5"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="alarm-open" width="29" height="27"/>
+        <image name="at_home" width="37" height="37"/>
+        <image name="list-setting" width="27" height="28"/>
+        <image name="rec" width="48" height="23"/>
+    </resources>
+</document>

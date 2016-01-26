@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9060" systemVersion="15B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9051"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="AppNameAndIconCell"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="CellTableIdentifier" rowHeight="84" id="aqB-NM-yhZ" customClass="AppNameAndIconCell">
+            <rect key="frame" x="0.0" y="0.0" width="313" height="84"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" restorationIdentifier="CellTableIdentifier" tableViewCell="aqB-NM-yhZ" id="4YJ-Aq-LRe">
+                <rect key="frame" x="0.0" y="0.0" width="313" height="83.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="awk-Kl-9g0">
+                        <rect key="frame" x="246" y="28" width="51" height="31"/>
+                        <animations/>
+                        <connections>
+                            <action selector="enableDisableAppAction:" destination="aqB-NM-yhZ" eventType="valueChanged" id="sdL-pg-Med"/>
+                        </connections>
+                    </switch>
+                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3cq-iq-zT1">
+                        <rect key="frame" x="14" y="29" width="36" height="31"/>
+                        <animations/>
+                        <state key="normal">
+                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                        </state>
+                        <connections>
+                            <action selector="chooseAppAction:" destination="aqB-NM-yhZ" eventType="touchUpInside" id="JKc-jH-9yq"/>
+                        </connections>
+                    </button>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="E1b-7c-MaB">
+                        <rect key="frame" x="88" y="37" width="142" height="22"/>
+                        <animations/>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+                <animations/>
+                <constraints>
+                    <constraint firstAttribute="trailingMargin" secondItem="awk-Kl-9g0" secondAttribute="trailing" constant="10" id="pQf-oM-n6V"/>
+                </constraints>
+            </tableViewCellContentView>
+            <animations/>
+            <connections>
+                <outlet property="enableDisableSwitch" destination="awk-Kl-9g0" id="Z8V-6C-iWU"/>
+                <outlet property="iconButton" destination="3cq-iq-zT1" id="kf4-Sh-yO0"/>
+                <outlet property="nameLabel" destination="E1b-7c-MaB" id="NLT-5S-BN5"/>
+            </connections>
+            <point key="canvasLocation" x="130.5" y="114"/>
+        </tableViewCell>
+    </objects>
+</document>

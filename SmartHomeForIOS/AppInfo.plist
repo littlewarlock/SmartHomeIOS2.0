@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>AppInfo</key>
+	<array>
+		<dict>
+			<key>appName</key>
+			<string>个人私有云</string>
+			<key>appIconName</key>
+			<string>personal-cloud</string>
+			<key>appKey</key>
+			<integer>1</integer>
+			<key>appInfo</key>
+			<string>百度云（Baidu Cloud）是百度推出的一项云存储服务，首次注册即有机会获得2T的空间，已覆盖主流PC和手机操作系统，包含Web版、Windows版、Mac版、Android版、iPhone版和Windows Phone版，用户将可以轻松将自己的文件上传到网盘上，并可跨终端随时随地查看和分享。</string>
+			<key>appVersion</key>
+			<string>11</string>
+		</dict>
+		<dict>
+			<key>appName</key>
+			<string>监控管理</string>
+			<key>appIconName</key>
+			<string>monitor</string>
+			<key>appKey</key>
+			<integer>2</integer>
+			<key>appInfo</key>
+			<string></string>
+			<key>appVersion</key>
+			<string>11</string>
+		</dict>
+		<dict>
+			<key>appName</key>
+			<string>百度云</string>
+			<key>appIconName</key>
+			<string>baidu-cloud</string>
+			<key>appKey</key>
+			<integer>4</integer>
+			<key>appInfo</key>
+			<string>百度云（Baidu Cloud）是百度推出的一项云存储服务，首次注册即有机会获得2T的空间，已覆盖主流PC和手机操作系统，包含Web版、Windows版、Mac版、Android版、iPhone版和Windows Phone版，用户将可以轻松将自己的文件上传到网盘上，并可跨终端随时随地查看和分享。</string>
+			<key>appVersion</key>
+			<string>11</string>
+		</dict>
+		<dict>
+			<key>appName</key>
+			<string>消息管理</string>
+			<key>appIconName</key>
+			<string>message</string>
+			<key>appKey</key>
+			<integer>6</integer>
+			<key>appInfo</key>
+			<string>百度云（Baidu Cloud）是百度推出的一项云存储服务，首次注册即有机会获得2T的空间，已覆盖主流PC和手机操作系统，包含Web版、Windows版、Mac版、Android版、iPhone版和Windows Phone版，用户将可以轻松将自己的文件上传到网盘上，并可跨终端随时随地查看和分享。</string>
+			<key>appVersion</key>
+			<string>11</string>
+		</dict>
+		<dict>
+			<key>appName</key>
+			<string>co-cloud登录</string>
+			<key>appIconName</key>
+			<string>personal-cloud</string>
+			<key>appKey</key>
+			<string>7</string>
+			<key>appInfo</key>
+			<string>百度云（Baidu Cloud）是百度推出的一项云存储服务，首次注册即有机会获得2T的空间，已覆盖主流PC和手机操作系统，包含Web版、Windows版、Mac版、Android版、iPhone版和Windows Phone版，用户将可以轻松将自己的文件上传到网盘上，并可跨终端随时随地查看和分享。</string>
+			<key>appVersion</key>
+			<string>11</string>
+		</dict>
+		<dict>
+			<key>appName</key>
+			<string>本地文档</string>
+			<key>appIconName</key>
+			<string>local</string>
+			<key>appKey</key>
+			<string>8</string>
+			<key>appInfo</key>
+			<string>百度云（Baidu Cloud）是百度推出的一项云存储服务，首次注册即有机会获得2T的空间，已覆盖主流PC和手机操作系统，包含Web版、Windows版、Mac版、Android版、iPhone版和Windows Phone版，用户将可以轻松将自己的文件上传到网盘上，并可跨终端随时随地查看和分享。</string>
+			<key>appVersion</key>
+			<string>11</string>
+		</dict>
+		<dict>
+			<key>appName</key>
+			<string>智能开关</string>
+			<key>appIconName</key>
+			<string>switch-icon</string>
+			<key>appKey</key>
+			<string>9</string>
+			<key>appInfo</key>
+			<string>百度云（Baidu Cloud）是百度推出的一项云存储服务，首次注册即有机会获得2T的空间，已覆盖主流PC和手机操作系统，包含Web版、Windows版、Mac版、Android版、iPhone版和Windows Phone版，用户将可以轻松将自己的文件上传到网盘上，并可跨终端随时随地查看和分享。</string>
+			<key>appVersion</key>
+			<string>11</string>
+		</dict>
+		<dict>
+			<key>appName</key>
+			<string>路由管理</string>
+			<key>appIconName</key>
+			<string>router</string>
+			<key>appKey</key>
+			<string>10</string>
+			<key>appInfo</key>
+			<string>百度云（Baidu Cloud）是百度推出的一项云存储服务，首次注册即有机会获得2T的空间，已覆盖主流PC和手机操作系统，包含Web版、Windows版、Mac版、Android版、iPhone版和Windows Phone版，用户将可以轻松将自己的文件上传到网盘上，并可跨终端随时随地查看和分享。</string>
+			<key>appVersion</key>
+			<string>11</string>
+		</dict>
+		<dict>
+			<key>appName</key>
+			<string>进度管理</string>
+			<key>appIconName</key>
+			<string>progress</string>
+			<key>appKey</key>
+			<string>11</string>
+			<key>appInfo</key>
+			<string>百度云（Baidu Cloud）是百度推出的一项云存储服务，首次注册即有机会获得2T的空间，已覆盖主流PC和手机操作系统，包含Web版、Windows版、Mac版、Android版、iPhone版和Windows Phone版，用户将可以轻松将自己的文件上传到网盘上，并可跨终端随时随地查看和分享。</string>
+			<key>appVersion</key>
+			<string>11</string>
+		</dict>
+		<dict>
+			<key>appName</key>
+			<string>迅雷</string>
+			<key>appIconName</key>
+			<string>thunder</string>
+			<key>appKey</key>
+			<string>12</string>
+			<key>appInfo</key>
+			<string>百度云（Baidu Cloud）是百度推出的一项云存储服务，首次注册即有机会获得2T的空间，已覆盖主流PC和手机操作系统，包含Web版、Windows版、Mac版、Android版、iPhone版和Windows Phone版，用户将可以轻松将自己的文件上传到网盘上，并可跨终端随时随地查看和分享。</string>
+			<key>appVersion</key>
+			<string>11</string>
+		</dict>
+	</array>
+</dict>
+</plist>

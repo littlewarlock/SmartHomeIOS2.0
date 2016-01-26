@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9531" systemVersion="15C50" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="CameraRecordHistoryViewController">
+            <connections>
+                <outlet property="barbuttonModeVideo" destination="agb-hd-DTZ" id="zRx-gs-wNu"/>
+                <outlet property="barbuttonSnapshot" destination="1e3-OC-wZI" id="pN7-6w-KKw"/>
+                <outlet property="barbuttonVideo" destination="0ky-fE-hQM" id="lY0-Wr-utS"/>
+                <outlet property="buttonModeVideo" destination="LJ7-Ek-G7G" id="tl4-LD-uEc"/>
+                <outlet property="buttonSnapshot" destination="Gqf-ce-dxp" id="E2D-cV-dCg"/>
+                <outlet property="buttonVideo" destination="qC3-zx-kw0" id="Hmu-lC-bcX"/>
+                <outlet property="collectionView" destination="sFZ-EK-3hX" id="K82-Pi-24d"/>
+                <outlet property="mytoolBar" destination="Eni-PI-egf" id="SRU-5T-Oxg"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" tag="100" contentMode="scaleToFill" misplaced="YES" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="sFZ-EK-3hX">
+                    <rect key="frame" x="8" y="8" width="304" height="498"/>
+                    <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="bDl-Cw-e16">
+                        <size key="itemSize" width="90" height="90"/>
+                        <size key="headerReferenceSize" width="0.0" height="20"/>
+                        <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                        <inset key="sectionInset" minX="0.0" minY="8" maxX="0.0" maxY="8"/>
+                    </collectionViewFlowLayout>
+                    <connections>
+                        <outlet property="dataSource" destination="-1" id="Hoi-De-Jfe"/>
+                        <outlet property="delegate" destination="-1" id="GlG-bX-hbk"/>
+                    </connections>
+                </collectionView>
+                <toolbar hidden="YES" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Eni-PI-egf">
+                    <rect key="frame" x="0.0" y="445" width="320" height="44"/>
+                    <items>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="Djt-c8-zjt"/>
+                        <barButtonItem title="模式视频" style="plain" id="agb-hd-DTZ">
+                            <color key="tintColor" red="0.0" green="0.62745098040000002" blue="0.8862745098" alpha="1" colorSpace="calibratedRGB"/>
+                            <connections>
+                                <action selector="barbuttonModeVideoPressed:" destination="-1" id="NHY-Ya-2sg"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem title="手动视频" id="0ky-fE-hQM">
+                            <color key="tintColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                            <connections>
+                                <action selector="barbuttonVideoPressed:" destination="-1" id="BFI-Gz-d0L"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem title="图片" id="1e3-OC-wZI">
+                            <color key="tintColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                            <connections>
+                                <action selector="barbuttonSnapshotPressed:" destination="-1" id="jJs-IA-RBw"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="kSN-EB-GAj"/>
+                    </items>
+                    <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                </toolbar>
+                <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LJ7-Ek-G7G">
+                    <rect key="frame" x="8" y="506" width="99" height="54"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                    <state key="normal" title="模式视频" image="camera_history_video_down">
+                        <color key="titleColor" red="0.0" green="0.62745098040000002" blue="0.8862745098" alpha="1" colorSpace="calibratedRGB"/>
+                    </state>
+                    <connections>
+                        <action selector="barbuttonModeVideoPressed:" destination="-1" eventType="touchUpInside" id="wLd-ZF-r0C"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qC3-zx-kw0">
+                    <rect key="frame" x="107" y="506" width="100" height="54"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                    <state key="normal" title="手动视频" image="camera_history_video_prohibt">
+                        <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="barbuttonVideoPressed:" destination="-1" eventType="touchUpInside" id="bKs-7J-Kb0"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Gqf-ce-dxp">
+                    <rect key="frame" x="207" y="506" width="105" height="54"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                    <state key="normal" title="图片" image="camera_history_photo_prohibt">
+                        <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="barbuttonSnapshotPressed:" destination="-1" eventType="touchUpInside" id="pV3-Y2-YLl"/>
+                    </connections>
+                </button>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstItem="LJ7-Ek-G7G" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="8" id="0Qw-vk-RHz"/>
+                <constraint firstItem="sFZ-EK-3hX" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="8" id="3mw-lk-0zG"/>
+                <constraint firstItem="Gqf-ce-dxp" firstAttribute="width" secondItem="sFZ-EK-3hX" secondAttribute="width" multiplier="1:3" id="4J2-QN-L7p"/>
+                <constraint firstAttribute="bottom" secondItem="LJ7-Ek-G7G" secondAttribute="bottom" constant="8" id="4m3-70-j0N"/>
+                <constraint firstAttribute="bottom" secondItem="sFZ-EK-3hX" secondAttribute="bottom" constant="50" id="58R-ow-NXR"/>
+                <constraint firstAttribute="trailing" secondItem="Gqf-ce-dxp" secondAttribute="trailing" constant="8" id="8ge-E9-hrt"/>
+                <constraint firstAttribute="bottom" secondItem="Gqf-ce-dxp" secondAttribute="bottom" constant="8" id="Fvi-N3-fe4"/>
+                <constraint firstItem="Gqf-ce-dxp" firstAttribute="top" secondItem="sFZ-EK-3hX" secondAttribute="bottom" id="HEy-N2-8eG"/>
+                <constraint firstAttribute="bottom" secondItem="Eni-PI-egf" secondAttribute="bottom" id="HiJ-xg-EiX"/>
+                <constraint firstItem="Eni-PI-egf" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="IkB-Gc-LGV"/>
+                <constraint firstAttribute="trailing" secondItem="Eni-PI-egf" secondAttribute="trailing" id="JYv-Ie-wl6"/>
+                <constraint firstItem="Gqf-ce-dxp" firstAttribute="leading" secondItem="qC3-zx-kw0" secondAttribute="trailing" id="Lox-Rt-OTv"/>
+                <constraint firstItem="qC3-zx-kw0" firstAttribute="width" secondItem="sFZ-EK-3hX" secondAttribute="width" multiplier="1:3" id="Rg5-Ll-e3B"/>
+                <constraint firstItem="sFZ-EK-3hX" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="8" id="UZv-SU-49n"/>
+                <constraint firstItem="LJ7-Ek-G7G" firstAttribute="width" secondItem="sFZ-EK-3hX" secondAttribute="width" multiplier="1:3" id="ZY4-Wg-war"/>
+                <constraint firstAttribute="bottom" secondItem="qC3-zx-kw0" secondAttribute="bottom" constant="8" id="fEg-oT-Yee"/>
+                <constraint firstItem="qC3-zx-kw0" firstAttribute="leading" secondItem="LJ7-Ek-G7G" secondAttribute="trailing" id="o5t-dm-bpa"/>
+                <constraint firstAttribute="trailing" secondItem="sFZ-EK-3hX" secondAttribute="trailing" constant="8" id="xuS-yi-FhX"/>
+                <constraint firstItem="LJ7-Ek-G7G" firstAttribute="top" secondItem="sFZ-EK-3hX" secondAttribute="bottom" id="yHE-uV-CZP"/>
+                <constraint firstItem="qC3-zx-kw0" firstAttribute="top" secondItem="sFZ-EK-3hX" secondAttribute="bottom" id="ymr-wa-p7b"/>
+            </constraints>
+            <point key="canvasLocation" x="167" y="243"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="camera_history_photo_prohibt" width="24" height="17"/>
+        <image name="camera_history_video_down" width="20" height="20"/>
+        <image name="camera_history_video_prohibt" width="20" height="20"/>
+    </resources>
+</document>

@@ -1,0 +1,182 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXFileReference section */
+		FC78BA961C2A34D60057A7D3 /* AUTHORS */ = {isa = PBXFileReference; lastKnownFileType = text; path = AUTHORS; sourceTree = "<group>"; };
+		FC78BA971C2A34D60057A7D3 /* bootstrap */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = bootstrap; sourceTree = "<group>"; };
+		FC78BA981C2A34D60057A7D3 /* ChangeLog */ = {isa = PBXFileReference; lastKnownFileType = text; path = ChangeLog; sourceTree = "<group>"; };
+		FC78BA991C2A34D60057A7D3 /* clinkc.pc.in */ = {isa = PBXFileReference; lastKnownFileType = text; path = clinkc.pc.in; sourceTree = "<group>"; };
+		FC78BA9A1C2A34D60057A7D3 /* config */ = {isa = PBXFileReference; lastKnownFileType = folder; path = config; sourceTree = "<group>"; };
+		FC78BA9B1C2A34D60057A7D3 /* config.h.in */ = {isa = PBXFileReference; lastKnownFileType = text; path = config.h.in; sourceTree = "<group>"; };
+		FC78BA9C1C2A34D60057A7D3 /* configure */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = configure; sourceTree = "<group>"; };
+		FC78BA9D1C2A34D60057A7D3 /* configure.in */ = {isa = PBXFileReference; lastKnownFileType = text; path = configure.in; sourceTree = "<group>"; };
+		FC78BA9E1C2A34D60057A7D3 /* COPYING */ = {isa = PBXFileReference; lastKnownFileType = text; path = COPYING; sourceTree = "<group>"; };
+		FC78BA9F1C2A34D60057A7D3 /* debian */ = {isa = PBXFileReference; lastKnownFileType = folder; path = debian; sourceTree = "<group>"; };
+		FC78BAA01C2A34D60057A7D3 /* Doxyfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Doxyfile; sourceTree = "<group>"; };
+		FC78BAA11C2A34D60057A7D3 /* Doxyfile.objc */ = {isa = PBXFileReference; lastKnownFileType = text; path = Doxyfile.objc; sourceTree = "<group>"; };
+		FC78BAA21C2A34D60057A7D3 /* DoxyFooterFile */ = {isa = PBXFileReference; lastKnownFileType = text; path = DoxyFooterFile; sourceTree = "<group>"; };
+		FC78BAA31C2A34D60057A7D3 /* include */ = {isa = PBXFileReference; lastKnownFileType = folder; path = include; sourceTree = "<group>"; };
+		FC78BAA41C2A34D60057A7D3 /* INSTALL */ = {isa = PBXFileReference; lastKnownFileType = text; path = INSTALL; sourceTree = "<group>"; };
+		FC78BAA51C2A34D60057A7D3 /* lib */ = {isa = PBXFileReference; lastKnownFileType = folder; path = lib; sourceTree = "<group>"; };
+		FC78BAA61C2A34D60057A7D3 /* Makefile.am */ = {isa = PBXFileReference; lastKnownFileType = text; path = Makefile.am; sourceTree = "<group>"; };
+		FC78BAA71C2A34D60057A7D3 /* NEWS */ = {isa = PBXFileReference; lastKnownFileType = text; path = NEWS; sourceTree = "<group>"; };
+		FC78BAA81C2A34D60057A7D3 /* README */ = {isa = PBXFileReference; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
+		FC78BAA91C2A34D60057A7D3 /* sample */ = {isa = PBXFileReference; lastKnownFileType = folder; path = sample; sourceTree = "<group>"; };
+		FC78BAAA1C2A34D60057A7D3 /* src */ = {isa = PBXFileReference; lastKnownFileType = folder; path = src; sourceTree = "<group>"; };
+		FC78BAAB1C2A34D60057A7D3 /* std */ = {isa = PBXFileReference; lastKnownFileType = folder; path = std; sourceTree = "<group>"; };
+		FC78BAAC1C2A34D60057A7D3 /* testunit */ = {isa = PBXFileReference; lastKnownFileType = folder; path = testunit; sourceTree = "<group>"; };
+		FC78BAAD1C2A34D60057A7D3 /* wrapper */ = {isa = PBXFileReference; lastKnownFileType = folder; path = wrapper; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		FC78BA901C2A34D60057A7D3 = {
+			isa = PBXGroup;
+			children = (
+				FC78BA961C2A34D60057A7D3 /* AUTHORS */,
+				FC78BA971C2A34D60057A7D3 /* bootstrap */,
+				FC78BA981C2A34D60057A7D3 /* ChangeLog */,
+				FC78BA991C2A34D60057A7D3 /* clinkc.pc.in */,
+				FC78BA9A1C2A34D60057A7D3 /* config */,
+				FC78BA9B1C2A34D60057A7D3 /* config.h.in */,
+				FC78BA9C1C2A34D60057A7D3 /* configure */,
+				FC78BA9D1C2A34D60057A7D3 /* configure.in */,
+				FC78BA9E1C2A34D60057A7D3 /* COPYING */,
+				FC78BA9F1C2A34D60057A7D3 /* debian */,
+				FC78BAA01C2A34D60057A7D3 /* Doxyfile */,
+				FC78BAA11C2A34D60057A7D3 /* Doxyfile.objc */,
+				FC78BAA21C2A34D60057A7D3 /* DoxyFooterFile */,
+				FC78BAA31C2A34D60057A7D3 /* include */,
+				FC78BAA41C2A34D60057A7D3 /* INSTALL */,
+				FC78BAA51C2A34D60057A7D3 /* lib */,
+				FC78BAA61C2A34D60057A7D3 /* Makefile.am */,
+				FC78BAA71C2A34D60057A7D3 /* NEWS */,
+				FC78BAA81C2A34D60057A7D3 /* README */,
+				FC78BAA91C2A34D60057A7D3 /* sample */,
+				FC78BAAA1C2A34D60057A7D3 /* src */,
+				FC78BAAB1C2A34D60057A7D3 /* std */,
+				FC78BAAC1C2A34D60057A7D3 /* testunit */,
+				FC78BAAD1C2A34D60057A7D3 /* wrapper */,
+			);
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXLegacyTarget section */
+		FC78BA951C2A34D60057A7D3 /* clinkc */ = {
+			isa = PBXLegacyTarget;
+			buildArgumentsString = "$(ACTION)";
+			buildConfigurationList = FC78BAAE1C2A34D60057A7D3 /* Build configuration list for PBXLegacyTarget "clinkc" */;
+			buildPhases = (
+			);
+			buildToolPath = /usr/bin/make;
+			buildWorkingDirectory = "/Users/suanyun/Documents/backup/20151219/smarthomeIos(修改更多按钮的业务逻辑)/clinkc";
+			dependencies = (
+			);
+			name = clinkc;
+			passBuildSettingsInEnvironment = 1;
+			productName = clinkc;
+		};
+/* End PBXLegacyTarget section */
+
+/* Begin PBXProject section */
+		FC78BA911C2A34D60057A7D3 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+			};
+			buildConfigurationList = FC78BA941C2A34D60057A7D3 /* Build configuration list for PBXProject "clinkc" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = FC78BA901C2A34D60057A7D3;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				FC78BA951C2A34D60057A7D3 /* clinkc */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin XCBuildConfiguration section */
+		FC78BA921C2A34D60057A7D3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				COPY_PHASE_STRIP = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx10.6;
+			};
+			name = Debug;
+		};
+		FC78BA931C2A34D60057A7D3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				COPY_PHASE_STRIP = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				SDKROOT = macosx10.6;
+			};
+			name = Release;
+		};
+		FC78BAAF1C2A34D60057A7D3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				DEBUGGING_SYMBOLS = YES;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = clinkc;
+			};
+			name = Debug;
+		};
+		FC78BAB01C2A34D60057A7D3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = clinkc;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		FC78BA941C2A34D60057A7D3 /* Build configuration list for PBXProject "clinkc" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FC78BA921C2A34D60057A7D3 /* Debug */,
+				FC78BA931C2A34D60057A7D3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FC78BAAE1C2A34D60057A7D3 /* Build configuration list for PBXLegacyTarget "clinkc" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FC78BAAF1C2A34D60057A7D3 /* Debug */,
+				FC78BAB01C2A34D60057A7D3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = FC78BA911C2A34D60057A7D3 /* Project object */;
+}

@@ -1,0 +1,197 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXFileReference section */
+		FC78BAD51C2A375C0057A7D3 /* AUTHORS */ = {isa = PBXFileReference; lastKnownFileType = text; path = AUTHORS; sourceTree = "<group>"; };
+		FC78BAD61C2A375C0057A7D3 /* bootstrap */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = bootstrap; sourceTree = "<group>"; };
+		FC78BAD71C2A375C0057A7D3 /* ChangeLog */ = {isa = PBXFileReference; lastKnownFileType = text; path = ChangeLog; sourceTree = "<group>"; };
+		FC78BAD81C2A375C0057A7D3 /* clinkc.pc.in */ = {isa = PBXFileReference; lastKnownFileType = text; path = clinkc.pc.in; sourceTree = "<group>"; };
+		FC78BAD91C2A375C0057A7D3 /* clinkc.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = clinkc.xcodeproj; sourceTree = "<group>"; };
+		FC78BADC1C2A375C0057A7D3 /* config */ = {isa = PBXFileReference; lastKnownFileType = folder; path = config; sourceTree = "<group>"; };
+		FC78BADD1C2A375C0057A7D3 /* config.h.in */ = {isa = PBXFileReference; lastKnownFileType = text; path = config.h.in; sourceTree = "<group>"; };
+		FC78BADE1C2A375C0057A7D3 /* configure */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = configure; sourceTree = "<group>"; };
+		FC78BADF1C2A375C0057A7D3 /* configure.in */ = {isa = PBXFileReference; lastKnownFileType = text; path = configure.in; sourceTree = "<group>"; };
+		FC78BAE01C2A375C0057A7D3 /* COPYING */ = {isa = PBXFileReference; lastKnownFileType = text; path = COPYING; sourceTree = "<group>"; };
+		FC78BAE11C2A375C0057A7D3 /* debian */ = {isa = PBXFileReference; lastKnownFileType = folder; path = debian; sourceTree = "<group>"; };
+		FC78BAE21C2A375C0057A7D3 /* Doxyfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Doxyfile; sourceTree = "<group>"; };
+		FC78BAE31C2A375C0057A7D3 /* Doxyfile.objc */ = {isa = PBXFileReference; lastKnownFileType = text; path = Doxyfile.objc; sourceTree = "<group>"; };
+		FC78BAE41C2A375C0057A7D3 /* DoxyFooterFile */ = {isa = PBXFileReference; lastKnownFileType = text; path = DoxyFooterFile; sourceTree = "<group>"; };
+		FC78BAE51C2A375C0057A7D3 /* include */ = {isa = PBXFileReference; lastKnownFileType = folder; path = include; sourceTree = "<group>"; };
+		FC78BAE61C2A375C0057A7D3 /* INSTALL */ = {isa = PBXFileReference; lastKnownFileType = text; path = INSTALL; sourceTree = "<group>"; };
+		FC78BAE71C2A375C0057A7D3 /* lib */ = {isa = PBXFileReference; lastKnownFileType = folder; path = lib; sourceTree = "<group>"; };
+		FC78BAE81C2A375C0057A7D3 /* Makefile.am */ = {isa = PBXFileReference; lastKnownFileType = text; path = Makefile.am; sourceTree = "<group>"; };
+		FC78BAE91C2A375C0057A7D3 /* NEWS */ = {isa = PBXFileReference; lastKnownFileType = text; path = NEWS; sourceTree = "<group>"; };
+		FC78BAEA1C2A375C0057A7D3 /* README */ = {isa = PBXFileReference; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
+		FC78BAEB1C2A375C0057A7D3 /* sample */ = {isa = PBXFileReference; lastKnownFileType = folder; path = sample; sourceTree = "<group>"; };
+		FC78BAEC1C2A375C0057A7D3 /* src */ = {isa = PBXFileReference; lastKnownFileType = folder; path = src; sourceTree = "<group>"; };
+		FC78BAED1C2A375C0057A7D3 /* std */ = {isa = PBXFileReference; lastKnownFileType = folder; path = std; sourceTree = "<group>"; };
+		FC78BAEE1C2A375C0057A7D3 /* testunit */ = {isa = PBXFileReference; lastKnownFileType = folder; path = testunit; sourceTree = "<group>"; };
+		FC78BAEF1C2A375C0057A7D3 /* wrapper */ = {isa = PBXFileReference; lastKnownFileType = folder; path = wrapper; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		FC78BACF1C2A375C0057A7D3 = {
+			isa = PBXGroup;
+			children = (
+				FC78BAD51C2A375C0057A7D3 /* AUTHORS */,
+				FC78BAD61C2A375C0057A7D3 /* bootstrap */,
+				FC78BAD71C2A375C0057A7D3 /* ChangeLog */,
+				FC78BAD81C2A375C0057A7D3 /* clinkc.pc.in */,
+				FC78BAD91C2A375C0057A7D3 /* clinkc.xcodeproj */,
+				FC78BADC1C2A375C0057A7D3 /* config */,
+				FC78BADD1C2A375C0057A7D3 /* config.h.in */,
+				FC78BADE1C2A375C0057A7D3 /* configure */,
+				FC78BADF1C2A375C0057A7D3 /* configure.in */,
+				FC78BAE01C2A375C0057A7D3 /* COPYING */,
+				FC78BAE11C2A375C0057A7D3 /* debian */,
+				FC78BAE21C2A375C0057A7D3 /* Doxyfile */,
+				FC78BAE31C2A375C0057A7D3 /* Doxyfile.objc */,
+				FC78BAE41C2A375C0057A7D3 /* DoxyFooterFile */,
+				FC78BAE51C2A375C0057A7D3 /* include */,
+				FC78BAE61C2A375C0057A7D3 /* INSTALL */,
+				FC78BAE71C2A375C0057A7D3 /* lib */,
+				FC78BAE81C2A375C0057A7D3 /* Makefile.am */,
+				FC78BAE91C2A375C0057A7D3 /* NEWS */,
+				FC78BAEA1C2A375C0057A7D3 /* README */,
+				FC78BAEB1C2A375C0057A7D3 /* sample */,
+				FC78BAEC1C2A375C0057A7D3 /* src */,
+				FC78BAED1C2A375C0057A7D3 /* std */,
+				FC78BAEE1C2A375C0057A7D3 /* testunit */,
+				FC78BAEF1C2A375C0057A7D3 /* wrapper */,
+			);
+			sourceTree = "<group>";
+		};
+		FC78BADA1C2A375C0057A7D3 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXLegacyTarget section */
+		FC78BAD41C2A375C0057A7D3 /* clinkc */ = {
+			isa = PBXLegacyTarget;
+			buildArgumentsString = "$(ACTION)";
+			buildConfigurationList = FC78BAF11C2A375C0057A7D3 /* Build configuration list for PBXLegacyTarget "clinkc" */;
+			buildPhases = (
+			);
+			buildToolPath = /usr/bin/make;
+			buildWorkingDirectory = "/Users/suanyun/Documents/backup/20151219/smarthomeIos(修改更多按钮的业务逻辑)/clinkc";
+			dependencies = (
+			);
+			name = clinkc;
+			passBuildSettingsInEnvironment = 1;
+			productName = clinkc;
+		};
+/* End PBXLegacyTarget section */
+
+/* Begin PBXProject section */
+		FC78BAD01C2A375C0057A7D3 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+			};
+			buildConfigurationList = FC78BAD31C2A375C0057A7D3 /* Build configuration list for PBXProject "clinkc 2" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = FC78BACF1C2A375C0057A7D3;
+			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = FC78BADA1C2A375C0057A7D3 /* Products */;
+					ProjectRef = FC78BAD91C2A375C0057A7D3 /* clinkc.xcodeproj */;
+				},
+			);
+			projectRoot = "";
+			targets = (
+				FC78BAD41C2A375C0057A7D3 /* clinkc */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin XCBuildConfiguration section */
+		FC78BAD11C2A375C0057A7D3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				COPY_PHASE_STRIP = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx10.6;
+			};
+			name = Debug;
+		};
+		FC78BAD21C2A375C0057A7D3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				COPY_PHASE_STRIP = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				SDKROOT = macosx10.6;
+			};
+			name = Release;
+		};
+		FC78BAF21C2A375C0057A7D3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				DEBUGGING_SYMBOLS = YES;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = clinkc;
+			};
+			name = Debug;
+		};
+		FC78BAF31C2A375C0057A7D3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = clinkc;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		FC78BAD31C2A375C0057A7D3 /* Build configuration list for PBXProject "clinkc 2" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FC78BAD11C2A375C0057A7D3 /* Debug */,
+				FC78BAD21C2A375C0057A7D3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FC78BAF11C2A375C0057A7D3 /* Build configuration list for PBXLegacyTarget "clinkc" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FC78BAF21C2A375C0057A7D3 /* Debug */,
+				FC78BAF31C2A375C0057A7D3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = FC78BAD01C2A375C0057A7D3 /* Project object */;
+}

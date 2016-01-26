@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9531" systemVersion="15C50" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="gTV-IL-0wX" customClass="CameraSnapshotHistoryCollectionViewCell">
+            <rect key="frame" x="0.0" y="0.0" width="322" height="554"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="322" height="554"/>
+                <subviews>
+                    <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" maximumZoomScale="5" translatesAutoresizingMaskIntoConstraints="NO" id="o4A-Sq-rgk">
+                        <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hcZ-eq-95z">
+                                <rect key="frame" x="-27" y="-151" width="306" height="538"/>
+                            </imageView>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="hcZ-eq-95z" firstAttribute="top" secondItem="o4A-Sq-rgk" secondAttribute="top" id="Cxl-wj-FMl"/>
+                            <constraint firstItem="hcZ-eq-95z" firstAttribute="leading" secondItem="o4A-Sq-rgk" secondAttribute="leading" id="EmF-Bx-2BO"/>
+                            <constraint firstAttribute="trailing" secondItem="hcZ-eq-95z" secondAttribute="trailing" id="Yj0-al-WFS"/>
+                            <constraint firstAttribute="bottom" secondItem="hcZ-eq-95z" secondAttribute="bottom" id="eip-ig-CUA"/>
+                        </constraints>
+                    </scrollView>
+                </subviews>
+                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+            </view>
+            <constraints>
+                <constraint firstItem="o4A-Sq-rgk" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="aRX-fA-XIq"/>
+                <constraint firstItem="o4A-Sq-rgk" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="m8Y-DV-h18"/>
+                <constraint firstAttribute="trailing" secondItem="o4A-Sq-rgk" secondAttribute="trailing" id="nuB-zo-tkN"/>
+                <constraint firstAttribute="bottom" secondItem="o4A-Sq-rgk" secondAttribute="bottom" id="oSB-5t-RzR"/>
+            </constraints>
+            <size key="customSize" width="322" height="554"/>
+            <connections>
+                <outlet property="myScrollView" destination="o4A-Sq-rgk" id="v2X-dM-Cxu"/>
+                <outlet property="showImg" destination="hcZ-eq-95z" id="BMl-t7-upY"/>
+            </connections>
+            <point key="canvasLocation" x="151" y="334"/>
+        </collectionViewCell>
+    </objects>
+</document>

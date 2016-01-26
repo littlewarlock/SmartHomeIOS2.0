@@ -1,0 +1,31 @@
+//
+//  JTCalendarDataSource.h
+//  JTCalendar
+//
+//  Created by Jonathan Tribouharet
+//
+
+#import <Foundation/Foundation.h>
+
+@class JTCalendar;
+
+@protocol JTCalendarDataSource <NSObject>
+
+- (BOOL)calendarHaveEvent:(JTCalendar *)calendar date:(NSDate *)date;
+- (void)calendarDidDateSelected:(JTCalendar *)calendar date:(NSDate *)date;
+//hgc start 2015 11 19
+- (void)canlendarDateWhenCanlendarScrolled:(JTCalendar *)canlendar date:(NSDate *)date;
+//hgc end 2015 11 19
+@end
+
+// 版权属于原作者
+// http://code4app.com (cn) http://code4app.net (en)
+// 发布代码于最专业的源码分享网站: Code4App.com 
+
+// 版权属于原作者
+// http://code4app.com (cn) http://code4app.net (en)
+// 发布代码于最专业的源码分享网站: Code4App.com 
+
+// 版权属于原作者
+// http://code4app.com (cn) http://code4app.net (en)
+// 发布代码于最专业的源码分享网站: Code4App.com 

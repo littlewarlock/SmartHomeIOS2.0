@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9531" systemVersion="15C50" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="AlarmMessagePopUpViewController">
+            <connections>
+                <outlet property="buttonClose" destination="3DP-3s-BNy" id="TXM-LM-og9"/>
+                <outlet property="buttonGoto" destination="mkl-EM-6m4" id="eix-yz-DGq"/>
+                <outlet property="buttonGoto2" destination="GSj-gc-i7m" id="DzT-g7-vL3"/>
+                <outlet property="imageView" destination="31m-Kv-AGB" id="7QQ-WX-a7r"/>
+                <outlet property="labelDate" destination="B5Q-z7-YQN" id="KQ7-ol-7Zx"/>
+                <outlet property="labelFrom" destination="FpV-Dt-uUa" id="AGh-bU-ca9"/>
+                <outlet property="labelTitle" destination="aLf-CE-KXN" id="mrD-KO-Tbg"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+                <outlet property="viewBottomSide" destination="5n6-jg-pQx" id="sXK-FJ-qTo"/>
+                <outlet property="viewTopSide" destination="uQ0-XU-VJm" id="Qjv-JA-MYR"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="120"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uQ0-XU-VJm" customClass="UIControl">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="90"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="移动侦测报警" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aLf-CE-KXN">
+                            <rect key="frame" x="142" y="8" width="107" height="21"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="来自:C6(12345678)" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FpV-Dt-uUa">
+                            <rect key="frame" x="142" y="39" width="107" height="21"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                            <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="2015-11-15 24:59:59" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="B5Q-z7-YQN">
+                            <rect key="frame" x="142" y="67" width="107" height="21"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                            <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="video_icon_camera" translatesAutoresizingMaskIntoConstraints="NO" id="31m-Kv-AGB">
+                            <rect key="frame" x="8" y="8" width="126" height="89"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="126" id="5Xv-nF-8BF"/>
+                                <constraint firstAttribute="height" constant="89" id="9hb-AP-c3B"/>
+                            </constraints>
+                        </imageView>
+                        <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GSj-gc-i7m">
+                            <rect key="frame" x="290" y="42" width="22" height="22"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="22" id="qTJ-xz-5Df"/>
+                                <constraint firstAttribute="height" constant="22" id="yqX-7e-4Hp"/>
+                            </constraints>
+                            <state key="normal" title="Button" image="arrow-right-alarm"/>
+                        </button>
+                        <button opaque="NO" contentMode="scaleAspectFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mkl-EM-6m4">
+                            <rect key="frame" x="257" y="42" width="33" height="24"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="15" id="sy1-uO-aQY"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <state key="normal" title="3" backgroundImage="message-bj">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                        </button>
+                    </subviews>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstItem="31m-Kv-AGB" firstAttribute="leading" secondItem="uQ0-XU-VJm" secondAttribute="leading" constant="8" id="0Nu-Lf-7as"/>
+                        <constraint firstItem="GSj-gc-i7m" firstAttribute="centerY" secondItem="mkl-EM-6m4" secondAttribute="centerY" id="8ea-eg-knD"/>
+                        <constraint firstItem="B5Q-z7-YQN" firstAttribute="leading" secondItem="31m-Kv-AGB" secondAttribute="trailing" constant="8" id="EiA-Fx-dm6"/>
+                        <constraint firstItem="31m-Kv-AGB" firstAttribute="top" secondItem="uQ0-XU-VJm" secondAttribute="top" constant="8" id="cbv-2X-DiO"/>
+                        <constraint firstItem="FpV-Dt-uUa" firstAttribute="leading" secondItem="31m-Kv-AGB" secondAttribute="trailing" constant="8" id="h0W-ke-Pgz"/>
+                        <constraint firstAttribute="trailing" secondItem="GSj-gc-i7m" secondAttribute="trailing" constant="8" id="iZy-QD-eu1"/>
+                        <constraint firstItem="aLf-CE-KXN" firstAttribute="leading" secondItem="31m-Kv-AGB" secondAttribute="trailing" constant="8" id="xYA-OF-bn3"/>
+                        <constraint firstItem="GSj-gc-i7m" firstAttribute="leading" secondItem="mkl-EM-6m4" secondAttribute="trailing" id="yPx-fo-Lep"/>
+                    </constraints>
+                </view>
+                <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5n6-jg-pQx" customClass="UIControl">
+                    <rect key="frame" x="0.0" y="90" width="320" height="30"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="消息推送" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="efZ-zz-tuC">
+                            <rect key="frame" x="125" y="4" width="71" height="21"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3DP-3s-BNy">
+                            <rect key="frame" x="281" y="3" width="21" height="22"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="22" id="2Mf-rt-4gv"/>
+                                <constraint firstAttribute="width" constant="22" id="5Lk-tb-zIz"/>
+                            </constraints>
+                            <state key="normal" title="Button" image="close"/>
+                            <connections>
+                                <action selector="buttonClosePressed:" destination="-1" eventType="touchUpInside" id="IhE-g1-wOB"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstItem="efZ-zz-tuC" firstAttribute="centerX" secondItem="5n6-jg-pQx" secondAttribute="centerX" id="HoC-i3-fhi"/>
+                        <constraint firstAttribute="trailing" secondItem="3DP-3s-BNy" secondAttribute="trailing" constant="8" id="Pg8-w6-0Ci"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstItem="5n6-jg-pQx" firstAttribute="top" secondItem="uQ0-XU-VJm" secondAttribute="bottom" id="6K0-HC-J0l"/>
+                <constraint firstAttribute="bottom" secondItem="5n6-jg-pQx" secondAttribute="bottom" id="8bA-YP-ab5"/>
+                <constraint firstAttribute="trailing" secondItem="5n6-jg-pQx" secondAttribute="trailing" id="RAY-ya-eb6"/>
+                <constraint firstAttribute="trailing" secondItem="uQ0-XU-VJm" secondAttribute="trailing" id="WAR-8I-Skv"/>
+                <constraint firstItem="uQ0-XU-VJm" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="gCz-f9-GqJ"/>
+                <constraint firstItem="5n6-jg-pQx" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="mDa-2J-gSh"/>
+                <constraint firstItem="uQ0-XU-VJm" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="seU-lA-Jta"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <point key="canvasLocation" x="339" y="76"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="arrow-right-alarm" width="7" height="13"/>
+        <image name="close" width="20" height="20"/>
+        <image name="message-bj" width="7" height="7"/>
+        <image name="video_icon_camera" width="69" height="53"/>
+    </resources>
+</document>

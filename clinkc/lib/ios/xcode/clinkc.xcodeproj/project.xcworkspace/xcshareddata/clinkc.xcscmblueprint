@@ -1,0 +1,25 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "f3d83b9a-97c9-4b4a-8455-deac071021ae",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+    "f3d83b9a-97c9-4b4a-8455-deac071021ae" : {
+
+    }
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "f3d83b9a-97c9-4b4a-8455-deac071021ae" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "17E535C6-961F-43D6-8D61-6341E58F9A3F",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "f3d83b9a-97c9-4b4a-8455-deac071021ae" : "SmartHomeIOS244\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "clinkc",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "clinkc\/lib\/ios\/xcode\/clinkc.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/106.120.129.244\/svn\/SmartHomeIOS",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Subversion",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "f3d83b9a-97c9-4b4a-8455-deac071021ae"
+    }
+  ]
+}

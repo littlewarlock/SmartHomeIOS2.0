@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9046" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9035"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="center" id="iN0-l3-epB" customClass="ProgressView">
+            <rect key="frame" x="0.0" y="0.0" width="323" height="64"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="upload-icon" translatesAutoresizingMaskIntoConstraints="NO" id="oES-Oq-X8c">
+                    <rect key="frame" x="16" y="5" width="69" height="53"/>
+                </imageView>
+                <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="uq6-tm-e9J">
+                    <rect key="frame" x="101" y="49" width="169" height="2"/>
+                    <color key="backgroundColor" red="1" green="0.72263372380255919" blue="0.10945341446630255" alpha="1" colorSpace="calibratedRGB"/>
+                </progressView>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mee-Zm-dZN" userLabel="BottomView">
+                    <rect key="frame" x="0.0" y="63" width="323" height="1"/>
+                    <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="1" id="gYR-zm-FtU"/>
+                    </constraints>
+                </view>
+                <button opaque="NO" contentMode="center" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="t22-rX-oug">
+                    <rect key="frame" x="285" y="22" width="27" height="22"/>
+                    <state key="normal" image="task-running"/>
+                    <connections>
+                        <action selector="setTaskStateAction:" destination="iN0-l3-epB" eventType="touchUpInside" id="IY0-Yg-GW8"/>
+                    </connections>
+                </button>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="249" verticalHuggingPriority="251" misplaced="YES" text="文件名" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wEz-ub-mtK">
+                    <rect key="frame" x="101" y="8" width="129" height="20.5"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="string" keyPath="lineBreakMode" value="UILineBreakModeWordWrap"/>
+                    </userDefinedRuntimeAttributes>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="V8A-L6-QHt">
+                    <rect key="frame" x="228" y="31" width="42" height="13"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+            </subviews>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="mee-Zm-dZN" secondAttribute="bottom" id="3MF-Fi-7GQ"/>
+                <constraint firstAttribute="trailing" secondItem="mee-Zm-dZN" secondAttribute="trailing" id="9Ug-gW-BMN"/>
+                <constraint firstItem="uq6-tm-e9J" firstAttribute="leading" secondItem="oES-Oq-X8c" secondAttribute="trailing" constant="16" id="AFy-Pc-7YA"/>
+                <constraint firstItem="t22-rX-oug" firstAttribute="leading" secondItem="uq6-tm-e9J" secondAttribute="trailing" constant="15" id="B25-hg-6Rg"/>
+                <constraint firstItem="oES-Oq-X8c" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="5" id="GGV-oz-wjj"/>
+                <constraint firstItem="wEz-ub-mtK" firstAttribute="trailing" secondItem="uq6-tm-e9J" secondAttribute="trailing" constant="-36" id="Nfm-zv-Mt0"/>
+                <constraint firstItem="t22-rX-oug" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="22" id="Of4-iR-nzp"/>
+                <constraint firstItem="wEz-ub-mtK" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="101" id="XRg-2W-Kaq"/>
+                <constraint firstItem="V8A-L6-QHt" firstAttribute="trailing" secondItem="uq6-tm-e9J" secondAttribute="trailing" id="XoR-gn-o4T"/>
+                <constraint firstItem="wEz-ub-mtK" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="3" id="Zzw-fe-72r"/>
+                <constraint firstItem="mee-Zm-dZN" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="bSp-9D-tjy"/>
+                <constraint firstItem="oES-Oq-X8c" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="16" id="d7H-9E-gTJ"/>
+                <constraint firstItem="wEz-ub-mtK" firstAttribute="bottom" secondItem="V8A-L6-QHt" secondAttribute="bottom" id="dzA-u7-5R1"/>
+                <constraint firstAttribute="trailing" secondItem="uq6-tm-e9J" secondAttribute="trailing" constant="53" id="eGa-uE-mmx"/>
+                <constraint firstItem="uq6-tm-e9J" firstAttribute="top" secondItem="V8A-L6-QHt" secondAttribute="bottom" constant="2" id="hBU-O9-kwQ"/>
+                <constraint firstItem="V8A-L6-QHt" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="31" id="qNV-J8-eny"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <inset key="insetFor6xAndEarlier" minX="0.0" minY="0.0" maxX="0.0" maxY="90"/>
+            <connections>
+                <outlet property="pauseBtn" destination="t22-rX-oug" id="fPg-oK-IdY"/>
+                <outlet property="percentLabel" destination="V8A-L6-QHt" id="oIS-Kv-Auq"/>
+                <outlet property="progressBar" destination="uq6-tm-e9J" id="Sqd-e6-ep8"/>
+                <outlet property="taskNameLabel" destination="wEz-ub-mtK" id="fLC-CF-JIf"/>
+                <outlet property="taskTypeImageView" destination="oES-Oq-X8c" id="u3t-5X-HtE"/>
+            </connections>
+            <point key="canvasLocation" x="452.5" y="-209"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="task-running" width="16" height="16"/>
+        <image name="upload-icon" width="69" height="53"/>
+    </resources>
+</document>

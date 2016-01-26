@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9531" systemVersion="15C50" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="AlarmMessageDetailViewController">
+            <connections>
+                <outlet property="buttonPlay" destination="Bvi-u1-pii" id="7iD-kM-TLR"/>
+                <outlet property="imageSnapshot" destination="WZB-S4-LGk" id="eOh-9w-oeb"/>
+                <outlet property="labelFrom" destination="vWX-cX-QFa" id="Czs-Ga-iwK"/>
+                <outlet property="labelTime" destination="ctc-ZB-Zgt" id="zQE-zh-YeC"/>
+                <outlet property="tableView" destination="85e-qz-I0J" id="qvd-eU-rwR"/>
+                <outlet property="toolBarNew" destination="2Zy-ni-lSm" id="WcX-Hh-WEK"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="Nil-HH-Mk7"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <toolbar hidden="YES" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2Zy-ni-lSm">
+                    <rect key="frame" x="0.0" y="524" width="320" height="44"/>
+                    <items>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="rNj-ju-IrX"/>
+                        <barButtonItem title="播放消息录像" id="w00-Aq-cKx">
+                            <connections>
+                                <action selector="buttonPlayAlarmVideoPressed:" destination="-1" id="uI1-1Z-qgl"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="tIm-Xt-tAv"/>
+                    </items>
+                </toolbar>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="alarmBackground.jpg" translatesAutoresizingMaskIntoConstraints="NO" id="WZB-S4-LGk">
+                    <rect key="frame" x="8" y="39" width="304" height="207"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="202" id="SOZ-JF-kXd"/>
+                    </constraints>
+                </imageView>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" alwaysBounceVertical="YES" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="1" sectionFooterHeight="1" translatesAutoresizingMaskIntoConstraints="NO" id="85e-qz-I0J">
+                    <rect key="frame" x="8" y="259" width="303" height="16"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="30" id="YaR-e1-grV"/>
+                    </constraints>
+                    <color key="sectionIndexBackgroundColor" red="0.93854561240000001" green="0.93854561240000001" blue="0.93854561240000001" alpha="1" colorSpace="calibratedRGB"/>
+                    <connections>
+                        <outlet property="dataSource" destination="-1" id="4VM-v4-SZo"/>
+                        <outlet property="delegate" destination="-1" id="llJ-bw-cke"/>
+                    </connections>
+                </tableView>
+                <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Bvi-u1-pii">
+                    <rect key="frame" x="8" y="39" width="303" height="207"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="202" id="G4q-sB-seg"/>
+                    </constraints>
+                    <state key="normal" image="play-icon-alarm">
+                        <color key="titleColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                    </state>
+                    <connections>
+                        <action selector="playVideo:" destination="-1" eventType="touchUpInside" id="k1z-nP-3nj"/>
+                    </connections>
+                </button>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="from" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vWX-cX-QFa">
+                    <rect key="frame" x="22" y="323" width="66" height="21"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                    <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="time" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ctc-ZB-Zgt">
+                    <rect key="frame" x="186" y="323" width="117" height="21"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                    <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                    <nil key="highlightedColor"/>
+                </label>
+            </subviews>
+            <color key="backgroundColor" red="0.93854561240000001" green="0.93854561240000001" blue="0.93854561240000001" alpha="1" colorSpace="calibratedRGB"/>
+            <constraints>
+                <constraint firstItem="2Zy-ni-lSm" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="0yj-Qc-cFh"/>
+                <constraint firstItem="Bvi-u1-pii" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="G2F-gk-ckJ"/>
+                <constraint firstItem="WZB-S4-LGk" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="8" id="GTc-ZJ-hvx"/>
+                <constraint firstAttribute="trailing" secondItem="Bvi-u1-pii" secondAttribute="trailing" constant="8" id="JC9-MA-z7w"/>
+                <constraint firstItem="Bvi-u1-pii" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="8" id="M0j-U7-sTP"/>
+                <constraint firstAttribute="trailing" secondItem="ctc-ZB-Zgt" secondAttribute="trailing" constant="16" id="NwB-WG-JLf"/>
+                <constraint firstAttribute="trailing" secondItem="2Zy-ni-lSm" secondAttribute="trailing" id="bWw-qk-KXE"/>
+                <constraint firstItem="WZB-S4-LGk" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="72" id="cFJ-s3-jsD"/>
+                <constraint firstItem="vWX-cX-QFa" firstAttribute="top" secondItem="85e-qz-I0J" secondAttribute="bottom" constant="8" id="ctp-Xw-8qP"/>
+                <constraint firstItem="ctc-ZB-Zgt" firstAttribute="top" secondItem="85e-qz-I0J" secondAttribute="bottom" constant="8" id="gh0-h3-dkI"/>
+                <constraint firstAttribute="bottom" secondItem="2Zy-ni-lSm" secondAttribute="bottom" id="m7s-Z1-AbK"/>
+                <constraint firstAttribute="trailing" secondItem="85e-qz-I0J" secondAttribute="trailing" constant="8" id="mjC-xy-vff"/>
+                <constraint firstItem="Bvi-u1-pii" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="72" id="ogP-jv-24x"/>
+                <constraint firstItem="85e-qz-I0J" firstAttribute="top" secondItem="WZB-S4-LGk" secondAttribute="bottom" constant="8" id="qrI-qr-wdl"/>
+                <constraint firstItem="85e-qz-I0J" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="8" id="rD7-7y-bcl"/>
+                <constraint firstAttribute="trailing" secondItem="WZB-S4-LGk" secondAttribute="trailing" constant="8" id="x3B-WS-gme"/>
+            </constraints>
+            <point key="canvasLocation" x="308" y="374"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="alarmBackground.jpg" width="1080" height="608"/>
+        <image name="play-icon-alarm" width="36" height="36"/>
+    </resources>
+</document>

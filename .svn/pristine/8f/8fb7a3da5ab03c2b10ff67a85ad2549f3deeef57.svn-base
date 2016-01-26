@@ -1,0 +1,73 @@
+//
+//  ViewController.h
+//  kxmovieapp
+//
+//  Created by Kolyvan on 11.10.12.
+//  Copyright (c) 2012 Konstantin Boukreev . All rights reserved.
+//
+//  https://github.com/kolyvan/kxmovie
+//  this file is part of KxMovie
+//  KxMovie is licenced under the LGPL v3, see lgpl-3.0.txt
+
+#import <UIKit/UIKit.h>
+#import <CyberLink/UPnPAV.h>
+@class CGUpnpAvController;
+@class CGUpnpAvItem;
+@class CGUpnpAvRenderer;
+
+@class KxMovieDecoder;
+
+extern NSString * const KxMovieParameterMinBufferedDuration;    // Float
+extern NSString * const KxMovieParameterMaxBufferedDuration;    // Float
+extern NSString * const KxMovieParameterDisableDeinterlacing;   // BOOL
+
+@interface KxMovieView : UIViewController<UITableViewDataSource, UITableViewDelegate,CGUpnpControlPointDelegate,CGUpnpDeviceDelegate>
+@property (readonly) BOOL playing;
+@property(strong,nonatomic) NSMutableString* filePath;
++ (id) movieViewControllerWithContentPath: (NSString *) path
+                               parameters: (NSDictionary *) parameters;
++ (id) openH264File: (NSString *) path
+         parameters: (NSDictionary *) parameters;
+- (void) play;
+- (void) pause;
+- (void) toolBarHidden;
+- (void) toolBarHiddens;
+- (void) setAllControlHidden;
+- (void) fullscreenMode: (id)sender;
+- (void)bottomBarAppears;
+- (Boolean) isEndOfFile;
+- (id) movieReplay;
+
+
+@property (nonatomic, retain)NSArray* dataSource;
+@property (nonatomic, retain)CGUpnpAvItem *avItem;
+@property (nonatomic, retain)UITableView *tableView;
+@property (nonatomic, retain)UIView *dlnaView;
+@property (nonatomic, retain)UIView *reTryView;
+
+
+@property (nonatomic, retain)CGUpnpAvRenderer *renderer;
+@property(nonatomic, retain)UIProgressView *progressView;
+
+
+@property(nonatomic, assign)NSInteger btnClickCount;
+/** 视频播放默认音量 */
+@property(nonatomic, assign)CGFloat defaultVol;
+/** 视频的当前播放时间 */
+@property(nonatomic, assign)CGFloat relTime;
+/** 播放时间占总时间的比例 */
+@property(nonatomic, assign)CGFloat scale;
+/** 时间定时器 */
+@property (retain, nonatomic) NSTimer *dlnaProgressTimer;
+/** 视频的总播放时间 */
+@property(nonatomic, assign)CGFloat totalTime;
+/**重新搜索进度指示器*/
+@property (nonatomic, strong)UIActivityIndicatorView *activity;
+
+
+@property (nonatomic) BOOL isPlay;
+
+- (void)timeEnd;
+- (id)initWithAvItem:(CGUpnpAvItem*)anAvItem;
+- (void)setCurrentVideoIndex:(NSUInteger)index;
+@end
