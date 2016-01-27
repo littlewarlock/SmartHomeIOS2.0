@@ -773,7 +773,8 @@ typedef NS_ENUM(NSUInteger, cameraControlDirection) {
 }
 
 - (void)viewDidDisappear:(BOOL)animated{
-
+    [super viewDidDisappear:animated];
+    
     if (self.kxvc != NULL) {
         [self.kxvc.view removeFromSuperview ];
         // 2015 12 23 hgc start
@@ -786,7 +787,8 @@ typedef NS_ENUM(NSUInteger, cameraControlDirection) {
 }
 
 - (void)viewWillDisappear:(BOOL)animated{
-//    [super viewWillAppear:animated];
+    [super viewWillDisappear:animated];
+    //
     if (self.isFullScreen) {
         [self fullScreen];
     }

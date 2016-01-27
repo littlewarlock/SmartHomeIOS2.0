@@ -1,4 +1,3 @@
-UIActivityIndicatorView *activityIndicator;
 //
 //  CameraListViewController.m
 //  SmartHomeForIOS
@@ -252,6 +251,11 @@ static NSString *CellTableIdentifier = @"CellTableIdentifier";
     [super viewWillDisappear:animated];
     [self.navigationController setToolbarHidden:YES animated:YES];
     [self.navigationController.toolbar setUserInteractionEnabled:NO];
+    //2016 01 27
+    if (self.activityIndicator) {
+        [self webViewDidFinishLoad];
+    }
+    
 }
 
 - (void)viewDidDisappear:(BOOL)animated
@@ -421,7 +425,7 @@ static NSString *CellTableIdentifier = @"CellTableIdentifier";
         [cell.buttonAlarm setImage:[UIImage imageNamed:@"alarm-off"] forState:UIControlStateNormal];
     }
 // about snapshot
-    UIImage *image = [UIImage imageNamed:@"devicetest.jpg"];
+//    UIImage *image = [UIImage imageNamed:@"devicetest.jpg"];
 //    UIImage *testimage = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:@"http://172.16.9.28:81/snapshot.cgi"]]];
 //    UIImage *myImage2 =[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:@"http://www.kutx.cn/xiaotupian/icons/png/200803/20080327095245737.png"]]];
     
@@ -454,8 +458,7 @@ static NSString *CellTableIdentifier = @"CellTableIdentifier";
         [engine enqueueOperation:operation];
 //hgc test 2016 01 20
 //hgc 替换getimageFromURL end
-        
-        
+
         // 2015 11 10 hgc add
         if ([tempOnlining isEqualToString:@"1"]) {
             //        UIImage* grayImage = [self grayscale:cell.imagetest.image type:1];

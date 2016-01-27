@@ -121,6 +121,8 @@ static NSString *CellTableIdentifier = @"CellTableIdentifier";
 
 - (void)viewWillDisappear:(BOOL)animated{
     NSLog(@"hello helloviewWillDisappear");
+    [super viewWillDisappear:animated];
+    
     self.isVisible = NO;
     [self.navigationController setToolbarHidden:YES animated:YES];
 }

@@ -118,7 +118,7 @@ static NSString *AlarmMessageDetailCellIdentifier = @"AlarmMessageDetailCellIden
 
 
 - (void)viewWillDisappear:(BOOL)animated{
-//    [super viewWillDisappear:animated];
+    [super viewWillDisappear:animated];
     //    [self.navigationController setToolbarHidden:YES animated:YES];
     NSLog(@"somehtingndgg");
     if (self.isFullScreen) {

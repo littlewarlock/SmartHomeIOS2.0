@@ -1,17 +1,17 @@
 {
-  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "f3d83b9a-97c9-4b4a-8455-deac071021ae",
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "33EA5EA66E65803DCD0C0E5A30FBCBE81EDA6B21",
   "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
-    "f3d83b9a-97c9-4b4a-8455-deac071021ae" : {
+    "33EA5EA66E65803DCD0C0E5A30FBCBE81EDA6B21" : {
 
     }
   },
   "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
-    "f3d83b9a-97c9-4b4a-8455-deac071021ae" : 0,
+    "33EA5EA66E65803DCD0C0E5A30FBCBE81EDA6B21" : 0,
     "6D3F791367E3EC64693A2548D668431B1FC117BF" : 0
   },
   "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "04ADA842-892C-461D-8BFE-1126A18938AF",
   "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
-    "f3d83b9a-97c9-4b4a-8455-deac071021ae" : "SmartHomeIOS\/",
+    "33EA5EA66E65803DCD0C0E5A30FBCBE81EDA6B21" : "SmartHomeIOS\/",
     "6D3F791367E3EC64693A2548D668431B1FC117BF" : "SmartHomeIOS244\/"
   },
   "DVTSourceControlWorkspaceBlueprintNameKey" : "SmartHomeForIOS",
@@ -19,14 +19,14 @@
   "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "SmartHomeForIOS.xcodeproj",
   "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
     {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/172.16.10.239\/svn\/SmartHomeIOS",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Subversion",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "33EA5EA66E65803DCD0C0E5A30FBCBE81EDA6B21"
+    },
+    {
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/littlewarlock\/SmartHomeIOS244.git",
       "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "6D3F791367E3EC64693A2548D668431B1FC117BF"
-    },
-    {
-      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/172.16.10.239\/svn\/SmartHomeIOS",
-      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Subversion",
-      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "f3d83b9a-97c9-4b4a-8455-deac071021ae"
     }
   ]
 }

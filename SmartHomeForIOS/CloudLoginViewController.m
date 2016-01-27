@@ -240,6 +240,7 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
     self.passwordText.text=nil;
 }
 //后退按钮

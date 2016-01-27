@@ -265,7 +265,7 @@ static NSString *footerId = @"footerId";
 }
 
 - (void)viewWillDisappear:(BOOL)animated{
-//    [super viewWillDisappear:animated];
+    [super viewWillDisappear:animated];
 
     if (self.isFullScreen) {
         [self closeKXVC];
