@@ -67,6 +67,7 @@
 
 //
 + (Boolean)isObjectNULLwith:(NSObject *)obj;
++ (Boolean)isNSStringSpacewith:(NSString *)string;
 
 @property (strong,nonatomic) NSMutableDictionary *dic;
 @property(strong,nonatomic) NSArray *deviceList;

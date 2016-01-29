@@ -67,7 +67,7 @@ CLLocationManager * locationManager;
             _selectedAppArray = [NSMutableArray arrayWithCapacity:10];
             [_selectedAppArray addObject:_appArray[0]]; //默认为用户添加前三个 app
             [_selectedAppArray addObject :_appArray[1]];
-            [_selectedAppArray addObject :_appArray[4]];
+            [_selectedAppArray addObject :_appArray[3]];
             [_selectedAppArray addObject :_appArray[5]];
             [FunctionManageTools saveSelectedApp];
         }
@@ -410,6 +410,8 @@ CLLocationManager * locationManager;
     // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
     NSOperationDownloadQueue *downloadQueue = [NSOperationDownloadQueue sharedInstance];
     [downloadQueue freezeOperations];
+    //hgc test 2016 01 27
+//    [[NSNotificationCenter defaultCenter] postNotificationName:UIApplicationWillResignActiveNotification object:nil];
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
@@ -438,6 +440,8 @@ CLLocationManager * locationManager;
     [downloadQueue checkAndRestoreFrozenOperations];
     //如果是在cameradetail页面，则继续播放rtsp
     [[NSNotificationCenter defaultCenter] postNotificationName:@"CameraDetailGoOnPlay" object:nil];
+    //2016 01 27 hgc
+//    [[NSNotificationCenter defaultCenter] postNotificationName:UIApplicationWillResignActiveNotification object:nil];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {

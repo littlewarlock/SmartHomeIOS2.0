@@ -535,6 +535,7 @@ _messageLabel.hidden = YES;
 {
     // LoggerStream(1, @"viewDidAppear");
     
+    
     [super viewDidAppear:animated];
         
     if (self.presentingViewController)
@@ -556,7 +557,7 @@ _messageLabel.hidden = YES;
         [_activityIndicatorView startAnimating];
     }
    
-        
+    NSLog(@"sdfsdkfsldjkflklkhello");
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(applicationWillResignActive:)
                                                  name:UIApplicationWillResignActiveNotification
@@ -1033,10 +1034,9 @@ _messageLabel.hidden = YES;
                                 _debugAudioStatus = 1;
                                 _debugAudioStatusTS = [NSDate date];
 #endif
-                                
-                                //2015 12 29 hgc start
-//                                [self playDidTouch:(nil)];
-                                //2015 12 29 hgc end
+                                //2016 01 29 hgc start
+                                _moviePosition = frame.position;
+                                //2016 01 29 hgc end
                                 break; // silence and exit
 
                             }
@@ -1050,6 +1050,9 @@ _messageLabel.hidden = YES;
                                 _debugAudioStatus = 2;
                                 _debugAudioStatusTS = [NSDate date];
 #endif
+                                //2016 01 29 hgc start
+                                _moviePosition = frame.position;
+                                //2016 01 29 hgc end
                                 continue;
                             }
                             
@@ -1960,7 +1963,30 @@ _messageLabel.hidden = YES;
     }
 }
 
-
+//hgc 2016 01 28
+- (void) awakeFromLocking
+{
+    //2015 11 06 hgc add
+    if (YES) {
+        [self pause];
+        _moviePosition = 0.0f;
+        [_decoder setPosition:0.0f];
+        _parameters = self.hgcParam;
+        NSError *error = nil;
+        [_decoder closeFile];
+        [_decoder openFile:self.hgcPath error:&error];
+    }
+    
+    //2015 11 06 hgc add
+    if (self.playing){
+        [self pause];
+    }
+    else
+    {
+        [self play];
+    }
+    
+}
 
 @end
 

@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface CameraListSetAllViewController : UIViewController
+@interface CameraListSetAllViewController : UIViewController<UIAlertViewDelegate>
 
 @property (strong,nonatomic)NSString *recordValue;
 @property (strong,nonatomic)NSString *alarmValue;

@@ -146,6 +146,14 @@ static NSString *CellTableIdentifier = @"CellTableIdentifier";
 -(void)loadData:(id)sender{
 
     [DeviceNetworkInterface getDeviceList:self withBlock:^(NSArray *deviceList, NSError *error) {
+        //
+        if (self.isCurrentViewControllerVisible) {
+            [self.navigationController setToolbarHidden:NO animated:YES];
+            [self.navigationController.toolbar setUserInteractionEnabled:YES];
+        }else{
+            NSLog(@"cameralistVC is gone");
+        }
+        //
         if (!error) {
 //            _devices = deviceList;
             self.devices = deviceList;
@@ -157,16 +165,8 @@ static NSString *CellTableIdentifier = @"CellTableIdentifier";
                 NSLog(@"self.devices.count");
                 [self.navigationController setToolbarHidden:YES animated:YES];
                 [self.navigationController.toolbar setUserInteractionEnabled:NO];
-                
-            }else{
-                
-                if (self.isCurrentViewControllerVisible) {
-                    [self.navigationController setToolbarHidden:NO animated:YES];
-                    [self.navigationController.toolbar setUserInteractionEnabled:YES];
-                }else{
-                    NSLog(@"cameralistVC is gone");
-                }
             }
+            
             NSLog(@"====%d",self.navigationController.toolbar.userInteractionEnabled);
             //2015 12 24 hgc
             
@@ -260,7 +260,6 @@ static NSString *CellTableIdentifier = @"CellTableIdentifier";
 
 - (void)viewDidDisappear:(BOOL)animated
 {
-//    [self.navigationController setToolbarHidden:YES];
     [super viewDidDisappear:animated];
 
 }

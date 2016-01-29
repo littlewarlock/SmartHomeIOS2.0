@@ -10,6 +10,9 @@
 #import "DeviceNetworkInterface.h"
 
 @interface CameraAddAutomaticViewController ()
+//button
+@property (strong, nonatomic) IBOutlet UIButton *buttonTest;
+//scroll
 @property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
 //textField
 @property (strong, nonatomic) IBOutlet UITextField *textFieldDeviceName;
@@ -35,6 +38,8 @@
 
 @property BOOL testFlg;
 
+//
+@property UIActivityIndicatorView *activityIndicator;
 @end
 
 @implementation CameraAddAutomaticViewController
@@ -69,9 +74,7 @@
     self.navigationItem.title = @"自动添加";
     //testflg
     self.testFlg = NO;
-    
-    //取得摄像头数据 gedata
-    [self getCameraSetting:self];
+
     
 //    UIBarButtonItem *rightBtn = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemSave target:self action:@selector(saveCameraAddAutomatic:)];
 //    self.navigationItem.rightBarButtonItem = rightBtn;
@@ -90,6 +93,9 @@
     //摄像头addman页 navigation右按钮 2015 11 04 hgc end
     
     
+    //取得摄像头数据 gedata
+    [self getCameraSetting:self];
+    
     //设置scrollview的范围
     [self.scrollView setScrollEnabled:YES];
     self.scrollView.contentSize = CGSizeMake(self.view.frame.size.width, self.view.frame.size.height);
@@ -107,6 +113,8 @@
     //2015 12 22 hgc added
     NSArray *array = [self.deviceInfo.addition componentsSeparatedByString:@":"];
     self.textFieldIPadress.text = array[0];
+    //2016 01 29
+    self.textFieldIPadressPort.text = array[1];
 //    self.textFieldIPadress.text = self.deviceInfo.addition;
     //2015 12 22 hgc ended
     self.labelBrand.text = self.deviceInfo.brand;
@@ -118,10 +126,11 @@
     // hgc 2015 11 04 added start
 //    [self.sliderSensitivity setThumbImage:[UIImage imageNamed:@"point"] forState:UIControlStateNormal];
     // hgc 2015 11 04 added end
-
-    
 }
 
+- (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+}
 
 - (void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
@@ -143,8 +152,7 @@
         [alert show];
         return;
     }
-    
-    if ([self.textFieldDeviceName.text isEqualToString:@""]) {
+    if ([DeviceNetworkInterface isNSStringSpacewith:self.textFieldDeviceName.text]) {
         UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"设备名" message:@"设备名不能为空" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [self.view addSubview:alert];
         [alert show];
@@ -197,8 +205,13 @@
         NSLog(@"self.deviceInfo.userid=%@",self.deviceInfo.alarmSetInSleep);
         
 //        DeviceInfo *df = self.deviceInfo;
+        //
+        [self.navigationItem.rightBarButtonItem setEnabled:NO];
+        [self webViewDidStartLoad];
 //请求添加
         [DeviceNetworkInterface addDeviceAutomaticWithDeviceInfo:self.deviceInfo withBlock:^(NSString *result, NSString *message, NSError *error) {
+            //
+            [self webViewDidFinishLoad];
             if (!error) {
                 NSLog(@"camera getDeviceSettingWithBrand result===%@",result);
                 NSLog(@"camera getDeviceSettingWithBrand mseeage===%@",message);
@@ -221,6 +234,8 @@
                 [self.view addSubview:alert];
                 [alert show];
             }
+            //
+            [self.navigationItem.rightBarButtonItem setEnabled:YES];
         }];
 
     }
@@ -229,17 +244,21 @@
 
 -(void)getCameraSetting:(id)sender
 {
+    //2016 01 29
+    [self webViewDidStartLoad];
+    [self.navigationItem.rightBarButtonItem setEnabled:NO];
+    //
     [DeviceNetworkInterface getDeviceSettingWithBrand:_brand andModel:_model withBlock:^(NSString *result, NSString *message, NSArray *brands, NSError *error) {
         if (!error) {
             NSLog(@"camera getDeviceSettingWithBrand result===%@",result);
             NSLog(@"camera getDeviceSettingWithBrand mseeage===%@",message);
             NSLog(@"camera getDeviceSettingWithBrand brands===%@",brands);
-            
+
             
             // hgc 2015 11 05 start
             // hgc 2015 12 30 start
             if ([DeviceNetworkInterface isObjectNULLwith:brands]) {
-                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"系统错误" message:@"网络接口出现错误，请停止操作" delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
+                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"系统错误" message:@"网络接口出现错误，请联系供应商" delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
                 [alert show];
                 if (self.navigationController) {
                     [self.navigationController popViewControllerAnimated:YES];
@@ -259,7 +278,7 @@
             else if (
                  ([DeviceNetworkInterface isObjectNULLwith:brands[0][@"userid"]])
                 || ([DeviceNetworkInterface isObjectNULLwith:brands[0][@"passwd"]])
-                || ([DeviceNetworkInterface isObjectNULLwith:brands[0][@"port"]])
+//                || ([DeviceNetworkInterface isObjectNULLwith:brands[0][@"port"]])
                 )
             {
 //                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"系统错误" message:@"网络接口出现错误，请停止操作" delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
@@ -272,7 +291,7 @@
                 NSLog(@"check ok.");
                 self.textFieldUserName.text = brands[0][@"userid"];
                 self.textFieldUserPassword.text = brands[0][@"passwd"];
-                self.textFieldIPadressPort.text =brands[0][@"port"];
+//                self.textFieldIPadressPort.text =brands[0][@"port"];
             }
             //hgc 2015 11 05 end
             
@@ -288,15 +307,21 @@
                 //
             }
             //
-            if ([DeviceNetworkInterface isObjectNULLwith:self.textFieldIPadressPort.text]) {
-                self.textFieldIPadressPort.text = @"";
-            }else{
-                //
-            }
+//            if ([DeviceNetworkInterface isObjectNULLwith:self.textFieldIPadressPort.text]) {
+//                self.textFieldIPadressPort.text = @"";
+//            }else{
+//                //
+//            }
         }
         else{
             NSLog(@"getCameraSetting error");
+            //alert提示
+            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"摄像头添加" message:@"摄像头数据取得失败" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            [alert show];
         }
+        //2016 01 29
+        [self.navigationItem.rightBarButtonItem setEnabled:YES];
+        [self webViewDidFinishLoad];
     }];
 }
 - (IBAction)buttonTestPressed:(UIButton *)sender {
@@ -311,7 +336,33 @@
     NSString *passwd = self.textFieldUserPassword.text;
     NSString *brand = self.labelBrand.text;
     NSString *model = self.labelModel.text;
+    //
+    //
+    if ([DeviceNetworkInterface isNSStringSpacewith:addition]) {
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"连接测试" message:@"IP不能为空" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [alert show];
+        return;
+    }else if([DeviceNetworkInterface isNSStringSpacewith:userid]){
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"连接测试" message:@"用户名不能为空" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [alert show];
+        return;
+    }else if([DeviceNetworkInterface isNSStringSpacewith:passwd]){
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"连接测试" message:@"密码不能为空" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [alert show];
+        return;
+    }else if([DeviceNetworkInterface isNSStringSpacewith:brand]){
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"连接测试" message:@"品牌不能为空" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [alert show];
+        return;
+    }else if([DeviceNetworkInterface isNSStringSpacewith:model]){
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"连接测试" message:@"型号不能为空" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [alert show];
+        return;
+    }
     
+    //
+    [self.buttonTest setEnabled:NO];
+    //
     [DeviceNetworkInterface newNetworkTestForDeviceAddWithAddition:addition andUserid:userid andPasswd:passwd withBlock:^(NSString *result, NSString *message, NSString *code, NSString *sensitivity, NSString *wifi, NSString *brand, NSString *model, NSString *version, NSError *error) {
         if (!error) {
             NSLog(@"camera getDeviceSettingWithBrand result===%@",result);
@@ -368,6 +419,8 @@
             
             self.testFlg = NO;
         }
+        //
+        [self.buttonTest setEnabled:YES];
     }];
 // 2015 11 18
     /*
@@ -415,5 +468,49 @@
 - (IBAction)finishEdit:(id)sender {
     [sender resignFirstResponder];
 }
+
+//for 刷新数据时加载动画 add by hgc 2015 10 19 start
+//开始加载动画
+- (void)webViewDidStartLoad{
+    //
+    [self textFieldEditing:self];
+    //创建UIActivityIndicatorView背底半透明View
+    UIView *view = [[UIView alloc] initWithFrame:[UIScreen mainScreen].applicationFrame];
+    [view setTag:2206];
+    [view setBackgroundColor:[UIColor colorWithRed:255.0/255 green:255.0/255 blue:255.0/255 alpha:0.8]];
+    
+    [view setAlpha:1];
+    [self.view addSubview:view];
+    
+    self.activityIndicator = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 32.0f, 32.0f)];
+    [self.activityIndicator setCenter:view.center];
+    [self.activityIndicator setActivityIndicatorViewStyle:UIActivityIndicatorViewStyleWhiteLarge];
+    [self.activityIndicator setColor:[UIColor blackColor]];
+    [view addSubview:self.activityIndicator];
+    
+    [self.activityIndicator startAnimating];
+    
+    UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(0.0f, 0.0f, self.view.frame.size.width, self.view.frame.size.height)];
+    label.text = @"数据加载中，请稍后...";
+    [label setCenter:CGPointMake(view.center.x, view.center.y + 40)];
+    [label setTextAlignment:NSTextAlignmentCenter];
+    [view addSubview:label];
+}
+//结束加载动画
+- (void)webViewDidFinishLoad{
+    [self.activityIndicator stopAnimating];
+    UIView *view = (UIView *)[self.view viewWithTag:2206];
+    [view removeFromSuperview];
+}
+//for 刷新数据时加载动画 add by hgc 2015 10 19 end
+
+- (void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    [self.buttonTest setEnabled:YES];
+    [self.navigationItem.rightBarButtonItem setEnabled:YES];
+    [self.navigationController setToolbarHidden:YES animated:NO];
+    [self webViewDidFinishLoad];
+}
+
 
 @end

@@ -40,4 +40,7 @@ extern NSString * const KxMovieParameterDisableDeinterlacing;   // BOOL
 - (UIView *) frameView;
 - (void)testClose;
 
+//2016 01 28
+- (void) awakeFromLocking;
+
 @end

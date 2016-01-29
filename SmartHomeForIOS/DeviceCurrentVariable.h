@@ -19,5 +19,7 @@
 @property (nonatomic,strong) NSString *deviceTag;
 
 + (instancetype)sharedInstance;
++ (BOOL)isPureInt:(NSString *)string;
++ (BOOL)isPureFloat:(NSString *)string;
 
 @end

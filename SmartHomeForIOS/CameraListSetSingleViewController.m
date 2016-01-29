@@ -34,6 +34,8 @@
 @property (strong, nonatomic) IBOutlet UISwitch *switchSleepMode;
 //slider
 @property (strong, nonatomic) IBOutlet UISlider *sliderSensitivity;
+//
+@property UIActivityIndicatorView *activityIndicator;
 
 @end
 
@@ -82,6 +84,9 @@
 //    }
 //hgc 2015 10 19 设置页面与添加页面分开，故注释
     
+    //
+    [self.navigationItem.rightBarButtonItem setEnabled:NO];
+    [self webViewDidStartLoad];
     //get data
     [DeviceNetworkInterface getCameraSettingWithDeviceId:_deviceID withBlock:^(NSString *result, NSString *message, NSArray *devices, NSError *error) {
         if (!error) {
@@ -123,7 +128,11 @@
         }
         else{
             NSLog(@"getDeviceAllSetting error");
+            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"摄像头设置" message:@"设置数据取得失败，请重新登录再试" delegate:self cancelButtonTitle:@"确认" otherButtonTitles:nil];
+            [alert show];
         }
+        [self.navigationItem.rightBarButtonItem setEnabled:YES];
+        [self webViewDidFinishLoad];
     }];
     
     //设置修改Name按钮图片
@@ -200,8 +209,13 @@
         deviceInfo.sensitivity = [NSString stringWithFormat:@"%d", (int)roundf(self.sliderSensitivity.value)];
         deviceInfo.wifi = self.labelCameraWIFI.text;
         //hgc
+        //2016 01 29
+        [self.navigationItem.rightBarButtonItem setEnabled:NO];
+        [self webViewDidStartLoad];
         //请求添加
         [DeviceNetworkInterface updateCameraSettingWithDeviceInfo:deviceInfo withBlock:^(NSString *result, NSString *message, NSError *error) {
+            //
+            [self webViewDidFinishLoad];
             if (!error) {
                 NSLog(@"camera getDeviceSettingWithBrand result===%@",result);
                 NSLog(@"camera getDeviceSettingWithBrand mseeage===%@",message);
@@ -224,6 +238,8 @@
                 [self.view addSubview:alert];
                 [alert show];
             }
+            //2016 01 29
+            [self.navigationItem.rightBarButtonItem setEnabled:YES];
         }];
     }
 }
@@ -487,5 +503,43 @@
     
 }
 
+
+//for 刷新数据时加载动画 add by hgc 2015 10 19 start
+//开始加载动画
+- (void)webViewDidStartLoad{
+    //创建UIActivityIndicatorView背底半透明View
+    UIView *view = [[UIView alloc] initWithFrame:[UIScreen mainScreen].applicationFrame];
+    [view setTag:2205];
+    [view setBackgroundColor:[UIColor colorWithRed:255/255.0 green:255/255.0 blue:255/255.0 alpha:0.8f]];
+    [view setAlpha:1];
+    [self.view addSubview:view];
+    
+    self.activityIndicator = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 32.0f, 32.0f)];
+    [self.activityIndicator setCenter:view.center];
+    [self.activityIndicator setActivityIndicatorViewStyle:UIActivityIndicatorViewStyleWhiteLarge];
+    [self.activityIndicator setColor:[UIColor blackColor]];
+    [view addSubview:self.activityIndicator];
+    
+    [self.activityIndicator startAnimating];
+    
+    UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(0.0f, 0.0f, self.view.frame.size.width, self.view.frame.size.height)];
+    label.text = @"数据加载中，请稍后...";
+    [label setCenter:CGPointMake(view.center.x, view.center.y + 40)];
+    [label setTextAlignment:NSTextAlignmentCenter];
+    [view addSubview:label];
+}
+//结束加载动画
+- (void)webViewDidFinishLoad{
+    [self.activityIndicator stopAnimating];
+    UIView *view = (UIView *)[self.view viewWithTag:2205];
+    [view removeFromSuperview];
+}
+//for 刷新数据时加载动画 add by hgc 2015 10 19 end
+
+- (void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    [self webViewDidFinishLoad];
+
+}
 
 @end

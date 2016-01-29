@@ -1193,9 +1193,11 @@ typedef NS_ENUM(NSUInteger, cameraControlDirection) {
 
 - (void)rtspPauseToPlay{
     NSLog(@"i am back");
-    if (![self.kxvc playing]) {
-        [self.kxvc play];
-    }
+//    if (![self.kxvc playing]) {
+//        [self.kxvc play];
+    [self.kxvc awakeFromLocking];
+//    }
+    
     
 }
 //2016 01 21

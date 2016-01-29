@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="8191" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9531" systemVersion="15C50" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="CameraAddAutomaticViewController">
             <connections>
+                <outlet property="buttonTest" destination="yBN-bZ-T4J" id="rTb-cg-2ON"/>
                 <outlet property="labelBrand" destination="Y1Y-8b-6Q6" id="LrG-pa-yqf"/>
                 <outlet property="labelModel" destination="AE0-bh-bKr" id="wFo-2S-WlY"/>
                 <outlet property="labelVersion" destination="hm6-n5-5Sr" id="2RV-E3-uPj"/>
@@ -312,12 +313,13 @@
                                         <action selector="finishEdit:" destination="-1" eventType="editingDidEndOnExit" id="rZT-7H-fCn"/>
                                     </connections>
                                 </textField>
-                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleAspectFit" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="14" translatesAutoresizingMaskIntoConstraints="NO" id="oe8-Bf-J9n">
+                                <textField opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="14" translatesAutoresizingMaskIntoConstraints="NO" id="oe8-Bf-J9n">
                                     <rect key="frame" x="234" y="59" width="62" height="30"/>
                                     <constraints>
                                         <constraint firstAttribute="width" constant="62" id="Chn-jU-jnb"/>
                                         <constraint firstAttribute="height" constant="30" id="LGB-2F-TzE"/>
                                     </constraints>
+                                    <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                     <textInputTraits key="textInputTraits" returnKeyType="done"/>
                                     <connections>

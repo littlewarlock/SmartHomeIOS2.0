@@ -43,9 +43,13 @@ BOOL testFlg;
 @property (strong, nonatomic) IBOutlet UISwitch *swtichSleepMode;
 //slider
 @property (strong, nonatomic) IBOutlet UISlider *sliderSensitivity;
-
+//button
+@property (strong, nonatomic) IBOutlet UIButton *buttonTest;
+//
+@property UIActivityIndicatorView *activityIndicator;
 
 //nsarray
+@property (strong,nonatomic) NSArray *arrayFromServer;
 @property (strong,nonatomic) NSMutableArray *mutableArrayBrand;
 @property (strong,nonatomic) NSMutableArray *mutableArrayModel;
 //nsdictionary
@@ -63,11 +67,6 @@ BOOL testFlg;
     self.deviceInfo = [[DeviceInfo alloc]init];
     self.labelVersion.text = @"";
     self.labelWIFI.text = @"";
-    
-    //getdata
-    pickerFlg = brand;
-    testFlg = NO;
-    [self getCameraSetting:self];
     
     //navigationItem
     self.navigationItem.title = @"手动添加";
@@ -89,6 +88,10 @@ BOOL testFlg;
     //2015 12 24
     //摄像头addman页 navigation右按钮 2015 11 04 hgc end
     
+    //getdata
+    pickerFlg = brand;
+    testFlg = NO;
+    [self getCameraSetting:self];
     
     //设置scrollview的范围
     [self.scroll setScrollEnabled:YES];
@@ -105,7 +108,7 @@ BOOL testFlg;
 //    _styles = @[@"11111111111111",@"2222222222",@"33333",@"666666666"];
 
 // hgc 2015 11 04 added start
-    [self.sliderSensitivity setThumbImage:[UIImage imageNamed:@"point"] forState:UIControlStateNormal];
+//    [self.sliderSensitivity setThumbImage:[UIImage imageNamed:@"point"] forState:UIControlStateNormal];
 // hgc 2015 11 04 added end
     
     //2016 01 20
@@ -117,12 +120,18 @@ BOOL testFlg;
     self.mutableArrayModel = [[NSMutableArray alloc]init];
     self.mutableArrayBrand = [[NSMutableArray alloc]init];
     self.dicForBrandModel = [[NSMutableDictionary alloc]init];
-    
+    //
+    [self.navigationItem.rightBarButtonItem setEnabled:NO];
+    [self webViewDidStartLoad];
+    //
     [DeviceNetworkInterface getDeviceSettingForManualAdd:self withBlock:^(NSString *result, NSString *message, NSArray *brands, NSError *error) {
+        [self webViewDidFinishLoad];
         if (!error) {
             NSLog(@"camera getDeviceSettingForManualAdd result===%@",result);
             NSLog(@"camera getDeviceSettingForManualAdd mseeage===%@",message);
             NSLog(@"camera getDeviceSettingForManualAdd brands===%@",brands);
+            //
+            self.arrayFromServer = brands;
             //分别取得brand 和 model list
             for (NSDictionary *dic in brands) {
                 NSLog(@"dic==%@",dic);
@@ -144,7 +153,9 @@ BOOL testFlg;
             NSLog(@"mutableArrayModel=%@",self.mutableArrayModel);
             
             //pickerView
-            self.pickerBrand.frame = CGRectMake(0, [UIScreen mainScreen].applicationFrame.size.height + 300, self.view.frame.size.width, 260);
+//            self.pickerBrand.frame = CGRectMake(0, [UIScreen mainScreen].applicationFrame.size.height + 300, self.view.frame.size.width, 260);
+            NSLog(@"[UIScreen mainScreen].bounds.size.height==%f",[UIScreen mainScreen].bounds.size.height);
+            self.pickerBrand.frame = CGRectMake(0, [UIScreen mainScreen].bounds.size.height + 300, self.view.frame.size.width, 260);
             self.pickerBrand.alpha = 0.8;
             self.pickerBrand.backgroundColor = [UIColor lightGrayColor];
             self.pickerBrand.hidden = YES;
@@ -153,6 +164,8 @@ BOOL testFlg;
         else{
             NSLog(@"getCameraSetting error");
         }
+        //
+        [self.navigationItem.rightBarButtonItem setEnabled:YES];
     }];
 }
 
@@ -167,10 +180,10 @@ BOOL testFlg;
     [UIView animateWithDuration:0.3 animations:^{
         if (hidden) {
             NSLog(@"hiddenhidden");
-            view.frame = CGRectMake(0, [UIScreen mainScreen].applicationFrame.size.height + 300, self.view.frame.size.width, 260);
+            view.frame = CGRectMake(0, [UIScreen mainScreen].bounds.size.height + 300, self.view.frame.size.width, 260);
         } else {
             [view setHidden:hidden];
-            view.frame = CGRectMake(0, [UIScreen mainScreen].applicationFrame.size.height - 250, self.view.frame.size.width, 260);
+            view.frame = CGRectMake(0, [UIScreen mainScreen].bounds.size.height - 240, self.view.frame.size.width, 260);
 //            view.frame = CGRectMake(0, [UIScreen mainScreen].applicationFrame.size.height - 250, self.view.frame.size.width, 260);
         }
     } completion:^(BOOL finished) {
@@ -247,6 +260,7 @@ BOOL testFlg;
         array = self.dicForBrandModel[self.labelBrand.text];
         NSLog(@"arrayselect[row]===%@",array[row]);
         self.labelStyle.text = array[row];
+        [self performSelector:@selector(fillUserPwdIPPort) withObject:nil afterDelay:0.0f];
     }
 //    [self ViewAnimation:self.pickerBrand willHidden:YES];
     [UIPickerView animateWithDuration:0.1 animations:^{
@@ -298,7 +312,6 @@ BOOL testFlg;
 }
 - (void)saveCameraAddManual:(id)sender
 {
-    
     NSLog(@"Saving... saveCameraAddManual");
     //save之前test网络连接
     if (testFlg == NO) {
@@ -307,36 +320,41 @@ BOOL testFlg;
         [alert show];
     }else{
         //save
-    if ([self.textFieldDeviceName.text isEqualToString:@""]) {
+    if ([DeviceNetworkInterface isNSStringSpacewith:self.textFieldDeviceName.text]) {
         UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"设备名" message:@"设备名不能为空" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [self.view addSubview:alert];
         [alert show];
-    }else if ([self.textFieldIPadress.text isEqualToString:@""]) {
+    }else if ([DeviceNetworkInterface isNSStringSpacewith:self.textFieldIPadress.text]) {
         UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"IP地址" message:@"IP不能为空" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [self.view addSubview:alert];
         [alert show];
     }
-    else if ([self.textFieldIPadressPort.text isEqualToString:@""]) {
+    else if ([DeviceNetworkInterface isNSStringSpacewith:self.textFieldIPadress.text]&&[self.textFieldIPadressPort.text isEqualToString:@""]) {
         UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"IP端口" message:@"IPPort不能为空" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [self.view addSubview:alert];
         [alert show];
     }
-    else if ([self.textFieldUserName.text isEqualToString:@""]) {
+    else if ([DeviceNetworkInterface isNSStringSpacewith:self.textFieldUserName.text]&&[self.textFieldUserName.text isEqualToString:@""]) {
         UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"用户名" message:@"用户名不能为空" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [self.view addSubview:alert];
         [alert show];
     }
-    else if ([self.textFieldUserPassword.text isEqualToString:@""]) {
+    else if ([DeviceNetworkInterface isNSStringSpacewith:self.textFieldUserPassword.text]&&[self.textFieldUserPassword.text isEqualToString:@""]) {
         UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"密码" message:@"密码不能为空" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [self.view addSubview:alert];
         [alert show];
     }
-    else if ([self.labelBrand.text isEqualToString:@""]) {
+    else if ([DeviceNetworkInterface isNSStringSpacewith:self.labelBrand.text]&&[self.labelBrand.text isEqualToString:@""]) {
         UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"品牌" message:@"品牌不能为空" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [self.view addSubview:alert];
         [alert show];
     }
-    else if ([self.labelStyle.text isEqualToString:@""]) {
+    else if ([DeviceNetworkInterface isNSStringSpacewith:self.deviceInfo.code]) {
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"code" message:@"品牌不能为空" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [self.view addSubview:alert];
+        [alert show];
+    }
+    else if ([DeviceNetworkInterface isNSStringSpacewith:self.labelStyle.text]&&[self.labelStyle.text isEqualToString:@""]) {
         UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"型号" message:@"型号不能为空" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [self.view addSubview:alert];
         [alert show];
@@ -372,7 +390,7 @@ BOOL testFlg;
         self.deviceInfo.wifi = self.labelWIFI.text;
         self.deviceInfo.brand = self.labelBrand.text;
         self.deviceInfo.model = self.labelStyle.text;
-        self.deviceInfo.addition = self.textFieldIPadress.text;
+        self.deviceInfo.addition = [NSString stringWithFormat:@"%@:%@",self.textFieldIPadress.text,self.textFieldIPadressPort.text];
         self.deviceInfo.type = @"0";
         self.deviceInfo.version = self.labelVersion.text;
         
@@ -393,8 +411,12 @@ BOOL testFlg;
         NSLog(@"self.deviceInfo.userid=%@",self.deviceInfo.alarmSetOutHome);
         NSLog(@"self.deviceInfo.userid=%@",self.deviceInfo.alarmSetInSleep);
         
+        //
+        [self.navigationItem.rightBarButtonItem setEnabled:NO];
+        [self webViewDidStartLoad];
         //请求添加
         [DeviceNetworkInterface addDeviceAutomaticWithDeviceInfo:self.deviceInfo withBlock:^(NSString *result, NSString *message, NSError *error) {
+            [self webViewDidFinishLoad];
             if (!error) {
                 NSLog(@"camera addDeviceAutomaticWithDeviceInfo result===%@",result);
                 NSLog(@"camera addDeviceAutomaticWithDeviceInfo mseeage===%@",message);
@@ -417,6 +439,7 @@ BOOL testFlg;
                 [self.view addSubview:alert];
                 [alert show];
             }
+            [self.navigationItem.rightBarButtonItem setEnabled:YES];
         }];
     }
     }
@@ -431,13 +454,38 @@ BOOL testFlg;
     NSString *passwd = self.textFieldUserPassword.text;
     NSString *brand = self.labelBrand.text;
     NSString *model = self.labelStyle.text;
+    //
+    if ([DeviceNetworkInterface isNSStringSpacewith:addition]) {
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"连接测试" message:@"IP不能为空" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [alert show];
+        return;
+    }else if([DeviceNetworkInterface isNSStringSpacewith:userid]){
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"连接测试" message:@"用户名不能为空" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [alert show];
+        return;
+    }else if([DeviceNetworkInterface isNSStringSpacewith:passwd]){
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"连接测试" message:@"密码不能为空" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [alert show];
+        return;
+    }else if([DeviceNetworkInterface isNSStringSpacewith:brand]){
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"连接测试" message:@"品牌不能为空" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [alert show];
+        return;
+    }else if([DeviceNetworkInterface isNSStringSpacewith:model]){
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"连接测试" message:@"型号不能为空" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [alert show];
+        return;
+    }
     
+    [self.buttonTest setEnabled:NO];
+    //
     [DeviceNetworkInterface networkTestForDeviceAddWithAddition:addition andUserid:userid andPasswd:passwd andBrand:brand andModel:model withBlock:^(NSString *result, NSString *message, NSString *code, NSString *sensitivity, NSString *wifi, NSString *version, NSError *error) {
         if (!error) {
             NSLog(@"camera getDeviceSettingWithBrand result===%@",result);
             NSLog(@"camera getDeviceSettingWithBrand mseeage===%@",message);
             if ([result isEqualToString:@"success"]) {
                 self.deviceInfo.code = code;
+                NSLog(@"code==%@",code);
                 self.sliderSensitivity.value = sensitivity.floatValue;
                 self.labelWIFI.text = wifi;
                 self.labelVersion.text =version;
@@ -462,6 +510,8 @@ BOOL testFlg;
             [alert show];
             testFlg = NO;
         }
+        //
+        [self.buttonTest setEnabled:YES];
     }];
     
 }
@@ -470,5 +520,69 @@ BOOL testFlg;
     [sender resignFirstResponder];
 }
 
+
+//for 刷新数据时加载动画 add by hgc 2015 10 19 start
+//开始加载动画
+- (void)webViewDidStartLoad{
+    [self textFieldEditing:self];
+    //创建UIActivityIndicatorView背底半透明View
+    UIView *view = [[UIView alloc] initWithFrame:[UIScreen mainScreen].applicationFrame];
+    [view setTag:2206];
+    [view setBackgroundColor:[UIColor colorWithRed:255.0/255 green:255.0/255 blue:255.0/255 alpha:0.8]];
+    
+    [view setAlpha:1];
+    [self.view addSubview:view];
+    
+    self.activityIndicator = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 32.0f, 32.0f)];
+    [self.activityIndicator setCenter:view.center];
+    [self.activityIndicator setActivityIndicatorViewStyle:UIActivityIndicatorViewStyleWhiteLarge];
+    [self.activityIndicator setColor:[UIColor blackColor]];
+    [view addSubview:self.activityIndicator];
+    
+    [self.activityIndicator startAnimating];
+    
+    UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(0.0f, 0.0f, self.view.frame.size.width, self.view.frame.size.height)];
+    label.text = @"数据加载中，请稍后...";
+    [label setCenter:CGPointMake(view.center.x, view.center.y + 40)];
+    [label setTextAlignment:NSTextAlignmentCenter];
+    [view addSubview:label];
+}
+//结束加载动画
+- (void)webViewDidFinishLoad{
+    [self.activityIndicator stopAnimating];
+    UIView *view = (UIView *)[self.view viewWithTag:2206];
+    [view removeFromSuperview];
+}
+//for 刷新数据时加载动画 add by hgc 2015 10 19 end
+
+- (void)fillUserPwdIPPort{
+    NSLog(@"fillUserPwdIPPort");
+    NSLog(@"self.labelBrand==%@",self.labelBrand.text);
+    NSLog(@"labelStyle==%@",self.labelStyle.text);
+    for (NSDictionary *dic in self.arrayFromServer) {
+        NSLog(@"fillUserPwdIPPortdic==%@",dic);
+        if ([self.labelBrand.text isEqualToString:dic[@"brand"]]) {
+            if ([self.labelStyle.text isEqualToString:dic[@"model"]]) {
+                NSLog(@"dic passwd==%@",dic[@"passwd"]);
+                NSLog(@"dic port==%@",dic[@"port"]);
+                NSLog(@"dic userid==%@",dic[@"userid"]);
+                self.textFieldIPadressPort.text = dic[@"port"];
+                self.textFieldUserName.text = dic[@"userid"];
+                self.textFieldUserPassword.text = dic[@"passwd"];
+                return;
+            }
+        }
+    }
+    NSLog(@"impossible is nothing");
+}
+
+
+- (void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    [self.buttonTest setEnabled:YES];
+    [self.navigationItem.rightBarButtonItem setEnabled:YES];
+    [self.navigationController setToolbarHidden:YES];
+    [self webViewDidFinishLoad];
+}
 
 @end

@@ -7,6 +7,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="CameraAddManualViewController">
             <connections>
+                <outlet property="buttonTest" destination="dmh-nT-shd" id="Dl7-bk-kLX"/>
                 <outlet property="firstContentView" destination="Vf1-Dh-jr4" id="oer-78-HCm"/>
                 <outlet property="labelBrand" destination="95Z-Sj-MOm" id="sjy-mu-20c"/>
                 <outlet property="labelStyle" destination="UqO-eB-rFh" id="Xmt-1z-YEO"/>
@@ -135,37 +136,37 @@
                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                     <nil key="highlightedColor"/>
                                 </label>
-                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="2Qr-XT-kQM">
+                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="15" translatesAutoresizingMaskIntoConstraints="NO" id="2Qr-XT-kQM">
                                     <rect key="frame" x="116" y="62" width="108" height="30"/>
                                     <constraints>
                                         <constraint firstAttribute="width" constant="108" id="a8O-xt-pyl"/>
                                         <constraint firstAttribute="height" constant="30" id="gJ3-no-ow6"/>
                                     </constraints>
-                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                     <textInputTraits key="textInputTraits" keyboardType="numbersAndPunctuation"/>
                                     <connections>
                                         <action selector="finishEdit:" destination="-1" eventType="editingDidEndOnExit" id="r2w-u3-He9"/>
                                     </connections>
                                 </textField>
-                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="RLb-LM-UUB">
+                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="15" translatesAutoresizingMaskIntoConstraints="NO" id="RLb-LM-UUB">
                                     <rect key="frame" x="232" y="62" width="64" height="30"/>
                                     <constraints>
                                         <constraint firstAttribute="width" constant="64" id="45O-Q4-jUr"/>
                                         <constraint firstAttribute="height" constant="30" id="fYO-8l-5o0"/>
                                     </constraints>
-                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                     <textInputTraits key="textInputTraits" keyboardType="numberPad"/>
                                     <connections>
                                         <action selector="finishEdit:" destination="-1" eventType="editingDidEndOnExit" id="RiX-vE-R5A"/>
                                     </connections>
                                 </textField>
-                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="VPs-ZB-d44">
+                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="15" translatesAutoresizingMaskIntoConstraints="NO" id="VPs-ZB-d44">
                                     <rect key="frame" x="116" y="109" width="180" height="30"/>
                                     <constraints>
                                         <constraint firstAttribute="width" constant="180" id="3na-bF-YDF"/>
                                         <constraint firstAttribute="height" constant="30" id="vdZ-sh-dnt"/>
                                     </constraints>
-                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                     <textInputTraits key="textInputTraits"/>
                                     <connections>
                                         <action selector="finishEdit:" destination="-1" eventType="editingDidEndOnExit" id="H7W-bI-kvd"/>
@@ -177,13 +178,13 @@
                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                     <nil key="highlightedColor"/>
                                 </label>
-                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="SE6-wy-ynL">
+                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="15" translatesAutoresizingMaskIntoConstraints="NO" id="SE6-wy-ynL">
                                     <rect key="frame" x="116" y="159" width="108" height="30"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="30" id="1he-lj-sXJ"/>
                                         <constraint firstAttribute="width" constant="108" id="5Ls-78-DlH"/>
                                     </constraints>
-                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                     <textInputTraits key="textInputTraits"/>
                                     <connections>
                                         <action selector="finishEdit:" destination="-1" eventType="editingDidEndOnExit" id="nCZ-Ys-c87"/>
@@ -219,13 +220,13 @@
                                     <rect key="frame" x="0.0" y="150" width="240" height="1"/>
                                     <color key="backgroundColor" red="0.93854561240000001" green="0.93854561240000001" blue="0.93854561240000001" alpha="1" colorSpace="calibratedRGB"/>
                                 </view>
-                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="aE3-le-tuE">
+                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="11" translatesAutoresizingMaskIntoConstraints="NO" id="aE3-le-tuE">
                                     <rect key="frame" x="116" y="14" width="180" height="30"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="30" id="m1g-Iz-i4r"/>
                                         <constraint firstAttribute="width" constant="180" id="wr3-uM-9P6"/>
                                     </constraints>
-                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                     <textInputTraits key="textInputTraits"/>
                                     <connections>
                                         <action selector="finishEdit:" destination="-1" eventType="editingDidEndOnExit" id="BVM-UU-vsl"/>
@@ -486,7 +487,7 @@
                     </constraints>
                 </scrollView>
                 <pickerView contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bZ8-i1-FYH">
-                    <rect key="frame" x="0.0" y="1011" width="320" height="216"/>
+                    <rect key="frame" x="0.0" y="1011" width="320" height="260"/>
                     <connections>
                         <outlet property="dataSource" destination="-1" id="I8v-V8-qf4"/>
                         <outlet property="delegate" destination="-1" id="R78-lV-nal"/>
@@ -497,10 +498,10 @@
             <constraints>
                 <constraint firstItem="Od4-Sc-u10" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="18W-pM-zBo"/>
                 <constraint firstItem="AvC-GP-YUW" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="3NA-dp-mV7"/>
-                <constraint firstAttribute="trailing" secondItem="bZ8-i1-FYH" secondAttribute="trailing" constant="8" id="7Ah-Jr-4FH"/>
+                <constraint firstAttribute="trailing" secondItem="bZ8-i1-FYH" secondAttribute="trailing" id="7Ah-Jr-4FH"/>
                 <constraint firstAttribute="trailing" secondItem="ZdL-TV-LiX" secondAttribute="trailing" id="86c-ib-A3T"/>
                 <constraint firstItem="ZdL-TV-LiX" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="8uN-vH-Tb6"/>
-                <constraint firstItem="bZ8-i1-FYH" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="8" id="PP5-TJ-Xgj"/>
+                <constraint firstItem="bZ8-i1-FYH" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="PP5-TJ-Xgj"/>
                 <constraint firstItem="AvC-GP-YUW" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="8" id="ZBJ-qh-BtY"/>
                 <constraint firstAttribute="trailing" secondItem="MMz-aT-V5Y" secondAttribute="trailing" id="gUS-BU-Snb"/>
                 <constraint firstAttribute="trailing" secondItem="Od4-Sc-u10" secondAttribute="trailing" id="hhh-nZ-Adz"/>

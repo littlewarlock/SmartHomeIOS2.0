@@ -213,9 +213,22 @@ NSString* urtTest = @"123.57.223.91";
         return YES;
     }
     return NO;
-
-
 }
+
++ (Boolean)isNSStringSpacewith:(NSString *)string
+{
+    if ([string isEqual: [NSNull null]] || string == nil)
+    {
+        return YES;
+    }else if ([string isKindOfClass:[NSString class]]) {
+        if ([string isEqualToString:@""]) {
+            return YES;
+        }
+    }
+    return NO;
+}
+
+
 
 +(void)realTimeCameraStreamWithDeviceId:(NSString *)deviceId withBlock:(void (^)(NSString *, NSString *, NSString *, NSString *, NSString *, NSString *, NSString *, NSString *, NSError *))block
 {
@@ -924,15 +937,30 @@ NSString* urtTest = @"123.57.223.91";
         else {
             NSLog(@"Data from server %@", [operation responseString]);
         }
+
+        //
         //get data
+        NSLog(@"join===%@",operation.responseJSON[@"join"]);
         NSString *result = operation.responseJSON[@"result"];
         NSString *message = operation.responseJSON[@"message"];
-        NSString *code = operation.responseJSON[@"code"];
-        NSString *sensitivity = operation.responseJSON[@"sensitivity"];
-        NSString *wifi = operation.responseJSON[@"wifi"];
-        NSString *version = operation.responseJSON[@"version"];
-        if (block) {
-            block(result,message,code,sensitivity,wifi,version,nil);
+        NSLog(@"join===%@",result);
+        NSLog(@"join===%@",message);
+        //
+        NSArray *join =operation.responseJSON[@"join"];
+        if (join.count == 0) {
+            if (block) {
+                block(result,message,nil,nil,nil,nil,nil);
+            }
+        }else{
+            NSString *code = operation.responseJSON[@"join"][0][@"code"];
+            NSString *sensitivity = operation.responseJSON[@"join"][0][@"sensitivity"];
+            NSString *wifi = operation.responseJSON[@"join"][0][@"wifi"];
+//            NSString *brand = operation.responseJSON[@"join"][0][@"brand"];
+//            NSString *model = operation.responseJSON[@"join"][0][@"model"];
+            NSString *version = operation.responseJSON[@"join"][0][@"version"];
+            if (block) {
+                block(result,message,code,sensitivity,wifi,version,nil);
+            }
         }
     } errorHandler:^(MKNetworkOperation *errorOp,NSError *error) {
         NSLog(@"MKNetwork request error : %@", [error localizedDescription]);
@@ -1487,5 +1515,8 @@ NSString* urtTest = @"123.57.223.91";
     [engine enqueueOperation:op];
     
 }
+
+
+
 
 @end
