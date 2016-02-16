@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "FileHandlerDelegate.h"
 #import "NSOperationDownloadQueue.h"
-@interface FileHandler : NSObject
+@interface FileHandler : NSObject<UITextFieldDelegate>
 
 @property(assign, nonatomic) NSUInteger opType;
 @property(assign, nonatomic) id<FileHandlerDelegate>  fileHandlerDelegate;

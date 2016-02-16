@@ -3,21 +3,22 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9051"/>
-        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="CloudFileViewController">
             <connections>
                 <outlet property="fileListTableView" destination="cYJ-PS-NeS" id="iZk-pa-yy6"/>
-                <outlet property="footerBtn_1" destination="Cej-Qj-64P" id="OlT-Qt-FqP"/>
-                <outlet property="footerBtn_2" destination="iIU-hO-OY6" id="etW-Jh-rtp"/>
-                <outlet property="footerBtn_3" destination="MnD-pF-DAF" id="vtd-dP-hrc"/>
-                <outlet property="footerBtn_4" destination="V8g-bv-mn4" id="M0W-Jf-UuE"/>
-                <outlet property="footerLabel_1" destination="drF-RW-reG" id="j1A-1D-hCK"/>
-                <outlet property="footerLabel_2" destination="nI0-xH-zBM" id="eph-rM-I5i"/>
-                <outlet property="footerLabel_3" destination="xMe-4k-dm1" id="AH5-xa-zc3"/>
-                <outlet property="footerLabel_4" destination="TNH-1H-OEU" id="9S9-Dj-zrh"/>
-                <outlet property="footerView" destination="FEK-Eg-ZCd" id="RhW-2w-qgp"/>
+                <outlet property="item1" destination="Dmj-wy-7gc" id="OBM-CX-vdW"/>
+                <outlet property="item2" destination="WVX-bT-sYq" id="uzx-bd-ssx"/>
+                <outlet property="item3" destination="YAD-UN-nWM" id="1pn-e1-HKZ"/>
+                <outlet property="item4" destination="jpa-jf-AG1" id="JJB-Zb-GVO"/>
+                <outlet property="misButton" destination="Udb-6H-pXg" id="7M8-DU-DYH"/>
+                <outlet property="moreBar" destination="GZi-pr-vRT" id="xAa-J9-uwx"/>
+                <outlet property="moreItem1" destination="CDl-fU-fTv" id="OHL-rM-A5L"/>
+                <outlet property="moreItem2" destination="JXg-sg-rpR" id="Ftw-WF-kZV"/>
+                <outlet property="moreItem3" destination="Jzx-pK-M7i" id="ybQ-eT-YgO"/>
+                <outlet property="moreItem4" destination="SrP-WQ-K0A" id="Vsn-10-QOK"/>
+                <outlet property="tabbar" destination="Ukb-zY-d9g" id="ZLe-6L-JP8"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -27,7 +28,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="cYJ-PS-NeS">
-                    <rect key="frame" x="0.0" y="11" width="320" height="495"/>
+                    <rect key="frame" x="0.0" y="11" width="320" height="508"/>
                     <animations/>
                     <color key="backgroundColor" red="0.94117647058823528" green="0.94117647058823528" blue="0.94117647058823528" alpha="1" colorSpace="calibratedRGB"/>
                     <connections>
@@ -35,137 +36,65 @@
                         <outlet property="delegate" destination="-1" id="HdD-Lq-2pp"/>
                     </connections>
                 </tableView>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FEK-Eg-ZCd">
-                    <rect key="frame" x="0.0" y="506" width="320" height="62"/>
-                    <subviews>
-                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RCf-bG-NWX" userLabel="FooterView_1">
-                            <rect key="frame" x="0.0" y="0.0" width="80" height="54"/>
-                            <subviews>
-                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Cej-Qj-64P">
-                                    <rect key="frame" x="28" y="5" width="23" height="28"/>
-                                    <animations/>
-                                    <state key="normal" title="Button" image="home"/>
-                                    <connections>
-                                        <action selector="footerButtonEventHandleAction:" destination="-1" eventType="touchUpInside" id="sVT-8P-eiq"/>
-                                    </connections>
-                                </button>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="首页" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="drF-RW-reG">
-                                    <rect key="frame" x="24" y="30" width="32" height="29"/>
-                                    <animations/>
-                                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                    <color key="textColor" red="0.32156862745098036" green="0.32156862745098036" blue="0.32156862745098036" alpha="1" colorSpace="calibratedRGB"/>
-                                    <nil key="highlightedColor"/>
-                                </label>
-                            </subviews>
-                            <animations/>
-                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        </view>
-                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ub1-M9-nnM" userLabel="FooterView_2">
-                            <rect key="frame" x="80" y="0.0" width="80" height="54"/>
-                            <subviews>
-                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iIU-hO-OY6">
-                                    <rect key="frame" x="29" y="5" width="25" height="32"/>
-                                    <animations/>
-                                    <state key="normal" title="Button" image="upload"/>
-                                    <connections>
-                                        <action selector="footerButtonEventHandleAction:" destination="-1" eventType="touchUpInside" id="ha0-gb-qiB"/>
-                                    </connections>
-                                </button>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="上传" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nI0-xH-zBM">
-                                    <rect key="frame" x="24" y="30" width="30" height="29"/>
-                                    <animations/>
-                                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                    <color key="textColor" red="0.32156862745098036" green="0.32156862745098036" blue="0.32156862745098036" alpha="1" colorSpace="calibratedRGB"/>
-                                    <nil key="highlightedColor"/>
-                                </label>
-                            </subviews>
-                            <animations/>
-                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        </view>
-                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VYK-c1-djz" userLabel="FooterView_3">
-                            <rect key="frame" x="161" y="0.0" width="80" height="54"/>
-                            <subviews>
-                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MnD-pF-DAF">
-                                    <rect key="frame" x="27" y="5" width="25" height="32"/>
-                                    <animations/>
-                                    <state key="normal" title="Button" image="refurbish"/>
-                                    <connections>
-                                        <action selector="footerButtonEventHandleAction:" destination="-1" eventType="touchUpInside" id="2Gy-Lj-sov"/>
-                                    </connections>
-                                </button>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="刷新" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xMe-4k-dm1">
-                                    <rect key="frame" x="24" y="30" width="30" height="29"/>
-                                    <animations/>
-                                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                    <color key="textColor" red="0.32156862745098036" green="0.32156862745098036" blue="0.32156862745098036" alpha="1" colorSpace="calibratedRGB"/>
-                                    <nil key="highlightedColor"/>
-                                </label>
-                            </subviews>
-                            <animations/>
-                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        </view>
-                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jJI-Sq-tmz" userLabel="FooterView_4">
-                            <rect key="frame" x="240" y="0.0" width="80" height="54"/>
-                            <subviews>
-                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="V8g-bv-mn4">
-                                    <rect key="frame" x="28" y="5" width="25" height="32"/>
-                                    <animations/>
-                                    <state key="normal" title="Button" image="new-folder"/>
-                                    <connections>
-                                        <action selector="footerButtonEventHandleAction:" destination="-1" eventType="touchUpInside" id="7e8-Za-l6H"/>
-                                    </connections>
-                                </button>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="新建目录" textAlignment="center" lineBreakMode="tailTruncation" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TNH-1H-OEU">
-                                    <rect key="frame" x="10" y="30" width="60" height="29"/>
-                                    <animations/>
-                                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                    <color key="textColor" red="0.32156862745098036" green="0.32156862745098036" blue="0.32156862745098036" alpha="1" colorSpace="calibratedRGB"/>
-                                    <nil key="highlightedColor"/>
-                                </label>
-                            </subviews>
-                            <animations/>
-                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        </view>
-                    </subviews>
+                <tabBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ukb-zY-d9g">
+                    <rect key="frame" x="0.0" y="519" width="320" height="49"/>
                     <animations/>
-                    <constraints>
-                        <constraint firstAttribute="bottom" secondItem="jJI-Sq-tmz" secondAttribute="bottom" constant="8" id="1da-a1-QMe"/>
-                        <constraint firstAttribute="bottom" secondItem="VYK-c1-djz" secondAttribute="bottom" constant="8" id="CxZ-BT-QUj"/>
-                        <constraint firstItem="jJI-Sq-tmz" firstAttribute="leading" secondItem="VYK-c1-djz" secondAttribute="trailing" constant="-1" id="EQJ-du-6po"/>
-                        <constraint firstItem="RCf-bG-NWX" firstAttribute="top" secondItem="Ub1-M9-nnM" secondAttribute="top" id="Hph-XX-bXe"/>
-                        <constraint firstItem="Ub1-M9-nnM" firstAttribute="top" secondItem="FEK-Eg-ZCd" secondAttribute="top" id="KbY-i6-cMt"/>
-                        <constraint firstItem="jJI-Sq-tmz" firstAttribute="width" secondItem="FEK-Eg-ZCd" secondAttribute="width" multiplier="0.25" id="LDJ-Nt-u47"/>
-                        <constraint firstItem="VYK-c1-djz" firstAttribute="leading" secondItem="Ub1-M9-nnM" secondAttribute="trailing" constant="1" id="NLa-Oo-gbb"/>
-                        <constraint firstItem="jJI-Sq-tmz" firstAttribute="top" secondItem="FEK-Eg-ZCd" secondAttribute="top" id="Pc9-1v-b0n"/>
-                        <constraint firstItem="VYK-c1-djz" firstAttribute="top" secondItem="FEK-Eg-ZCd" secondAttribute="top" id="RPr-QE-JYo"/>
-                        <constraint firstItem="VYK-c1-djz" firstAttribute="width" secondItem="FEK-Eg-ZCd" secondAttribute="width" multiplier="0.25" id="Thw-NV-zxo"/>
-                        <constraint firstItem="Ub1-M9-nnM" firstAttribute="width" secondItem="FEK-Eg-ZCd" secondAttribute="width" multiplier="0.25" id="XHl-HR-P3K"/>
-                        <constraint firstAttribute="bottom" secondItem="Ub1-M9-nnM" secondAttribute="bottom" constant="8" id="Y02-OJ-5uU"/>
-                        <constraint firstAttribute="bottom" secondItem="RCf-bG-NWX" secondAttribute="bottom" constant="8" id="azH-P7-xYt"/>
-                        <constraint firstItem="RCf-bG-NWX" firstAttribute="leading" secondItem="FEK-Eg-ZCd" secondAttribute="leading" id="d7a-Uj-m2A"/>
-                        <constraint firstItem="Ub1-M9-nnM" firstAttribute="leading" secondItem="RCf-bG-NWX" secondAttribute="trailing" id="fZj-1o-ljd"/>
-                        <constraint firstAttribute="height" constant="62" id="ljB-kM-bfs"/>
-                        <constraint firstItem="RCf-bG-NWX" firstAttribute="width" secondItem="FEK-Eg-ZCd" secondAttribute="width" multiplier="0.25" id="wu9-Rv-jR9"/>
-                    </constraints>
-                </view>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <items>
+                        <tabBarItem title="首页" image="home" id="Dmj-wy-7gc"/>
+                        <tabBarItem title="上传" image="upload" id="WVX-bT-sYq"/>
+                        <tabBarItem title="刷新" image="refurbish" id="YAD-UN-nWM"/>
+                        <tabBarItem title="新建目录" image="new-folder" id="jpa-jf-AG1"/>
+                    </items>
+                </tabBar>
+                <tabBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GZi-pr-vRT" userLabel="more">
+                    <rect key="frame" x="0.0" y="519" width="320" height="49"/>
+                    <animations/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <items>
+                        <tabBarItem title="复制" image="copy" id="CDl-fU-fTv"/>
+                        <tabBarItem title="移动" image="move" id="JXg-sg-rpR"/>
+                        <tabBarItem title="重命名" image="rechristen" id="Jzx-pK-M7i"/>
+                        <tabBarItem title="删除" image="delete" id="SrP-WQ-K0A"/>
+                    </items>
+                </tabBar>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Udb-6H-pXg">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="519"/>
+                    <animations/>
+                    <connections>
+                        <action selector="moreBarMiss:" destination="-1" eventType="touchUpInside" id="NdR-gB-He9"/>
+                    </connections>
+                </button>
             </subviews>
             <animations/>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <constraints>
-                <constraint firstItem="FEK-Eg-ZCd" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="0vM-Ie-FLk"/>
-                <constraint firstAttribute="trailing" secondItem="FEK-Eg-ZCd" secondAttribute="trailing" id="1ec-tk-6f4"/>
-                <constraint firstAttribute="bottom" secondItem="FEK-Eg-ZCd" secondAttribute="bottom" id="P9U-xS-HfN"/>
+                <constraint firstItem="Ukb-zY-d9g" firstAttribute="top" secondItem="cYJ-PS-NeS" secondAttribute="bottom" id="5DF-WN-H1d"/>
+                <constraint firstAttribute="trailing" secondItem="GZi-pr-vRT" secondAttribute="trailing" id="AjN-6X-PTS"/>
+                <constraint firstAttribute="trailing" secondItem="Udb-6H-pXg" secondAttribute="trailing" id="FNa-OP-sQN"/>
+                <constraint firstItem="Ukb-zY-d9g" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="L6T-cd-18H"/>
                 <constraint firstAttribute="trailing" secondItem="cYJ-PS-NeS" secondAttribute="trailing" id="Rdr-Eb-Xp1"/>
+                <constraint firstItem="GZi-pr-vRT" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="T4L-su-JAF"/>
+                <constraint firstAttribute="trailing" secondItem="Ukb-zY-d9g" secondAttribute="trailing" id="Uo6-lM-8aG"/>
+                <constraint firstItem="Udb-6H-pXg" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="W2A-GD-Xrs"/>
                 <constraint firstItem="cYJ-PS-NeS" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="bOa-Mt-4Gr"/>
+                <constraint firstItem="Udb-6H-pXg" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="gom-mY-0L2"/>
                 <constraint firstItem="cYJ-PS-NeS" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="11" id="k4z-lm-Db9"/>
-                <constraint firstItem="FEK-Eg-ZCd" firstAttribute="top" secondItem="cYJ-PS-NeS" secondAttribute="bottom" id="yKJ-cx-10g"/>
+                <constraint firstAttribute="bottom" secondItem="Ukb-zY-d9g" secondAttribute="bottom" id="l0c-8x-5GP"/>
+                <constraint firstAttribute="bottom" secondItem="GZi-pr-vRT" secondAttribute="bottom" id="l0d-2a-1IJ"/>
+                <constraint firstItem="GZi-pr-vRT" firstAttribute="top" secondItem="Udb-6H-pXg" secondAttribute="bottom" id="oru-As-6eg"/>
+                <constraint firstItem="GZi-pr-vRT" firstAttribute="top" secondItem="cYJ-PS-NeS" secondAttribute="bottom" id="qlj-7l-9Us"/>
             </constraints>
             <point key="canvasLocation" x="326" y="272"/>
         </view>
     </objects>
     <resources>
+        <image name="copy" width="23" height="24"/>
+        <image name="delete" width="22" height="22"/>
         <image name="home" width="24" height="24"/>
+        <image name="move" width="21" height="21"/>
         <image name="new-folder" width="24" height="24"/>
+        <image name="rechristen" width="24" height="22"/>
         <image name="refurbish" width="24" height="24"/>
         <image name="upload" width="24" height="24"/>
     </resources>

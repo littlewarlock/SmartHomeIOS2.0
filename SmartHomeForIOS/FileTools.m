@@ -8,6 +8,7 @@
 
 #import "FileTools.h"
 #import "RequestConstant.h"
+#import "DataManager.h"
 @implementation FileTools
 
 + (NSMutableDictionary *)getAllFiles:(NSString *)path skipDescendents:(bool)skip isShowAlbum:(bool)isShowAlbum{
@@ -28,10 +29,10 @@
         dirList.fileName = @"My Photos";
         dirList.fileType = @"folder"; //文件夹
         dirList.fileSubtype = @"folder";
-      [tableDataDic setObject:dirList forKey:[NSString stringWithFormat:@"%d", dirNum]];
+        [tableDataDic setObject:dirList forKey:[NSString stringWithFormat:@"%d", dirNum]];
         dirNum++;
     }
-
+    
     
     while((filePath = [direnu nextObject])!=nil)
     {
@@ -153,7 +154,7 @@
 //    NSDecimalNumberHandler* roundingBehavior = [NSDecimalNumberHandler decimalNumberHandlerWithRoundingMode:NSRoundDown scale:position raiseOnExactness:NO raiseOnOverflow:NO raiseOnUnderflow:NO raiseOnDivideByZero:NO];
 //    NSDecimalNumber *ouncesDecimal;
 //    NSDecimalNumber *roundedOunces;
-//    
+//
 //    ouncesDecimal = [[NSDecimalNumber alloc] initWithFloat:price];
 //    roundedOunces = [ouncesDecimal decimalNumberByRoundingAccordingToBehavior:roundingBehavior];
 //    ouncesDecimal =nil ;
@@ -291,27 +292,27 @@
 }
 
 
-//+ (int)moveFileByUrl:(NSString*)fileUrl toPath: (NSString*)destinationUrl
-//{
-//    NSFileManager *fileMgr = [NSFileManager defaultManager];
-//    NSError *err;
-//    BOOL bRet = [fileMgr fileExistsAtPath:fileUrl];
-//    if (bRet) {
-//        if ([fileMgr moveItemAtPath:fileUrl toPath:destinationUrl error:&err] != YES){
-//            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:[err localizedDescription] delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil] ;
-//            [alert show];
-//            NSLog(@"Unable to move file: %@", [err localizedDescription]);
-//        }
-//    }else{
-//        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:@"文件不存在！" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil] ;
-//        [alert show];
-//        return -1;
-//    }
-//    if (!err) {
-//        return 0;
-//    }
-//    return -1;
-//}
++ (int)moveFileByUrl:(NSString*)fileUrl toPath: (NSString*)destinationUrl
+{
+    NSFileManager *fileMgr = [NSFileManager defaultManager];
+    NSError *err;
+    BOOL bRet = [fileMgr fileExistsAtPath:fileUrl];
+    if (bRet) {
+        if ([fileMgr moveItemAtPath:fileUrl toPath:destinationUrl error:&err] != YES){
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:[err localizedDescription] delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil] ;
+            [alert show];
+            NSLog(@"Unable to move file: %@", [err localizedDescription]);
+        }
+    }else{
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:@"文件不存在！" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil] ;
+        [alert show];
+        return -1;
+    }
+    if (!err) {
+        return 0;
+    }
+    return -1;
+}
 
 //+ (int) copyFileByUrl:(NSString*)fileUrl toPath: (NSString*)destinationUrl
 //{
@@ -471,6 +472,7 @@
     NSDictionary *dic = [fm attributesOfItemAtPath:fileNamePath error:nil];
     long long fileSize = [[dic objectForKey:@"NSFileSize"] longLongValue];
     if (fileSize>=0) {
+        NSLog(@"getFileSize===========%lld",fileSize);
         return fileSize;
     }
     return 0;
@@ -540,7 +542,7 @@
             [byte intValue] >= (0)){
         returnStr = [NSString stringWithFormat:@"%.1fB",[byte floatValue]] ;
     }
-
+    
     return returnStr;
 }
 
@@ -587,7 +589,7 @@
 +(UIImage*)getVideoDuartionAndThumb:(NSString *)videoURL
 {
     
-   KxMovieDecoderVer2 *_decoder = [[KxMovieDecoderVer2 alloc] init];
+    KxMovieDecoderVer2 *_decoder = [[KxMovieDecoderVer2 alloc] init];
     
     [_decoder openFile:videoURL error:nil];
     NSArray *ar =  [_decoder decodeFrames:1.0f];
@@ -609,15 +611,26 @@
     return imageKX;
 }
 
+#pragma mark -
+#pragma mark getFilesByPath 获取path目录下的所有文件，不递归
++ (NSArray *)getFilesByPath:(NSString *)path{
+    NSFileManager* fm = [NSFileManager defaultManager];
+    NSMutableArray* fileDataArray = [[NSMutableArray alloc] init];
+    NSArray *filesArray = [fm contentsOfDirectoryAtPath:path error:nil];
+    for (NSString *fileName in filesArray) {
+        [fileDataArray addObject:fileName];
+    }
+    return fileDataArray;
+}
 #pragma mark getDuplicateFileNames 返回指定目录下的所有重名文件名称
 +(NSMutableArray*)getDuplicateFileNames:(NSString*)path fileNames:(NSArray*)fileNamesArray{
-   NSArray *existFileNamesArray = [self getAllFilesUrl:path];
+    NSArray *existFileNamesArray = [self getFilesByPath:path];
     NSMutableArray *duplicateFileNamesArray = [[NSMutableArray alloc] init];
     for (int i=0; i<fileNamesArray.count; i++) {
         for (int j=0; j<existFileNamesArray.count; j++){
             NSString * fileName = [existFileNamesArray[j] lastPathComponent];
             if ([(NSString*)fileNamesArray[i] isEqualToString:fileName]) {
-             [duplicateFileNamesArray addObject:fileNamesArray[i]];
+                [duplicateFileNamesArray addObject:fileNamesArray[i]];
             }
         }
     }

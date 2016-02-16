@@ -23,7 +23,7 @@
             <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" bounces="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IB3-N4-yyE">
+                <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IB3-N4-yyE">
                     <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="I7U-1n-HAA">
@@ -113,9 +113,14 @@
                                 <constraint firstItem="sw4-cv-CdB" firstAttribute="leading" secondItem="I7U-1n-HAA" secondAttribute="leading" constant="24" id="gAp-LC-C0y"/>
                                 <constraint firstItem="UHn-lE-uLs" firstAttribute="centerY" secondItem="x5h-RL-QLG" secondAttribute="centerY" id="gc8-0F-HTA"/>
                             </constraints>
+                            <variation key="default">
+                                <mask key="constraints">
+                                    <exclude reference="DlZ-ay-qSC"/>
+                                </mask>
+                            </variation>
                         </view>
                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="photo" translatesAutoresizingMaskIntoConstraints="NO" id="Kxg-pt-QwZ">
-                            <rect key="frame" x="-5.5" y="183" width="385" height="2000"/>
+                            <rect key="frame" x="0.0" y="183" width="375" height="2000"/>
                             <animations/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="3449" id="AnI-GX-XvB"/>
@@ -125,6 +130,7 @@
                             <variation key="default">
                                 <mask key="constraints">
                                     <exclude reference="AnI-GX-XvB"/>
+                                    <exclude reference="vfd-2M-efQ"/>
                                 </mask>
                             </variation>
                         </imageView>
@@ -132,18 +138,24 @@
                     <animations/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <constraints>
+                        <constraint firstItem="Kxg-pt-QwZ" firstAttribute="leading" secondItem="IB3-N4-yyE" secondAttribute="leading" id="3zo-Dv-EPe"/>
                         <constraint firstItem="I7U-1n-HAA" firstAttribute="top" secondItem="IB3-N4-yyE" secondAttribute="top" id="5j4-Iv-KYW"/>
                         <constraint firstAttribute="height" constant="667" id="9PE-xd-TeB"/>
                         <constraint firstItem="Kxg-pt-QwZ" firstAttribute="top" secondItem="I7U-1n-HAA" secondAttribute="bottom" constant="5" id="AiN-iW-V9g"/>
                         <constraint firstItem="I7U-1n-HAA" firstAttribute="leading" secondItem="IB3-N4-yyE" secondAttribute="leading" id="DqS-bM-2As"/>
+                        <constraint firstAttribute="trailing" secondItem="Kxg-pt-QwZ" secondAttribute="trailing" id="Lni-t1-pz9"/>
                         <constraint firstAttribute="trailing" secondItem="I7U-1n-HAA" secondAttribute="trailing" id="PIJ-A7-8iE"/>
                         <constraint firstItem="Kxg-pt-QwZ" firstAttribute="centerX" secondItem="IB3-N4-yyE" secondAttribute="centerX" id="Ql2-uN-6A3"/>
+                        <constraint firstAttribute="trailing" secondItem="I7U-1n-HAA" secondAttribute="trailing" id="eHF-3b-Bwl"/>
                         <constraint firstAttribute="trailing" secondItem="Kxg-pt-QwZ" secondAttribute="trailing" id="hqc-4m-7E2"/>
                         <constraint firstAttribute="width" constant="375" id="i7I-6q-LIS"/>
+                        <constraint firstAttribute="bottom" secondItem="Kxg-pt-QwZ" secondAttribute="bottom" id="p4D-2U-Ttq"/>
                         <constraint firstItem="Kxg-pt-QwZ" firstAttribute="leading" secondItem="IB3-N4-yyE" secondAttribute="leading" id="uF5-WY-s0g"/>
                     </constraints>
                     <variation key="default">
                         <mask key="constraints">
+                            <exclude reference="9PE-xd-TeB"/>
+                            <exclude reference="i7I-6q-LIS"/>
                             <exclude reference="PIJ-A7-8iE"/>
                             <exclude reference="hqc-4m-7E2"/>
                             <exclude reference="uF5-WY-s0g"/>
@@ -160,12 +172,12 @@
                 <constraint firstAttribute="bottom" secondItem="IB3-N4-yyE" secondAttribute="bottom" id="jb4-Ff-JYQ"/>
             </constraints>
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
-            <point key="canvasLocation" x="325.5" y="317.5"/>
+            <point key="canvasLocation" x="321.5" y="281.5"/>
         </view>
     </objects>
     <resources>
         <image name="button" width="45" height="24"/>
-        <image name="photo" width="640" height="3449"/>
+        <image name="photo" width="320" height="1724"/>
         <image name="xunlei_icon" width="85" height="85"/>
     </resources>
 </document>

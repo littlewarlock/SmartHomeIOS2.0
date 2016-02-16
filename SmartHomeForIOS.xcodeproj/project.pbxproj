@@ -14,6 +14,7 @@
 		200563D21C20FEA70062B193 /* KxMovieDecoderVer2.m in Sources */ = {isa = PBXBuildFile; fileRef = 200563D11C20FEA70062B193 /* KxMovieDecoderVer2.m */; };
 		200563D51C20FF000062B193 /* FileDownloadOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 200563D41C20FF000062B193 /* FileDownloadOperation.m */; };
 		200563D81C20FF0B0062B193 /* NSOperationDownloadQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 200563D71C20FF0B0062B193 /* NSOperationDownloadQueue.m */; };
+		20112B7C1C72FB2100F27331 /* CameraHistoryToolBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 20112B7B1C72FB2100F27331 /* CameraHistoryToolBar.m */; };
 		201590331C4790FD003897FD /* FileUploadByBlockOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 201590321C4790FD003897FD /* FileUploadByBlockOperation.m */; };
 		202173DD1C3CE8760025679E /* CustomIOSAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 202173DC1C3CE8760025679E /* CustomIOSAlertView.m */; };
 		202173E01C3CE8800025679E /* TableViewDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 202173DF1C3CE8800025679E /* TableViewDelegate.m */; };
@@ -65,7 +66,6 @@
 		205A3BDB1C06A940007072C4 /* BackupTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 205A3BDA1C06A940007072C4 /* BackupTool.m */; };
 		205A3BDE1C06A94E007072C4 /* FileUploadByBlockTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 205A3BDD1C06A94E007072C4 /* FileUploadByBlockTool.m */; };
 		205B83321C0474B500B19DFD /* LocalFileHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 205B83311C0474B500B19DFD /* LocalFileHandler.m */; };
-		205B83351C04754A00B19DFD /* FileCopyAndMoveTools.m in Sources */ = {isa = PBXBuildFile; fileRef = 205B83341C04754A00B19DFD /* FileCopyAndMoveTools.m */; };
 		20699D491BFAFAEA002BA63E /* AlarmMessageListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 20699D471BFAFAEA002BA63E /* AlarmMessageListCell.m */; };
 		20699D4A1BFAFAEA002BA63E /* AlarmMessageListCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 20699D481BFAFAEA002BA63E /* AlarmMessageListCell.xib */; };
 		2069DFF11BF1E3CE00EAFAF7 /* DeckTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 20DF81621BF1E1410031ADC7 /* DeckTableViewController.m */; };
@@ -110,6 +110,11 @@
 		20BF60DC1C3BA3AB00EFB569 /* camera_history_photo_prohibt.png in Resources */ = {isa = PBXBuildFile; fileRef = 20BF60D81C3BA3AB00EFB569 /* camera_history_photo_prohibt.png */; };
 		20BF60DD1C3BA3AB00EFB569 /* camera_history_video_down.png in Resources */ = {isa = PBXBuildFile; fileRef = 20BF60D91C3BA3AB00EFB569 /* camera_history_video_down.png */; };
 		20BF60DE1C3BA3AB00EFB569 /* camera_history_video_prohibt.png in Resources */ = {isa = PBXBuildFile; fileRef = 20BF60DA1C3BA3AB00EFB569 /* camera_history_video_prohibt.png */; };
+		20CA72A31C6345D1005D65A6 /* BackupHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 20CA72A21C6345D1005D65A6 /* BackupHandler.m */; };
+		20CA72A61C6345FE005D65A6 /* FileCopyTools.m in Sources */ = {isa = PBXBuildFile; fileRef = 20CA72A51C6345FE005D65A6 /* FileCopyTools.m */; };
+		20CA72A91C634612005D65A6 /* NSOperationUploadQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 20CA72A81C634612005D65A6 /* NSOperationUploadQueue.m */; };
+		20CA72AC1C63462F005D65A6 /* BackupOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 20CA72AB1C63462F005D65A6 /* BackupOperation.m */; };
+		20CA72AF1C63463B005D65A6 /* NSOperationBackupQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 20CA72AE1C63463B005D65A6 /* NSOperationBackupQueue.m */; };
 		20D497121C47404C00D2C6C9 /* SDPieLoopProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 20D497111C47404C00D2C6C9 /* SDPieLoopProgressView.m */; };
 		20D497151C47417000D2C6C9 /* SDBaseProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 20D497141C47417000D2C6C9 /* SDBaseProgressView.m */; };
 		20D76ACB1C16748300C62AB9 /* AlbumCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 20D76AC91C16748300C62AB9 /* AlbumCollectionViewController.m */; };
@@ -573,6 +578,8 @@
 		200563D41C20FF000062B193 /* FileDownloadOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FileDownloadOperation.m; sourceTree = "<group>"; };
 		200563D61C20FF0B0062B193 /* NSOperationDownloadQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSOperationDownloadQueue.h; sourceTree = "<group>"; };
 		200563D71C20FF0B0062B193 /* NSOperationDownloadQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSOperationDownloadQueue.m; sourceTree = "<group>"; };
+		20112B7A1C72FB2100F27331 /* CameraHistoryToolBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CameraHistoryToolBar.h; sourceTree = "<group>"; };
+		20112B7B1C72FB2100F27331 /* CameraHistoryToolBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CameraHistoryToolBar.m; sourceTree = "<group>"; };
 		201590311C4790FD003897FD /* FileUploadByBlockOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileUploadByBlockOperation.h; sourceTree = "<group>"; };
 		201590321C4790FD003897FD /* FileUploadByBlockOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FileUploadByBlockOperation.m; sourceTree = "<group>"; };
 		202173DB1C3CE8760025679E /* CustomIOSAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomIOSAlertView.h; sourceTree = "<group>"; };
@@ -729,6 +736,16 @@
 		20BF60D81C3BA3AB00EFB569 /* camera_history_photo_prohibt.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera_history_photo_prohibt.png; sourceTree = "<group>"; };
 		20BF60D91C3BA3AB00EFB569 /* camera_history_video_down.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera_history_video_down.png; sourceTree = "<group>"; };
 		20BF60DA1C3BA3AB00EFB569 /* camera_history_video_prohibt.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera_history_video_prohibt.png; sourceTree = "<group>"; };
+		20CA72A11C6345D1005D65A6 /* BackupHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BackupHandler.h; sourceTree = "<group>"; };
+		20CA72A21C6345D1005D65A6 /* BackupHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BackupHandler.m; sourceTree = "<group>"; };
+		20CA72A41C6345FE005D65A6 /* FileCopyTools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileCopyTools.h; sourceTree = "<group>"; };
+		20CA72A51C6345FE005D65A6 /* FileCopyTools.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FileCopyTools.m; sourceTree = "<group>"; };
+		20CA72A71C634612005D65A6 /* NSOperationUploadQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSOperationUploadQueue.h; sourceTree = "<group>"; };
+		20CA72A81C634612005D65A6 /* NSOperationUploadQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSOperationUploadQueue.m; sourceTree = "<group>"; };
+		20CA72AA1C63462F005D65A6 /* BackupOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BackupOperation.h; sourceTree = "<group>"; };
+		20CA72AB1C63462F005D65A6 /* BackupOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BackupOperation.m; sourceTree = "<group>"; };
+		20CA72AD1C63463B005D65A6 /* NSOperationBackupQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSOperationBackupQueue.h; sourceTree = "<group>"; };
+		20CA72AE1C63463B005D65A6 /* NSOperationBackupQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSOperationBackupQueue.m; sourceTree = "<group>"; };
 		20D497101C47404C00D2C6C9 /* SDPieLoopProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDPieLoopProgressView.h; sourceTree = "<group>"; };
 		20D497111C47404C00D2C6C9 /* SDPieLoopProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDPieLoopProgressView.m; sourceTree = "<group>"; };
 		20D497131C47417000D2C6C9 /* SDBaseProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDBaseProgressView.h; sourceTree = "<group>"; };
@@ -1495,6 +1512,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		20112B781C72FAEE00F27331 /* MyToolBar */ = {
+			isa = PBXGroup;
+			children = (
+				20112B7A1C72FB2100F27331 /* CameraHistoryToolBar.h */,
+				20112B7B1C72FB2100F27331 /* CameraHistoryToolBar.m */,
+			);
+			name = MyToolBar;
+			sourceTree = "<group>";
+		};
 		2038C71E1C48D59D00A2026E /* SomethingNew */ = {
 			isa = PBXGroup;
 			children = (
@@ -2143,6 +2169,7 @@
 		480AE34C1BB4FA8E006C1ACD /* Device */ = {
 			isa = PBXGroup;
 			children = (
+				20112B781C72FAEE00F27331 /* MyToolBar */,
 				20D4970F1C47402200D2C6C9 /* ProgressCircle */,
 				20EC76681C17C2570026C91B /* H264Decoder */,
 				20DEA01D1C1A65520037F1C6 /* NewSnapshot */,
@@ -2611,6 +2638,16 @@
 		483F537D1B96CDE90011E153 /* Login */ = {
 			isa = PBXGroup;
 			children = (
+				20CA72AD1C63463B005D65A6 /* NSOperationBackupQueue.h */,
+				20CA72AE1C63463B005D65A6 /* NSOperationBackupQueue.m */,
+				20CA72AA1C63462F005D65A6 /* BackupOperation.h */,
+				20CA72AB1C63462F005D65A6 /* BackupOperation.m */,
+				20CA72A71C634612005D65A6 /* NSOperationUploadQueue.h */,
+				20CA72A81C634612005D65A6 /* NSOperationUploadQueue.m */,
+				20CA72A41C6345FE005D65A6 /* FileCopyTools.h */,
+				20CA72A51C6345FE005D65A6 /* FileCopyTools.m */,
+				20CA72A11C6345D1005D65A6 /* BackupHandler.h */,
+				20CA72A21C6345D1005D65A6 /* BackupHandler.m */,
 				2002B95C1C4F77830024EADD /* ValidateTool.h */,
 				2002B95D1C4F77830024EADD /* ValidateTool.m */,
 				201590311C4790FD003897FD /* FileUploadByBlockOperation.h */,
@@ -3556,11 +3593,13 @@
 				226498D21BDA098B00E080A2 /* JTCalendarMenuView.m in Sources */,
 				20AE98431BCE712A0041AB50 /* AppInfo.m in Sources */,
 				22C352311BE21BCC00C48F86 /* NSUUIDTool.m in Sources */,
+				20CA72AF1C63463B005D65A6 /* NSOperationBackupQueue.m in Sources */,
 				20AE979C1BCE6E710041AB50 /* AsyncUdpSocket.m in Sources */,
 				20AE983A1BCE70FC0041AB50 /* TaskInfo.m in Sources */,
 				48F4A3011BACF536007F13D9 /* MWGridViewController.m in Sources */,
 				20E0BAC21C200C3A003D1CF5 /* UIView+PBExtend.m in Sources */,
 				20548E131C08012700E19F66 /* MJRefreshHeader.m in Sources */,
+				20CA72A31C6345D1005D65A6 /* BackupHandler.m in Sources */,
 				22C352921BE21CD000C48F86 /* AlbumHeaderCell.m in Sources */,
 				48F4A2DB1BACF4EA007F13D9 /* NSData+ImageContentType.m in Sources */,
 				204CB0A51C0D9B1800191E1D /* CloudRegisterViewController.m in Sources */,
@@ -3569,7 +3608,6 @@
 				2038C7261C48D5F700A2026E /* UPnPDeviceTableViewCell.m in Sources */,
 				206C95CD1C1EA9E100DB30F7 /* CameraPhotoMagnifyVC.m in Sources */,
 				2038C7291C48D60000A2026E /* thunderTools.m in Sources */,
-				205B83351C04754A00B19DFD /* FileCopyAndMoveTools.m in Sources */,
 				48F4A3031BACF536007F13D9 /* MWPhotoBrowser.m in Sources */,
 				2289589D1BE8BD2500EE86F7 /* KxAudioManager.m in Sources */,
 				22C352451BE21C2300C48F86 /* ProgressBarViewController.m in Sources */,
@@ -3610,6 +3648,7 @@
 				484937461BEA19BA009B78F9 /* FileHandler.m in Sources */,
 				20DEA0311C1A656C0037F1C6 /* BigLayout.m in Sources */,
 				22C352911BE21CD000C48F86 /* CollectionViewCell.m in Sources */,
+				20112B7C1C72FB2100F27331 /* CameraHistoryToolBar.m in Sources */,
 				48F4A2DE1BACF4EA007F13D9 /* SDWebImageDecoder.m in Sources */,
 				48F4A31A1BACF9A9007F13D9 /* DACircularProgressView.m in Sources */,
 				226498CD1BDA098B00E080A2 /* JTCalendar.m in Sources */,
@@ -3620,12 +3659,14 @@
 				204CB0AA1C0D9B4B00191E1D /* LoginHandler.m in Sources */,
 				226498CE1BDA098B00E080A2 /* JTCalendarAppearance.m in Sources */,
 				205B83321C0474B500B19DFD /* LocalFileHandler.m in Sources */,
+				20CA72A91C634612005D65A6 /* NSOperationUploadQueue.m in Sources */,
 				48F4A2DF1BACF4EA007F13D9 /* SDWebImageDownloader.m in Sources */,
 				226498D91BDA09A400E080A2 /* DeviceInfo.m in Sources */,
 				20AE97931BCE6E4F0041AB50 /* Singleton.m in Sources */,
 				20548E1A1C08012700E19F66 /* MJRefreshGifHeader.m in Sources */,
 				22775E401BEA0AF900470D28 /* IIWrapController.m in Sources */,
 				4831AB841B870B660060D2D3 /* AppDelegate.m in Sources */,
+				20CA72A61C6345FE005D65A6 /* FileCopyTools.m in Sources */,
 				20DEA0321C1A656C0037F1C6 /* SmallLayout.m in Sources */,
 				22775E8A1BEA170900470D28 /* CameraRecordHistoryViewCell.m in Sources */,
 				202173E01C3CE8800025679E /* TableViewDelegate.m in Sources */,
@@ -3673,6 +3714,7 @@
 				48F4A2E21BACF4EA007F13D9 /* SDWebImagePrefetcher.m in Sources */,
 				228958A01BE8BD2500EE86F7 /* KxMovieGLView.m in Sources */,
 				22C352A91BE21D0B00C48F86 /* KxMenu.m in Sources */,
+				20CA72AC1C63462F005D65A6 /* BackupOperation.m in Sources */,
 				48F4A3071BACF536007F13D9 /* UIImage+MWPhotoBrowser.m in Sources */,
 				20548E1E1C08012700E19F66 /* MJRefreshConst.m in Sources */,
 				22C3526D1BE21CAB00C48F86 /* AudioTableViewController.m in Sources */,

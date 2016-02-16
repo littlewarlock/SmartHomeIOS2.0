@@ -65,7 +65,7 @@ static NSString *CellTableIdentifier = @"CellTableIdentifier";
     btn.frame = rect;
     [btn setTitle:@"手动添加摄像头" forState:UIControlStateNormal];
     btn.backgroundColor = [UIColor clearColor];
-    [btn setImage:[UIImage imageNamed:@"add-icon"] forState:UIControlStateNormal];
+    [btn setImage:[UIImage imageNamed:@"add_icon"] forState:UIControlStateNormal];
     [btn.titleLabel setFont:[UIFont systemFontOfSize:18.0]];
     [btn setTitleColor:[UIColor colorWithRed:0.0/255 green:160.0/255 blue:226.0/255 alpha:1] forState:UIControlStateNormal];
     [btn setTintColor:[UIColor colorWithRed:0.0/255 green:160.0/255 blue:226.0/255 alpha:1]];

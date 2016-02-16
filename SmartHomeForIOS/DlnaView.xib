@@ -100,7 +100,7 @@
                                 <constraint firstAttribute="height" constant="22" id="G4S-Tt-tX3"/>
                                 <constraint firstAttribute="width" constant="22" id="xli-Tw-FFc"/>
                             </constraints>
-                            <state key="normal" backgroundImage="return_icon">
+                            <state key="normal" backgroundImage="return">
                                 <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                             </state>
                             <connections>
@@ -150,9 +150,9 @@
                         <constraint firstAttribute="height" constant="34.5" id="gol-yb-DZh"/>
                         <constraint firstAttribute="width" constant="34.5" id="xAL-at-LpI"/>
                     </constraints>
-                    <state key="normal" image="pause_icon"/>
+                    <state key="normal" image="pause"/>
                     <state key="disabled" image="pause_icon"/>
-                    <state key="selected" image="play_icon"/>
+                    <state key="selected" image="play-screen"/>
                     <connections>
                         <action selector="playOrPause:" destination="-1" eventType="touchUpInside" id="9SB-ny-dj9"/>
                     </connections>
@@ -216,9 +216,10 @@
     </objects>
     <resources>
         <image name="left arrow" width="13" height="16"/>
+        <image name="pause" width="18" height="18"/>
         <image name="pause_icon" width="69" height="69"/>
-        <image name="play_icon" width="69" height="69"/>
-        <image name="return_icon" width="44" height="44"/>
+        <image name="play-screen" width="34" height="34"/>
+        <image name="return" width="22" height="22"/>
         <image name="right arrow" width="13" height="16"/>
         <image name="video_icon" width="188" height="139"/>
         <image name="volume" width="11" height="13"/>

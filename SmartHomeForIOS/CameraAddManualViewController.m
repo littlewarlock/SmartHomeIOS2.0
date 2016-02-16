@@ -108,7 +108,7 @@ BOOL testFlg;
 //    _styles = @[@"11111111111111",@"2222222222",@"33333",@"666666666"];
 
 // hgc 2015 11 04 added start
-//    [self.sliderSensitivity setThumbImage:[UIImage imageNamed:@"point"] forState:UIControlStateNormal];
+    [self.sliderSensitivity setThumbImage:[UIImage imageNamed:@"point"] forState:UIControlStateNormal];
 // hgc 2015 11 04 added end
     
     //2016 01 20
@@ -138,6 +138,13 @@ BOOL testFlg;
                 [self.mutableArrayBrand addObject:dic[@"brand"]];
                 [self.mutableArrayModel addObject:dic[@"model"]];
             }
+            //2016 02 01
+            NSLog(@"self.mutableArrayBrand====%@",self.mutableArrayBrand);
+            NSSet *tempSet = [NSSet setWithArray:self.mutableArrayBrand];
+            NSLog(@"tempSet==%@",[tempSet allObjects]);
+            self.mutableArrayBrand = [NSMutableArray arrayWithArray:[tempSet allObjects]];
+            NSLog(@"self.mutableArrayBrand====%@",self.mutableArrayBrand);
+            //2016 02 01
             //对于不同的brand 建立model的响应
             for (NSString *brand in self.mutableArrayBrand) {
                 NSMutableArray *tempArrayForModels = [[NSMutableArray alloc]init];
@@ -486,7 +493,7 @@ BOOL testFlg;
             if ([result isEqualToString:@"success"]) {
                 self.deviceInfo.code = code;
                 NSLog(@"code==%@",code);
-                self.sliderSensitivity.value = sensitivity.floatValue;
+//                self.sliderSensitivity.value = sensitivity.floatValue;
                 self.labelWIFI.text = wifi;
                 self.labelVersion.text =version;
                 

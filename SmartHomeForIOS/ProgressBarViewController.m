@@ -24,7 +24,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.navigationItem.title = @"任务管理";
+    self.navigationItem.title = @"进度管理";
     UIImage* img=[UIImage imageNamed:@"back"];
     leftBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     leftBtn.frame =CGRectMake(200, 0, 32, 32);
@@ -33,7 +33,7 @@
     UIBarButtonItem* leftItem=[[UIBarButtonItem alloc]initWithCustomView:leftBtn];
     self.navigationItem.leftBarButtonItem = leftItem;
     [self setTabBarStyle];
- }
+}
 
 
 + (instancetype)sharedInstance
@@ -43,7 +43,7 @@
     dispatch_once(&onceToken, ^{
         instance = [[ProgressBarViewController alloc] initWithNibName:@"ProgressBarViewController" bundle:nil];
         instance.taskDic = [[NSMutableDictionary alloc] init];
-
+        
         instance.uploadProgressBarDic = [[NSMutableDictionary alloc] init];
         instance.uploadTaskDic =[[NSMutableDictionary alloc] init];
         instance.downloadProgressBarDic = [[NSMutableDictionary alloc] init];
@@ -61,7 +61,7 @@
         //下载进度条的scrollView
         instance.downloadScrollView = [[UIScrollView alloc]init];
         instance.downloadScrollView.frame = CGRectMake(0,NAVIGATIONBARHEIGHT+TOOLBARHEIGHT, size.width, size.height-TOOLBARHEIGHT-TOOLBARHEIGHT-NAVIGATIONBARHEIGHT);
-
+        
         instance.downloadScrollView.bounces = NO;
         instance.downloadScrollView.alwaysBounceVertical = NO;
         instance.downloadScrollView.showsVerticalScrollIndicator = NO;
@@ -99,19 +99,19 @@
     }else if([taskInfo.taskType isEqualToString:@"下载"]){
         progressView.frame = CGRectMake(0, self.downloadViewY, viewWidth, PROGRESSHEIGHT);
     }
-
+    
     progressView.progressBar.progress = 0.0f;
     progressView.progressBar.layer.masksToBounds = YES;
     progressView.progressBar.layer.cornerRadius = 2;
     progressView.taskNameLabel.text = [taskInfo.taskName lastPathComponent];
     progressView.taskNameLabel.lineBreakMode = NSLineBreakByTruncatingTail;
-  //  progressView.taskDetailLabel.text = taskInfo.taskType;
+    //  progressView.taskDetailLabel.text = taskInfo.taskType;
     if ([taskInfo.taskType isEqualToString:@"上传"] || [taskInfo.taskType isEqualToString:@"备份"]) {
         progressView.pauseBtn.hidden = YES;
     }
     progressView.percentLabel.text =@"0%";
     progressView.taskInfo = taskInfo;
-
+    
     if([taskInfo.taskType isEqualToString:@"上传"] || [taskInfo.taskType isEqualToString:@"备份"])
     {
         [self.uploadProgressBarDic setObject:progressView forKey:taskInfo.taskId];
@@ -186,7 +186,7 @@
             if([[currentProgressDic allKeys]containsObject:@"sendBytes"]){
                 NSNumber * sendBytes = [currentProgressDic objectForKey:@"sendBytes"];
                 long long  totalBytes = progressView.taskInfo.totalBytes;
-                progressView.taskInfo.transferedBytes+= [sendBytes longLongValue];
+                //progressView.taskInfo.transferedBytes+= [sendBytes longLongValue];
                 float currentProgress =(float)progressView.taskInfo.transferedBytes/(float)totalBytes*100;
                 NSLog(@"currentProgress===========================%f,transferedBytes===%lld",currentProgress,progressView.taskInfo.transferedBytes);
                 [progressView.progressBar setProgress:currentProgress/100 animated:NO];
@@ -267,13 +267,23 @@
     [self.downloadTaskDic removeAllObjects];
     [self.uploadProgressBarDic removeAllObjects];
     [self.downloadProgressBarDic removeAllObjects];
+    [[NSOperationDownloadQueue sharedInstance] cancelAllOperations];
+    [[NSOperationUploadQueue sharedInstance] cancelAllOperations];
 }
 
 #pragma mark 设置progressView的TaskInfo对象
 - (void)setProgressViewTaskInfo:(TaskInfo *)taskInfo{
-    ProgressView* progressView =[self.downloadProgressBarDic objectForKey:taskInfo.taskId];
-    [self.downloadTaskDic setObject:taskInfo forKey:taskInfo.taskId];
-    progressView.taskInfo = taskInfo;
+    if ([taskInfo.taskType isEqualToString:@"下载"]) {
+        ProgressView* progressView =[self.downloadProgressBarDic objectForKey:taskInfo.taskId];
+        [self.downloadTaskDic setObject:taskInfo forKey:taskInfo.taskId];
+        progressView.taskInfo = taskInfo;
+    }else if([taskInfo.taskType isEqualToString:@"上传"]){
+        ProgressView* progressView =[self.uploadProgressBarDic objectForKey:taskInfo.taskId];
+        [self.uploadTaskDic setObject:taskInfo forKey:taskInfo.taskId];
+        progressView.taskInfo = taskInfo;
+        
+    }
+    
 }
 
 #pragma mark 切换上传进度条和下载进度条
@@ -301,9 +311,9 @@
         self.rightTabLineView.hidden = YES;
     }else{
         [self.downloadTabBtn setTitleColor:[UIColor colorWithRed:48.0/255 green:131.0/255 blue:251.0/255 alpha:1.0f] forState:UIControlStateNormal];
-
+        
         [self.uploadTabBtn setTitleColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:1.0f]forState:UIControlStateNormal];
-
+        
         self.downloadScrollView.hidden = NO;
         self.uploadScrollView.hidden = YES;
         self.leftTabLineView.hidden = YES;
@@ -312,34 +322,31 @@
 }
 
 - (IBAction)clearFinishedTask:(id)sender {
-    if (self.showTabIndex==1) {
-        for (NSString *taskId in [self.downloadProgressBarDic allKeys]) {
-            ProgressView* progressView =[self.downloadProgressBarDic objectForKey:taskId];
-            if ([progressView.taskInfo.taskStatus isEqualToString:FINISHED]) {
-                [self.downloadProgressBarDic removeObjectForKey:taskId];
-                [self.downloadTaskDic removeObjectForKey:taskId];
-            }
+    for (NSString *taskId in [self.downloadProgressBarDic allKeys]) {
+        ProgressView* progressView =[self.downloadProgressBarDic objectForKey:taskId];
+        if ([progressView.taskInfo.taskStatus isEqualToString:FINISHED]) {
+            [self.downloadProgressBarDic removeObjectForKey:taskId];
+            [self.downloadTaskDic removeObjectForKey:taskId];
         }
-        [self.downloadScrollView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
-        self.downloadViewY = MARGINTOP;
-        for (NSString *taskId in [self.downloadProgressBarDic allKeys]) {
-            ProgressView* progressView =[self.downloadProgressBarDic objectForKey:taskId];
-            [self addProgressView:progressView];
+    }
+    [self.downloadScrollView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+    self.downloadViewY = MARGINTOP;
+    for (NSString *taskId in [self.downloadProgressBarDic allKeys]) {
+        ProgressView* progressView =[self.downloadProgressBarDic objectForKey:taskId];
+        [self addProgressView:progressView];
+    }
+    self.uploadViewY = MARGINTOP;
+    for (NSString *taskId in [self.uploadProgressBarDic allKeys]) {
+        ProgressView* progressView =[self.uploadProgressBarDic objectForKey:taskId];
+        if ([progressView.taskInfo.taskStatus isEqualToString:FINISHED]) {
+            [self.uploadProgressBarDic removeObjectForKey:taskId];
+            [self.uploadTaskDic removeObjectForKey:taskId];
         }
-    }else if(self.showTabIndex==0){
-        self.uploadViewY = MARGINTOP;
-        for (NSString *taskId in [self.uploadProgressBarDic allKeys]) {
-            ProgressView* progressView =[self.uploadProgressBarDic objectForKey:taskId];
-            if ([progressView.taskInfo.taskStatus isEqualToString:FINISHED]) {
-                [self.uploadProgressBarDic removeObjectForKey:taskId];
-                [self.uploadTaskDic removeObjectForKey:taskId];
-            }
-        }
-        [self.uploadScrollView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
-        for (NSString *taskId in [self.uploadProgressBarDic allKeys]) {
-            ProgressView* progressView =[self.uploadProgressBarDic objectForKey:taskId];
-            [self addProgressView:progressView];
-        }
+    }
+    [self.uploadScrollView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+    for (NSString *taskId in [self.uploadProgressBarDic allKeys]) {
+        ProgressView* progressView =[self.uploadProgressBarDic objectForKey:taskId];
+        [self addProgressView:progressView];
     }
 }
 

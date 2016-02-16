@@ -42,6 +42,8 @@
     [self.returnLastDirBtn addTarget: self action: @selector(returnParentDirectoryAction:) forControlEvents: UIControlEventTouchUpInside];
     [self.returnRootDirBtn addTarget: self action: @selector(returnRootDirectoryAction:) forControlEvents: UIControlEventTouchUpInside];
     [self.fileListTableView setTableFooterView:[[UIView alloc] initWithFrame:CGRectZero]];//设置表尾不显示，就不显示多余的横线
+    self.filesDic = [[NSMutableDictionary alloc]init];
+    self.dirsDic = [[NSMutableDictionary alloc]init];
     [self loadFileData];
 }
 
@@ -268,6 +270,12 @@
     if (tableDataDic != nil) {
         [tableDataDic removeAllObjects];
     }
+    if (self.filesDic!=nil) {
+        [self.filesDic removeAllObjects];
+    }
+    if (self.dirsDic!=nil) {
+        [self.dirsDic removeAllObjects];
+    }
     loadingView = [UIHelper addLoadingViewWithSuperView: self.view text:@"正在获取目录" ];
     // Reachability
     NSString* requestHost = [g_sDataManager requestHost];
@@ -294,7 +302,7 @@
                     
                     FileInfo *fileInfo = [[FileInfo alloc] init];
                     fileInfo.fileName = dict[ @"fileName"];
-                    fileInfo.fileSize = dict[ @"fileSize"];
+                    fileInfo.fileSize = [FileTools  convertFileSize: dict[@"fileSize"]];
                     fileInfo.fileChangeTime = dict[ @"fileChangeTime"];
                     fileInfo.fileType = dict[ @"fileType"];
                     if([fileInfo.fileType isEqualToString:@"folder"])
@@ -302,6 +310,7 @@
                         fileInfo.fileSubtype =@"folder";
                         fileInfo.isShare = dict[ @"isShare"];
                         [tableDataDic setObject:fileInfo forKey:[NSString stringWithFormat:@"%zi", [tableDataDic count]]];
+                        [self.dirsDic setObject:fileInfo.fileName forKey:fileInfo.fileName];
                     }
                 }else{
                     *stop = YES;
@@ -316,7 +325,7 @@
                 if (responseJSONResult && responseJSONResult.count>0) {
                     FileInfo *fileInfo = [[FileInfo alloc] init];
                     fileInfo.fileName = dict[@"fileName"];
-                    fileInfo.fileSize = dict[@"fileSize"];
+                    fileInfo.fileSize = [FileTools  convertFileSize: dict[@"fileSize"]];
                     fileInfo.fileChangeTime = dict[@"fileChangeTime"];
                     fileInfo.fileType = dict[@"fileType"];
                     if([fileInfo.fileType isEqualToString:@"file"])
@@ -327,6 +336,7 @@
                         }
                         fileInfo.isShare = dict[@"isShare"];
                         [tableDataDic setObject:fileInfo forKey:[NSString stringWithFormat:@"%zi", index]];
+                        [self.filesDic setObject:fileInfo.fileName forKey:fileInfo.fileName];
                         index++;
                     }
                 }else{

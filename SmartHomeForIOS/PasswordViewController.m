@@ -17,7 +17,7 @@
 {
     [super viewDidLoad];
     
-    self.title = @"密码修改";
+    self.title = @"修改密码";
     [self.passwordOld setSecureTextEntry:YES];
     [self.passwordNew setSecureTextEntry:YES];
     [self.passwordNewConfirm setSecureTextEntry:YES];

@@ -253,7 +253,7 @@ static NSString* _cellId = @"album";
     fileinfo.fileName = [[[thumbPhoto defaultRepresentation]url] absoluteString]; //存放照片的url，
     cell.fileinfo = fileinfo;
     cell.backgroundView = thumbImage;
-    UIImageView *bgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"done"]];
+    UIImageView *bgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"checbox"]];
     bgView.contentMode = UIViewContentModeBottomRight;
     cell.selectedBackgroundView = bgView;
     cell.selected = false;
@@ -504,16 +504,17 @@ static NSString* _cellId = @"album";
                 if (!operationIsExist) {
                     ALAsset* cellAsset =[selectedItemsDic valueForKey:filePath];
                     AlbumUploadByBlockTool *operation = [[AlbumUploadByBlockTool alloc] initWithLocalPath:filePath ip:[g_sDataManager requestHost]withServer:uploadUrl withName:[g_sDataManager userName] withPass:[g_sDataManager password] cellAsset:cellAsset];
-                    TaskInfo* task = [[TaskInfo alloc] init];
-                    task.taskId = [NSUUIDTool gen_uuid];
-                    task.taskName =fileName;
-                    task.taskType = @"上传";
-                    operation.taskId =  task.taskId;
+                    TaskInfo *taskInfo = [[TaskInfo alloc] init];
+                    taskInfo.taskId = [NSUUIDTool gen_uuid];
+                    taskInfo.taskName =fileName;
+                    taskInfo.taskType = @"上传";
+                    operation.taskId =  taskInfo.taskId;
                     operation.fileName = fileName;
-                    operation.taskId = task.taskId;
+                    operation.taskId = taskInfo.taskId;
+                    operation.taskInfo = taskInfo;
                     [uploadQueue addOperation:operation];
-                    [[ProgressBarViewController sharedInstance].taskDic  setObject:task forKey:task.taskId];
-                    [[ProgressBarViewController sharedInstance] addProgressBarRow:task];
+                    [[ProgressBarViewController sharedInstance].uploadTaskDic  setObject:taskInfo forKey:taskInfo.taskId];
+                    [[ProgressBarViewController sharedInstance] addProgressBarRow:taskInfo];
                 }
             }
             [self.navigationController pushViewController:[ProgressBarViewController sharedInstance] animated:YES];

@@ -460,7 +460,7 @@ static NSString *NumOfAlarmList = @"10";
     return 2.0f;
 }
 
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+- (BOOL)tableView:(UITableView *)tableView  RowAtIndexPath:(NSIndexPath *)indexPath
 {
     return YES;
 }

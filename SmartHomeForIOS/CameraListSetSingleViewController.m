@@ -145,7 +145,7 @@
     self.scroll.contentSize = CGSizeMake(self.view.frame.size.width, self.view.frame.size.height);
     
     // hgc 2015 11 04 added start
-//    [self.sliderSensitivity setThumbImage:[UIImage imageNamed:@"point"] forState:UIControlStateNormal];
+    [self.sliderSensitivity setThumbImage:[UIImage imageNamed:@"point"] forState:UIControlStateNormal];
     // hgc 2015 11 04 added end
     
 //hgc 2015 11 11 add 离线摄像头设置页 start
@@ -283,46 +283,46 @@
     }
 // tag 2202
     else if (alertView.tag == 2202){
-//        if (buttonIndex == 2){
-//            NSLog(@"shishi");
-//            [DeviceNetworkInterface deleteFromDeviceListAndFileWithDeviceId:self.deviceID withBlock:^(NSString *result, NSString *message, NSError *error) {
-//                if (!error) {
-//                    NSLog(@"camera deleteFromDeviceListAndFileWithDeviceId result===%@",result);
-//                    NSLog(@"camera deleteFromDeviceListAndFileWithDeviceId mseeage===%@",message);
-//                    
-//                    // 2. 更新UI
-//                    if ([result isEqualToString:@"success"]) {
-//                        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"删除摄像头" message:@"删除摄像头成功" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-//                        [self.view addSubview:alert];
-//                        [alert show];
-//                        
-//                        //superVC
-//                        NSArray *ctrlArray = self.navigationController.viewControllers;
-//                        for (UIViewController *ctrl in ctrlArray){
-//                            if ([ctrl isKindOfClass:[CameraListViewController class]])
-//                            {
-//                                CameraListViewController *superVC = ctrl;
-//                                //            superVC.deviceID = self.deviceID;
-//                                [self.navigationController popToViewController:superVC animated:YES];
-//                                break;
-//                            }
-//                            NSLog(@"ctrl ---- %@", ctrl);
-//                        }
-//                    }else{
-//                        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"删除摄像头失败" message:message delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-//                        [self.view addSubview:alert];
-//                        [alert show];
-//                    }
-//                }
-//                else{
-//                    NSLog(@"deleleFromDeviceListWithDeviceId error");
-//                    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"删除摄像头" message:@"网络错误，删除摄像头失败" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-//                    [self.view addSubview:alert];
-//                    [alert show];
-//                }
-//            }];
-//        }else
         if (buttonIndex == 1){
+            NSLog(@"shishi");
+            [DeviceNetworkInterface deleteFromDeviceListAndFileWithDeviceId:self.deviceID withBlock:^(NSString *result, NSString *message, NSError *error) {
+                if (!error) {
+                    NSLog(@"camera deleteFromDeviceListAndFileWithDeviceId result===%@",result);
+                    NSLog(@"camera deleteFromDeviceListAndFileWithDeviceId mseeage===%@",message);
+                    
+                    // 2. 更新UI
+                    if ([result isEqualToString:@"success"]) {
+                        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"删除摄像头" message:@"删除摄像头成功" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                        [self.view addSubview:alert];
+                        [alert show];
+                        
+                        //superVC
+                        NSArray *ctrlArray = self.navigationController.viewControllers;
+                        for (UIViewController *ctrl in ctrlArray){
+                            if ([ctrl isKindOfClass:[CameraListViewController class]])
+                            {
+                                CameraListViewController *superVC = ctrl;
+                                //            superVC.deviceID = self.deviceID;
+                                [self.navigationController popToViewController:superVC animated:YES];
+                                break;
+                            }
+                            NSLog(@"ctrl ---- %@", ctrl);
+                        }
+                    }else{
+                        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"删除摄像头失败" message:message delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                        [self.view addSubview:alert];
+                        [alert show];
+                    }
+                }
+                else{
+                    NSLog(@"deleleFromDeviceListWithDeviceId error");
+                    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"删除摄像头" message:@"网络错误，删除摄像头失败" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                    [self.view addSubview:alert];
+                    [alert show];
+                }
+            }];
+        }else
+        if (buttonIndex == 2){
             NSLog(@"foufou");
             NSLog(@"queding");
             [DeviceNetworkInterface deleleFromDeviceListWithDeviceId:self.deviceID withBlock:^(NSString *result, NSString *message, NSError *error) {
@@ -496,8 +496,8 @@
                                                    message:@"确定要删除摄像头吗?"
                                                   delegate:self
                                          cancelButtonTitle:@"取消"
-                                         otherButtonTitles:@"确定",nil];
-//                                             otherButtonTitles:@"是",@"否",nil];
+//                                         otherButtonTitles:@"确定",nil];
+                                             otherButtonTitles:@"是",@"否",nil];
     [alert show];
     [alert setTag:2202];
     

@@ -22,12 +22,16 @@
                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TK2-P2-gNA">
+                        <rect key="frame" x="0.0" y="0.0" width="22" height="22"/>
+                    </imageView>
                 </subviews>
                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             </view>
             <size key="customSize" width="241" height="151"/>
             <connections>
                 <outlet property="image" destination="G85-KN-smI" id="9Bz-7v-ezj"/>
+                <outlet property="imageForMulSelect" destination="TK2-P2-gNA" id="pUE-ge-iFs"/>
                 <outlet property="label" destination="Ehm-gj-Jgv" id="NAG-g4-o6j"/>
             </connections>
             <point key="canvasLocation" x="248" y="333"/>

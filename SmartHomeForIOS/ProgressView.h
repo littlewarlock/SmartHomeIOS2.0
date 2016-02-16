@@ -10,6 +10,8 @@
 #import "TaskInfo.h"
 #import "NSOperationDownloadQueue.h"
 #import "FileDownloadOperation.h"
+#import "NSOperationUploadQueue.h"
+
 @interface ProgressView :UIView
 @property (weak, nonatomic) IBOutlet UILabel *taskNameLabel;
 @property (strong, nonatomic) IBOutlet UIImageView *taskTypeImageView;

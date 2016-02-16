@@ -40,6 +40,7 @@
     [menuItemArray addObject:@"修改密码"];
     [menuItemArray addObject:@"路由管理器"];
     [menuItemArray addObject:@"AP管理"];
+    [menuItemArray addObject:@"更多功能"];
     [menuItemArray addObject:@"注销"];
     
     
@@ -83,16 +84,19 @@
             break;
         }
         case 2:
-            NSLog(@"dasdsa");
+            NSLog(@"路由管理");
             break;
         case 3:{
-            AppViewController *appView = [[AppViewController alloc] initWithNibName:@"AppViewController" bundle:nil];
-            self.viewDeckController.toggleLeftView;
-            [(UINavigationController*)self.viewDeckController.centerController pushViewController:appView animated:YES];
-            
+            NSLog(@"ap管理");
             break;
         }
         case 4:{
+            AppViewController *appView = [[AppViewController alloc] initWithNibName:@"AppViewController" bundle:nil];
+            self.viewDeckController.toggleLeftView;
+            [(UINavigationController*)self.viewDeckController.centerController pushViewController:appView animated:YES];
+            break;
+        }
+        case 5:{
             //[FunctionManageTools saveSelectedApp];
             [g_sDataManager setUserName:@""];
             [g_sDataManager setPassword:@""];
@@ -103,10 +107,9 @@
             loginView.isPushHomeView =YES;
             loginView.isShowLocalFileBtn =YES;
             self.viewDeckController.toggleLeftView;
-
             [self.viewDeckController presentViewController:loginView animated:YES completion:nil];
-        }
             break;
+        }
         default:
             break;
     }

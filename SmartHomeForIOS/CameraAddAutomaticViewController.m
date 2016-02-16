@@ -124,7 +124,7 @@
     self.sliderSensitivity.value = self.deviceInfo.sensitivity.floatValue;
 
     // hgc 2015 11 04 added start
-//    [self.sliderSensitivity setThumbImage:[UIImage imageNamed:@"point"] forState:UIControlStateNormal];
+    [self.sliderSensitivity setThumbImage:[UIImage imageNamed:@"point"] forState:UIControlStateNormal];
     // hgc 2015 11 04 added end
 }
 
@@ -394,7 +394,7 @@
                 self.labelModel.text = model;
                 self.labelVersion.text = version;
                 self.labelWIFI.text = wifi;
-                self.sliderSensitivity.value = [sensitivity floatValue];
+//                self.sliderSensitivity.value = [sensitivity floatValue];
                 self.deviceInfo.brand = brand;
                 self.deviceInfo.model = model;
                 //2015 11 18

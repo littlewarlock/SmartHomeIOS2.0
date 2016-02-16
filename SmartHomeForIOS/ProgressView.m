@@ -59,7 +59,7 @@
                         NSMutableDictionary * btnStateDic=[[NSMutableDictionary alloc] initWithObjectsAndKeys:self.taskInfo.taskId,@"taskId",@"disable" ,@"btnState", nil];
                         [[ProgressBarViewController sharedInstance] performSelectorOnMainThread:@selector(setPauseBtnState:) withObject:btnStateDic waitUntilDone:NO];
                         //更新进度条的状态信息
-                        NSMutableDictionary * taskStatusDic=[[NSMutableDictionary alloc] initWithObjectsAndKeys:self.taskInfo.taskId,@"taskId",@"已完成" ,@"taskStatus", nil];
+                        NSMutableDictionary * taskStatusDic=[[NSMutableDictionary alloc] initWithObjectsAndKeys:self.taskInfo.taskId,@"taskId",FINISHED ,@"taskStatus", nil];
                         //在主线程刷新UI
                         [[ProgressBarViewController sharedInstance] performSelectorOnMainThread:@selector(setTaskStatusInfo:) withObject:taskStatusDic waitUntilDone:NO];
                     }
@@ -81,6 +81,9 @@
 
 - (void)setTaskStatusInfo:(NSString *)taskStatus{
    // self.taskDetailLabel.text = taskStatus;
+    if([taskStatus isEqualToString:FINISHED]){
+        self.pauseBtn.hidden = YES;
+    }
 }
 
 - (void)setPauseBtnStateCaptionAndTaskStatus:(BOOL) btnState caption:(NSString*)caption taskStatus:(NSString*)taskStatus{

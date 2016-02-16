@@ -24,7 +24,7 @@
     //  根据ftype不同分别初始化cell
     //CGSize scaleToSize = {34.0,24.0};
     if ([file.fileType isEqualToString:@"folder"]) {
-        self = [super initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:file.fileName];
+        self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:file.fileName];
         
         self.imageView.image = [UIImage imageNamed:@"documents-icon"];
         if([file.isShare isEqualToString:@"1"]){
@@ -37,6 +37,14 @@
         if([[file.cpath stringByAppendingPathComponent: file.fileName] isEqualToString:[@"/" stringByAppendingPathComponent: SHARE_FOLDER]]){
             self.imageView.image =  [UIImage imageNamed:@"share-icon"];
         }
+        if([[file.cpath stringByAppendingPathComponent: file.fileName] isEqualToString:[@"/" stringByAppendingPathComponent: PUBLIC_FOLDER]]){
+            self.imageView.image =  [UIImage imageNamed:@"public-icon"];
+        }
+        if([[file.cpath stringByAppendingPathComponent: file.fileName] isEqualToString:[@"/" stringByAppendingPathComponent: CAMERA_FOLDER]]){
+            self.imageView.image =  [UIImage imageNamed:@"camera-icon"];
+        }
+        
+        
         
         self.textLabel.text = file.fileName;
         [self.textLabel setTextColor:[UIColor colorWithRed:82.0/255 green:82.0/255 blue:82.0/255 alpha:1] ];
@@ -167,7 +175,7 @@
             NSArray *picArray=  [NSArray arrayWithObjects:@"jpg",@"png",@"jpeg", nil];
             BOOL isPic = [picArray containsObject:[[file.fileName pathExtension] lowercaseString]];
             if(isPic){
-                self.imageView.image =  self.imageView.image = [UIImage imageNamed:@"personal_photo"];
+                self.imageView.image = [UIImage imageNamed:@"personal_photo"];
                 NSMutableString *picUrl = [NSMutableString stringWithFormat:@"http://%@/%@",[g_sDataManager requestHost],REQUEST_PIC_URL];
                 picUrl =[NSMutableString stringWithFormat:@"%@?uname=%@&filePath=%@&fileName=%@",picUrl,[[g_sDataManager userName] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding],[file.cpath stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding],[file.fileName stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
                 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{

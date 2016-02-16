@@ -26,7 +26,9 @@ static NSString * UserCell = @"UserCell";
    // self.cellsCurrentlyEditing = [NSMutableArray array];
     
     self.title = @"用户管理";
-//    self.nameTextField.layer.borderColor=[[UIColor redColor]CGColor];
+    //self.nameTextField.layer.borderColor=[[UIColor redColor]CGColor];
+    //关闭联想输入
+    self.nameTextField.autocorrectionType=UITextAutocorrectionTypeNo;
 //    self.nameTextField.layer.borderWidth= 1.0f;
     
     UIButton *left = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -151,12 +153,20 @@ static NSString * UserCell = @"UserCell";
     
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     UserInfo *selectedUser = _userList[indexPath.row];
+
+    if([selectedUser.userName isEqualToString:@"admin"]){
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:@"admin用户不能被删除" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] ;
+        [alert show];
+        return;
+    }
     
     if([selectedUser.userName isEqualToString:[g_sDataManager userName]]){
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:@"用户不能删除自己" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] ;
         [alert show];
         return;
     }
+
+    
     [_userList removeObjectAtIndex:indexPath.row];
     
     [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:indexPath.row inSection: 0]] withRowAnimation:UITableViewRowAnimationFade];
@@ -231,7 +241,7 @@ static NSString * UserCell = @"UserCell";
         if([[NSString stringWithFormat:@"%@",[responseJSON objectForKey:@"result"]] isEqualToString: @"1"])//添加成功
         {
             self.addUserBtn.enabled = YES;
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:@"注册成功" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] ;
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:@"用户添加成功" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] ;
             [alert show];
             
             UserInfo *userInfo = [[UserInfo alloc] init];
@@ -243,21 +253,32 @@ static NSString * UserCell = @"UserCell";
             self.addUserBtn.enabled = YES;
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:@"用户已存在" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] ;
             [alert show];
-        }else if ([[NSString stringWithFormat:@"%@",[responseJSON objectForKey:@"result"]] isEqualToString: @"2"]){
-            self.addUserBtn.enabled = YES;
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:@"用户根目录创建失败" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] ;
-            [alert show];
-        }else if ([[NSString stringWithFormat:@"%@",[responseJSON objectForKey:@"result"]] isEqualToString: @"3"]){
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:@"数据通信失败" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] ;
-            [alert show];
-        }else{
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:@"其他错误" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] ;
+        }
+        
+//        else if ([[NSString stringWithFormat:@"%@",[responseJSON objectForKey:@"result"]] isEqualToString: @"2"]){
+//            self.addUserBtn.enabled = YES;
+//            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:@"用户根目录创建失败" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] ;
+//            [alert show];
+//        }else if ([[NSString stringWithFormat:@"%@",[responseJSON objectForKey:@"result"]] isEqualToString: @"3"]){
+//            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:@"数据通信失败" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] ;
+//            [alert show];
+//        }else if ([[NSString stringWithFormat:@"%@",[responseJSON objectForKey:@"result"]] isEqualToString: @"4"]){
+//            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:@"共享文件夹创建失败" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] ;
+//            [alert show];
+//        }else if ([[NSString stringWithFormat:@"%@",[responseJSON objectForKey:@"result"]] isEqualToString: @"5"]){
+//            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:@"摄像文件链接失败" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] ;
+//            [alert show];
+//        }
+        else{
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:@"用户添加失败" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] ;
             [alert show];
             self.addUserBtn.enabled = YES;
         }
     }errorHandler:^(MKNetworkOperation *errorOp, NSError* err) {
         self.addUserBtn.enabled = YES;
         NSLog(@"MKNetwork request error : %@", [err localizedDescription]);
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:@"网络错误" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] ;
+        [alert show];
     }];
     [engine enqueueOperation:op];
     [self.nameTextField resignFirstResponder];

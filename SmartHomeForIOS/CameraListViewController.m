@@ -22,6 +22,8 @@ static NSString *CellTableIdentifier = @"CellTableIdentifier";
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 @property UIRefreshControl *control;
 @property UIActivityIndicatorView *activityIndicator;
+//
+@property Boolean isLoadData;
 
 @end
 
@@ -39,7 +41,9 @@ static NSString *CellTableIdentifier = @"CellTableIdentifier";
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
+    
+    self.isLoadData = NO;
+    
     //2016 01 05 hgc channels
 //    AVInstallation *currentInstallation = [AVInstallation currentInstallation];
 //    [currentInstallation addUniqueObject:@"234" forKey:@"channels"];
@@ -89,7 +93,7 @@ static NSString *CellTableIdentifier = @"CellTableIdentifier";
     btn.backgroundColor = [UIColor clearColor];
     [btn setTitleColor:[UIColor colorWithRed:0.0/255 green:160.0/255 blue:226.0/255 alpha:1] forState:UIControlStateNormal];
 //    [btn setTitleColor:[UIColor grayColor] forState:UIControlStateDisabled];
-    [btn setImage:[UIImage imageNamed:@"add-icon"] forState:UIControlStateNormal];
+    [btn setImage:[UIImage imageNamed:@"add_icon"] forState:UIControlStateNormal];
     [btn setTintColor:[UIColor colorWithRed:0.0/255 green:160.0/255 blue:226.0/255 alpha:1]];
     [btn.titleLabel setFont:[UIFont systemFontOfSize:18.0]];
     //2015 11 04
@@ -145,6 +149,8 @@ static NSString *CellTableIdentifier = @"CellTableIdentifier";
 
 -(void)loadData:(id)sender{
 
+    self.isLoadData = YES;
+    
     [DeviceNetworkInterface getDeviceList:self withBlock:^(NSArray *deviceList, NSError *error) {
         //
         if (self.isCurrentViewControllerVisible) {
@@ -304,6 +310,17 @@ static NSString *CellTableIdentifier = @"CellTableIdentifier";
     return self.devices.count;
 }
 
+- (void)tableView:(UITableView *)tableView didEndDisplayingCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSLog(@"indexPath.row==%d",indexPath.row);
+    if (indexPath.row == [self.tableView numberOfRowsInSection:0] - 1 ) {
+        NSLog(@"didEndDisplayingCell");
+        //
+//        self.isLoadData = NO;
+        //
+    }
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView
          cellForRowAtIndexPath:(NSIndexPath *)indexPath
 
@@ -336,7 +353,6 @@ static NSString *CellTableIdentifier = @"CellTableIdentifier";
         NSLog(@"check ok.");
     }
     //hgc 2015 11 05 end
-    
     
     NSLog(@"addition==%@",[rowData objectForKey:@"addition"]);
     
@@ -431,62 +447,61 @@ static NSString *CellTableIdentifier = @"CellTableIdentifier";
 //    UIImage *imageOnline = [self getImageFromURL:rowData[@"snapshot"]];
     NSLog(@"rowData===%@",rowData[@"snapshot"]);
     
-    if ([rowData[@"snapshot"] isEqual:[NSNull null]] || [rowData[@"snapshot"] isEqualToString:@""] ) {
-//        cell.imagetest.image = image;
-//        cell.imagetest.image = [[UIImage alloc]init];
-        [cell.imagetest setImage:[UIImage imageNamed:@"camera_disconnect"]];
+    //2016 02 03 hgc
+    if (cell.imagetest.image&&!self.isLoadData) {
+        NSLog(@"self.isLoadData==%d",self.isLoadData);
+        NSLog(@"nothing to do");
     }else{
-        //
-// hgc 替换getimageFromURL start
-//        cell.imagetest.image = [self getImageFromURL:rowData[@"snapshot"]];
-//hgc test 2016 01 20
-        MKNetworkEngine *engine = [[MKNetworkEngine alloc]init];
-        MKNetworkOperation *operation = [engine operationWithURLString:rowData[@"snapshot"] params:nil httpMethod:@"GET"];
-        //添加完成处理程序
-        [operation addCompletionHandler:^(MKNetworkOperation *completedOperation) {
-            //请求成功,为_imgView添加图片
-            UIImage * testImageMK = [UIImage imageWithData:[completedOperation responseData]];
-            //
-            [cell.imagetest setImage:testImageMK];
-            //
-        } errorHandler:^(MKNetworkOperation *completedOperation, NSError *error) {
-            //请求出错
-            NSLog(@"%@",completedOperation.error);
-        }];
-        //发起网络请求
-        [engine enqueueOperation:operation];
-//hgc test 2016 01 20
-//hgc 替换getimageFromURL end
-
-        // 2015 11 10 hgc add
-        if ([tempOnlining isEqualToString:@"1"]) {
-            //        UIImage* grayImage = [self grayscale:cell.imagetest.image type:1];
-            //        cell.imagetest.image = grayImage;
-            NSLog(@"nomal image");
+        if ([rowData[@"snapshot"] isEqual:[NSNull null]] || [rowData[@"snapshot"] isEqualToString:@""] ) {
+            [cell.imagetest setImage:[UIImage imageNamed:@"camera_disconnect"]];
         }else{
-            if (cell.imagetest.image) {
-                //            UIImage* grayImage = [[UIImage alloc]init];
-                //            grayImage = cell.imagetest.image;
+            //
+            // hgc 替换getimageFromURL start
+            //        cell.imagetest.image = [self getImageFromURL:rowData[@"snapshot"]];
+            //hgc test 2016 01 20
+            MKNetworkEngine *engine = [[MKNetworkEngine alloc]init];
+            MKNetworkOperation *operation = [engine operationWithURLString:rowData[@"snapshot"] params:nil httpMethod:@"GET"];
+            //添加完成处理程序
+            [operation addCompletionHandler:^(MKNetworkOperation *completedOperation) {
+                //请求成功,为_imgView添加图片
+                UIImage * testImageMK = [UIImage imageWithData:[completedOperation responseData]];
                 //
-                UIImage*  grayImage = [self grayscale:cell.imagetest.image type:1];
-                cell.imagetest.image = grayImage;
-                NSLog(@"gray image");
-
+                [cell.imagetest setImage:testImageMK];
+                //
+            } errorHandler:^(MKNetworkOperation *completedOperation, NSError *error) {
+                //请求出错
+                NSLog(@"%@",completedOperation.error);
+            }];
+            //发起网络请求
+            [engine enqueueOperation:operation];
+            //hgc test 2016 01 20
+            //hgc 替换getimageFromURL end
+            
+            // 2015 11 10 hgc add
+            if ([tempOnlining isEqualToString:@"1"]) {
+                NSLog(@"nomal image");
             }else{
-//                UIView *coverView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, cell.imagetest.frame.size.width, cell.imagetest.frame.size.height)];
-//                [coverView setBackgroundColor:[UIColor colorWithRed:5/255.0 green:5/255.0 blue:5/255.0 alpha:0.3 ]];
-//                [cell.imagetest addSubview:coverView];
-                
-                //2016 01 20
-                NSLog(@"camera_disconnectcamera_disconnect");
-                [cell.imagetest setImage:[UIImage imageNamed:@"camera_disconnect"]];
+                if (cell.imagetest.image) {
+                    UIImage*  grayImage = [self grayscale:cell.imagetest.image type:1];
+                    cell.imagetest.image = grayImage;
+                    NSLog(@"gray image");
+                    
+                }else{
+                    //2016 01 20
+                    NSLog(@"camera_disconnectcamera_disconnect");
+                    [cell.imagetest setImage:[UIImage imageNamed:@"camera_disconnect"]];
+                }
+                NSLog(@"what is this");
             }
-            NSLog(@"what is this");
+            // 2015 11 10 hgc end
         }
-        // 2015 11 10 hgc end
-        
     }
+//
     cell.delegate = self;
+    //2016 02 03
+    if (indexPath.row == [self.tableView numberOfRowsInSection:0] -1 ) {
+        self.isLoadData = NO;
+    }
     
     NSLog(@"what the god !!! ");
     return cell;

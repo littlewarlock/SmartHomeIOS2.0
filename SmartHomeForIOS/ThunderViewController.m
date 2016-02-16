@@ -40,53 +40,48 @@
     UIBarButtonItem* leftItem = [[UIBarButtonItem alloc]initWithCustomView:leftBtn];
     self.navigationItem.leftBarButtonItem = leftItem;
     
-    //设置ImagescrollView的滚动范围
-    self.ImagescrollView.contentSize = CGSizeMake(0, 2100);
+    //默认不显示
+    self.activeLabel.hidden = YES;
+    self.boundingLabel.text = @"";
+    self.replaceButton.hidden = YES;
+    self.tipLabel1.hidden = YES;
+    self.tipLabel2.hidden = YES;
+    self.tipLabel3.hidden = YES;
+    self.tipLabel4.hidden = YES;
     
     //返回激活码
     [self activeCode];
-    
-
 
 }
+
+
 //返回激活码
 - (void)activeCode
 {
-    
-    NSString* requestHost = [g_sDataManager requestHost];
-    NSString* requestUrl = [NSString stringWithFormat:@"%@",requestHost];
-    __weak typeof(self) weakSelf = self;
-    MKNetworkEngine *engine = [[MKNetworkEngine alloc] initWithHostName:requestUrl customHeaderFields:nil];
-    MKNetworkOperation *op = [engine operationWithPath:REQUEST_THUNDER_KEY_URL params:nil httpMethod:@"POST"];
-    
-    [op addCompletionHandler:^(MKNetworkOperation *operation) {
-        
-        NSLog(@"[operation responseData]-->>%@", [operation responseString]);
-        if (![[operation responseString]  isEqual:@""]) {//未绑定
-            weakSelf.activeLabel.hidden = NO;
-            weakSelf.boundingLabel.text = @"未绑定";
-            weakSelf.replaceButton.hidden = NO;
-            weakSelf.tipLabel1.hidden = NO;
-            weakSelf.tipLabel2.hidden = NO;
-            weakSelf.tipLabel3.hidden = NO;
-            weakSelf.tipLabel4.hidden = NO;
-            weakSelf.activeLabel.text = [NSString stringWithFormat:@"激活码:%@",[operation responseString]];
-        } else {//已绑定
-            weakSelf.activeLabel.hidden = YES;
-            weakSelf.boundingLabel.text = @"已绑定";
-            weakSelf.replaceButton.hidden = YES;
-            weakSelf.tipLabel1.hidden = YES;
-            weakSelf.tipLabel2.hidden = YES;
-            weakSelf.tipLabel3.hidden = YES;
-            weakSelf.tipLabel4.hidden = YES;
-        }
-        
-    }errorHandler:^(MKNetworkOperation *errorOp, NSError* err) {
-        
-        NSLog(@"MKNetwork request error : %@", [err localizedDescription]);
+    [thunderTools activeCodewithBlock:^(NSString *result, NSError *error) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            if (![result isEqual:@""]) {//未绑定
+                self.activeLabel.hidden = NO;
+                self.boundingLabel.text = @"未绑定";
+                self.replaceButton.hidden = NO;
+                self.tipLabel1.hidden = NO;
+                self.tipLabel2.hidden = NO;
+                self.tipLabel3.hidden = NO;
+                self.tipLabel4.hidden = NO;
+                self.activeLabel.text = [NSString stringWithFormat:@"激活码:%@",result];
+            } else {//已绑定
+                self.activeLabel.hidden = YES;
+                self.boundingLabel.text = @"已绑定";
+                self.replaceButton.hidden = YES;
+                self.tipLabel1.hidden = YES;
+                self.tipLabel2.hidden = YES;
+                self.tipLabel3.hidden = YES;
+                self.tipLabel4.hidden = YES;
+            }
+        });
         
     }];
-    [engine enqueueOperation:op];
 }
 
 //将激活码的文本复制到剪贴板

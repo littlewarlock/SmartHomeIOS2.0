@@ -69,7 +69,9 @@ static CGFloat const kBounceValue = 20.0f;
     if (sender == self.updateButton) {
         [self.delegate updateButtonAction:self.updateButton];
     } else if (sender == self.deleteButton) {
-        [self.delegate deleteButtonAction:self.deleteButton];
+        
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"该用户的文件将会被删除,如果要保留请用该用户登录备份到公共文件夹或其他设备。" message:nil delegate:self cancelButtonTitle:@"确定" otherButtonTitles:@"取消", nil];
+        [alert show];
     } else {
         NSLog(@"Clicked unknown button!");
     }
@@ -262,5 +264,18 @@ static CGFloat const kBounceValue = 20.0f;
 {
     return YES;
 }
+
+
+-(void) alertView : (UIAlertView*)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    //delete user
+    if(buttonIndex ==0 ){
+        [self.delegate deleteButtonAction:self.deleteButton];
+    }else{
+    
+    }
+}
+
+
 
 @end

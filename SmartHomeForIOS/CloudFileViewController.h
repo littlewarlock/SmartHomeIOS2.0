@@ -22,20 +22,22 @@
 @property (copy, nonatomic) NSString *rootUrl; //存储当前用户的根目录
 @property (assign, nonatomic) BOOL isInSharedFolder; //是否在共享文件夹下
 @property (strong, nonatomic) IBOutlet UITableView *fileListTableView;
+@property (weak, nonatomic) IBOutlet UITabBar *tabbar;
 
 @property (nonatomic, strong) UISwipeGestureRecognizer *leftSwipeGestureRecognizer;
 @property (nonatomic, strong) UISwipeGestureRecognizer *rightSwipeGestureRecognizer;
+@property (weak, nonatomic) IBOutlet UITabBarItem *item1;
+@property (weak, nonatomic) IBOutlet UITabBarItem *item2;
+@property (weak, nonatomic) IBOutlet UITabBarItem *item3;
+@property (weak, nonatomic) IBOutlet UITabBarItem *item4;
+@property (weak, nonatomic) IBOutlet UIButton *misButton;
+@property (weak, nonatomic) IBOutlet UITabBar *moreBar;
+@property (weak, nonatomic) IBOutlet UITabBarItem *moreItem1;
 
-@property (strong, nonatomic) IBOutlet UIView *footerView;
-@property (strong, nonatomic) IBOutlet UIButton *footerBtn_1;
-@property (strong, nonatomic) IBOutlet UILabel *footerLabel_1;
-@property (strong, nonatomic) IBOutlet UIButton *footerBtn_2;
-@property (strong, nonatomic) IBOutlet UILabel *footerLabel_2;
-@property (strong, nonatomic) IBOutlet UIButton *footerBtn_3;
+@property (weak, nonatomic) IBOutlet UITabBarItem *moreItem2;
+@property (weak, nonatomic) IBOutlet UITabBarItem *moreItem3;
+@property (weak, nonatomic) IBOutlet UITabBarItem *moreItem4;
 
-@property (strong, nonatomic) IBOutlet UILabel *footerLabel_3;
-@property (strong, nonatomic) IBOutlet UIButton *footerBtn_4;
-@property (strong, nonatomic) IBOutlet UILabel *footerLabel_4;
 @property (weak, nonatomic) FDTableViewCell *curCel;
-- (IBAction)footerButtonEventHandleAction:(id)sender;
+
 @end

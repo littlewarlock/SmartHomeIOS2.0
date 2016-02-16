@@ -27,6 +27,7 @@
 @property (assign, nonatomic) BOOL isConnetNetServer;
 @property (strong, nonatomic) NSString *postLoginIp;//提交的ip
 
+@property (weak, nonatomic) IBOutlet UIButton *listButton;
 @property (strong, nonatomic) IBOutlet UITextField *textFieldIp;//展示的ip
 @property (strong, nonatomic) IBOutlet UITableView *tvList;
 @property (strong, nonatomic) IBOutlet UITableView *tvSearch;

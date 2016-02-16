@@ -25,6 +25,12 @@
     [encoder encodeInt64: self.transferedBytes forKey:@"transferedBytes"];
     [encoder encodeObject: self.currentProgress forKey:@"currentProgress"];
     [encoder encodeObject: self.taskName forKey:@"taskName"];
+    [encoder encodeObject: self.ip forKey:@"ip"];
+    [encoder encodeObject: self.localFileNamePath forKey:@"localFileNamePath"];
+    [encoder encodeObject: self.password forKey:@"password"];
+    [encoder encodeObject: self.serverPath forKey:@"serverPath"];
+    [encoder encodeObject: self.filesDic forKey:@"filesDic"];
+    [encoder encodeObject: self.filesArray forKey:@"filesArray"];
 }
 
 - (instancetype)initWithCoder:(NSCoder *)decoder
@@ -45,7 +51,12 @@
         self.transferedBytes = [decoder decodeInt64ForKey:@"transferedBytes"];
         self.currentProgress = [decoder decodeObjectForKey:@"currentProgress"];
         self.taskName = [decoder decodeObjectForKey:@"taskName"];
-       
+        self.ip = [decoder decodeObjectForKey:@"ip"];
+        self.localFileNamePath = [decoder decodeObjectForKey:@"localFileNamePath"];
+        self.password = [decoder decodeObjectForKey:@"password"];
+        self.serverPath = [decoder decodeObjectForKey:@"serverPath"];
+        self.filesDic = [decoder decodeObjectForKey:@"filesDic"];//上传文件夹时，filesDic存储所有的文件列表
+        self.filesArray = [decoder decodeObjectForKey:@"filesArray"];
     }
     return self;
 }

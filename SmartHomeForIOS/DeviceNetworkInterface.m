@@ -953,7 +953,8 @@ NSString* urtTest = @"123.57.223.91";
             }
         }else{
             NSString *code = operation.responseJSON[@"join"][0][@"code"];
-            NSString *sensitivity = operation.responseJSON[@"join"][0][@"sensitivity"];
+//            NSString *sensitivity = operation.responseJSON[@"join"][0][@"sensitivity"];
+            NSString *sensitivity = @"10";
             NSString *wifi = operation.responseJSON[@"join"][0][@"wifi"];
 //            NSString *brand = operation.responseJSON[@"join"][0][@"brand"];
 //            NSString *model = operation.responseJSON[@"join"][0][@"model"];
@@ -1010,7 +1011,8 @@ NSString* urtTest = @"123.57.223.91";
             }
         }else{
             NSString *code = operation.responseJSON[@"join"][0][@"code"];
-            NSString *sensitivity = operation.responseJSON[@"join"][0][@"sensitivity"];
+//            NSString *sensitivity = operation.responseJSON[@"join"][0][@"sensitivity"];
+            NSString *sensitivity = @"10";
             NSString *wifi = operation.responseJSON[@"join"][0][@"wifi"];
             NSString *brand = operation.responseJSON[@"join"][0][@"brand"];
             NSString *model = operation.responseJSON[@"join"][0][@"model"];

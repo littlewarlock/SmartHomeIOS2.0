@@ -38,10 +38,26 @@
 
     [self.userPasswordField setValue:[UIColor colorWithRed:255.0/255 green:255.0/255 blue:255.0/255 alpha:1] forKeyPath:@"_placeholderLabel.textColor"];
     
-    [self.tvSearch setBackgroundColor:[UIColor colorWithRed:94.0/255 green:94.0/255 blue:94.0/255 alpha:0.5]];
-    [self.tvList setBackgroundColor:[UIColor colorWithRed:94.0/255 green:94.0/255 blue:94.0/255 alpha:0.5]];
+    [self.tvSearch setBackgroundColor:[UIColor colorWithRed:94.0/255 green:94.0/255 blue:94.0/255 alpha:0.0]];
+    [self.tvList setBackgroundColor:[UIColor colorWithRed:94.0/255 green:94.0/255 blue:94.0/255 alpha:0.0]];
     [self.tvSearch setTableFooterView:[[UIView alloc] initWithFrame:CGRectZero]];//设置表尾不显示，就不显示多余的横线
     [self.tvList setTableFooterView:[[UIView alloc] initWithFrame:CGRectZero]];//设置表尾不显示，就不显示多余的横线
+    
+    self.tvSearch.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.tvSearch.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
+    self.tvList.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.tvList.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
+//    self.tableView.layer.borderWidth = 0;
+//    if ([self.tableView respondsToSelector:@selector(setSeparatorInset:)])
+//    {
+//        [self.tableView setSeparatorInset:UIEdgeInsetsZero];
+//    }
+//    if ([self.tableView respondsToSelector:@selector(setLayoutMargins:)])
+//    {
+//        [self.tableView setLayoutMargins:UIEdgeInsetsZero];
+//    }
+    
+    
     //设置本地文档按钮是否可见
     if(self.isShowLocalFileBtn)
     {
@@ -74,6 +90,11 @@
     self.tvList.delegate = self;
     self.tvList.tag = TAG_TV_LIST;
     self.tvList.hidden = TRUE;
+    if(self.tvList.hidden){
+        [self.listButton setImage:[UIImage imageNamed:@"login_arrow"] forState:UIControlStateNormal];
+    }else{
+        [self.listButton setImage:[UIImage imageNamed:@"login_arrow-up"] forState:UIControlStateNormal];
+    }
     self.tvSearch.dataSource = self;
     self.tvSearch.delegate = self;
     self.tvSearch.tag = TAG_TV_SEARCH;
@@ -103,6 +124,7 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self.tvList reloadData];
+    [self.tvSearch reloadData];
     UIButton *left = [UIButton buttonWithType:UIButtonTypeCustom];
     left.frame =CGRectMake(0, 0, 100, 32);
     [left setTitle:@"<<本地文档" forState:UIControlStateNormal];
@@ -135,9 +157,19 @@
     if (self.arrayIps1.count>0) {
         self.tvSearch.hidden = TRUE;
         self.tvList.hidden=!self.tvList.hidden;//每次点击都改变按钮的状态
+        if(self.tvList.hidden){
+            [self.listButton setImage:[UIImage imageNamed:@"login_arrow"] forState:UIControlStateNormal];
+        }else{
+            [self.listButton setImage:[UIImage imageNamed:@"login_arrow-up"] forState:UIControlStateNormal];
+        }
+        
     }else{
         self.tvList.hidden=YES;
-        
+        if(self.tvList.hidden){
+            [self.listButton setImage:[UIImage imageNamed:@"login_arrow"] forState:UIControlStateNormal];
+        }else{
+            [self.listButton setImage:[UIImage imageNamed:@"login_arrow-up"] forState:UIControlStateNormal];
+        }
     }
     if(self.tvList.hidden){
         //在此实现隐藏列表时的方法
@@ -288,6 +320,11 @@
 //检索按钮按下
 - (IBAction)searchBtn:(UIButton *)sender {
     self.tvList.hidden = TRUE;
+    if(self.tvList.hidden){
+        [self.listButton setImage:[UIImage imageNamed:@"login_arrow"] forState:UIControlStateNormal];
+    }else{
+        [self.listButton setImage:[UIImage imageNamed:@"login_arrow-up"] forState:UIControlStateNormal];
+    }
     self.tvSearch.hidden=TRUE;
     [self.arrayIps2 removeAllObjects];
     self.loadingView = [self addLoadingViewWithSuperView:self.view text:@"正在获取IP" ];
@@ -384,41 +421,59 @@
                     reuseIdentifier:cellId];
         }
         cell.layer.borderWidth = 0;
-        
         IpInfo *selectedIp = self.arrayIps1[indexPath.row];
+        
+        //自定义label的坐标
+        CGFloat x = self.textFieldIp.frame.origin.x;
+        UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(x, 10,160, 30)];
+        label.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+        [label setText:selectedIp.ipAddress];
+        label.font = [UIFont systemFontOfSize:15];
+        label.textColor = [UIColor blackColor];
+        label.textAlignment = NSTextAlignmentCenter;
+        label.backgroundColor = [UIColor clearColor];
+        [cell.contentView addSubview:label];
+        //
+        /*
         cell.textLabel.text = selectedIp.ipAddress;
-        cell.textLabel.font = [UIFont systemFontOfSize: 20.0];
+        cell.textLabel.font = [UIFont systemFontOfSize: 20.0];*/
+        CGFloat accessoryButtonX = self.listButton.frame.origin.x;
         UIButton *accessoryButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        accessoryButton.frame = CGRectMake(150,5,20,20);
+        accessoryButton.frame = CGRectMake(accessoryButtonX,15,20,20);
         [accessoryButton setImage:[UIImage imageNamed:@"clear"] forState:UIControlStateNormal];
         [accessoryButton addTarget:self action:@selector(accessoryButtonIsTapped:event:)
                   forControlEvents:UIControlEventTouchUpInside];
-        cell.accessoryView = accessoryButton;
-        
-        cell.backgroundColor = [UIColor clearColor];
+       // cell.accessoryView = accessoryButton;
+        [cell.contentView addSubview:accessoryButton];
+        cell.backgroundColor = [UIColor whiteColor];
         return cell;
     }else{
         //检索列表
-        static NSString* cellId = @"cellId";
-        UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:cellId];
-        if(cell == nil)
-        {
-            cell = [[UITableViewCell alloc]
+        static NSString* cellId = @"searchCellId";
+        UITableViewCell* cell;
+
+        cell = [[UITableViewCell alloc]
                     initWithStyle:UITableViewCellStyleDefault
                     reuseIdentifier:cellId];
-        }
         cell.layer.borderWidth = 0;
-        
+        CGFloat x = self.textFieldIp.frame.origin.x;
+        UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(x, 10,160, 30)];
+        label.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+        label.font = [UIFont systemFontOfSize:15];
+        label.textColor = [UIColor blackColor];
+        label.textAlignment = NSTextAlignmentCenter;
+        label.backgroundColor = [UIColor clearColor];
         
         NSRange range  = [self.arrayIps2[indexPath.row] rangeOfString:@"="];
-        //NSString *subIP = [searchedOrSavedAdressStr  substringFromIndex:range.location+1];
         if(range.location!= NSNotFound){
-            cell.textLabel.text = [self.arrayIps2[indexPath.row]  substringToIndex:range.location];
+            [label setText:[self.arrayIps2[indexPath.row]  substringToIndex:range.location]];
         }else{
-            cell.textLabel.text = self.arrayIps2[indexPath.row];
+            [label setText:self.arrayIps2[indexPath.row]];
+
         }
-        cell.textLabel.font = [UIFont systemFontOfSize: 20.0];
-        cell.backgroundColor = [UIColor clearColor];
+        [cell.contentView addSubview:label];
+                    NSLog(@"ooooooosssss==========");
+        cell.backgroundColor = [UIColor whiteColor];
         return cell;
     }
 }
@@ -445,6 +500,11 @@
         rect.size.height = TV_Cell_Height * self.arrayIps1.count;
         self.tvList.frame = rect;
         self.tvList.hidden = TRUE;
+        if(self.tvList.hidden){
+            [self.listButton setImage:[UIImage imageNamed:@"login_arrow"] forState:UIControlStateNormal];
+        }else{
+            [self.listButton setImage:[UIImage imageNamed:@"login_arrow-up"] forState:UIControlStateNormal];
+        }
     }
     //删除
     if (tableView.tag==TAG_TV_LIST) {
@@ -496,6 +556,11 @@
         IpInfo *selectedIp = self.arrayIps1[indexPath.row];
         [self setLoginIp : selectedIp.ipAddress];
         self.tvList.hidden = TRUE;
+        if(self.tvList.hidden){
+            [self.listButton setImage:[UIImage imageNamed:@"login_arrow"] forState:UIControlStateNormal];
+        }else{
+            [self.listButton setImage:[UIImage imageNamed:@"login_arrow-up"] forState:UIControlStateNormal];
+        }
     }else{
         //检索列表
         [self setLoginIp : self.arrayIps2[indexPath.row]];
@@ -505,19 +570,24 @@
 //登录按钮按下
 - (IBAction)loginAction:(UIButton *)sender {
     NSString *regexs = @"^[a-zA-Z0-9=.]*$";
+     NSString *regexs2 = @"^[a-zA-Z0-9]*$";
      NSPredicate *predicates = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regexs];
-    if(([predicates evaluateWithObject:self.textFieldIp.text] == NO)
+     NSPredicate *predicates2 = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regexs2];
+    if(([predicates evaluateWithObject:self.textFieldIp.text] == NO || [self.textFieldIp.text  isEqualToString: @""])
        ){
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:@"输入内容含非法字符!" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] ;
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:@"地址输入有误!" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] ;
         [alertView show];
         return;
     }
     
-    if([self.userNameField.text  isEqualToString: @""] ||
-       [self.userPasswordField.text  isEqualToString: @""] ||
-       [self.textFieldIp.text  isEqualToString: @""]
-       ){
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:@"输入内容不能为空!" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] ;
+    if([predicates2 evaluateWithObject:self.userNameField.text] == NO || [self.userNameField.text  isEqualToString: @""]){
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:@"账号输入有误!" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] ;
+        [alertView show];
+        return;
+    }
+
+    if([predicates2 evaluateWithObject:self.userPasswordField.text] == NO ||[self.userPasswordField.text  isEqualToString: @""]){
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:@"密码输入有误!" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] ;
         [alertView show];
         return;
     }
@@ -687,6 +757,11 @@
 
 - (IBAction)backgroundAction:(id)sender {
     self.tvList.hidden=true;
+    if(self.tvList.hidden){
+        [self.listButton setImage:[UIImage imageNamed:@"login_arrow"] forState:UIControlStateNormal];
+    }else{
+        [self.listButton setImage:[UIImage imageNamed:@"login_arrow-up"] forState:UIControlStateNormal];
+    }
     self.tvSearch.hidden=true;
     [self.textFieldIp resignFirstResponder];
     [self setLoginIp:self.textFieldIp.text];

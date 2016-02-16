@@ -12,22 +12,32 @@
 #import "FileTools.h"
 static NSString* boundary = @"----WebKitFormBoundaryT1HoybnYeFOGFlBR";
 @implementation FileUploadByBlockOperation
+
+- (id)initWithTaskInfo:(TaskInfo*) taskInfo{
+    if (self=[super init]) {
+        self.taskInfo = taskInfo;
+    }
+    NSURLSessionConfiguration *sessionConfiguration = [NSURLSessionConfiguration defaultSessionConfiguration];
+    NSOperationQueue *queue = [[NSOperationQueue alloc]init];
+    self.session = [NSURLSession sessionWithConfiguration:sessionConfiguration  delegate:self delegateQueue:queue];
+    return self;
+}
+
 - (id)initWithLocalPath:(NSString *)localStr ip:(NSString*)ip withServer:(NSString*)serverStr
                withName:(NSString*)theName withPass:(NSString*)thePass {
     self = [super init];
     if (self == nil)
         return nil;
     localStr = [localStr stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-    self.localFileNamePath = localStr;
-    self.ip=ip ;
-    self.serverPath = serverStr;
-    self.userName = theName;
-    self.port = REQUEST_PORT;
-    self.password = thePass;
+    self.taskInfo.localFileNamePath = localStr;
+    self.taskInfo.ip = ip ;
+    self.taskInfo.serverPath = serverStr;
+    self.taskInfo.userName = theName;
+    self.taskInfo.port = REQUEST_PORT;
+    self.taskInfo.password = thePass;
     NSURLSessionConfiguration *sessionConfiguration = [NSURLSessionConfiguration defaultSessionConfiguration];
     NSOperationQueue *queue = [[NSOperationQueue alloc]init];
     self.session = [NSURLSession sessionWithConfiguration:sessionConfiguration  delegate:self delegateQueue:queue];
-    
     return self;
 }
 
@@ -37,18 +47,29 @@ static NSString* boundary = @"----WebKitFormBoundaryT1HoybnYeFOGFlBR";
     NSMutableURLRequest * request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:urlStr]];
     [request setTimeoutInterval:20];
     long long  fileSize =  [FileTools getFileSize:fileNamePath];
+    NSLog(@"fileSize===========%lld",fileSize);
     int httpBlockNum = (int) (fileSize / DOWNLOAD_STREAM_SIZE);
     if (fileSize % DOWNLOAD_STREAM_SIZE != 0)
         httpBlockNum++;
-    NSFileHandle *file  = [NSFileHandle fileHandleForReadingAtPath:fileNamePath];
+    NSFileHandle *file = [NSFileHandle fileHandleForReadingAtPath:fileNamePath];
     long long transferedBytes = 0;
-    for (int i = 0; i < httpBlockNum; i++) {
+    long long streamChunk =0;
+    long long i = 0;
+    if (self.taskInfo && self.taskInfo.transferedBlocks) {
+        streamChunk = self.taskInfo.transferedBlocks+1;
+    }else{
+        streamChunk = 0;
+    }
+    if (self.taskInfo && self.taskInfo.transferedBytes) {
+        transferedBytes =  self.taskInfo.transferedBytes;
+    }
+    for (i = streamChunk; i < httpBlockNum && !self.isCancelled; i++) {
         @autoreleasepool {
             // header of uploaded file
             NSMutableString *bodyString = [[NSMutableString alloc]init];
             [self setParameter:bodyString key:@
              "user" value:user];
-            //  NSString *path = [remotePath stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+            //NSString *path = [remotePath stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
             [self setParameter:bodyString key:@
              "password" value:password];
             [self setParameter:bodyString key:@
@@ -57,7 +78,7 @@ static NSString* boundary = @"----WebKitFormBoundaryT1HoybnYeFOGFlBR";
              "filename" value:fileName];
             
             [self setParameter:bodyString key:@"blocksize"  value:[NSString stringWithFormat:@"%d",DOWNLOAD_STREAM_SIZE]];
-            [self setParameter:bodyString key:@"blockindex"  value:[NSString stringWithFormat:@"%d",i]];
+            [self setParameter:bodyString key:@"blockindex"  value:[NSString stringWithFormat:@"%lld",i]];
             if (i == 0)
                 [self setParameter:bodyString key:@"firstblockflag"  value:@"1"];
             else
@@ -90,6 +111,8 @@ static NSString* boundary = @"----WebKitFormBoundaryT1HoybnYeFOGFlBR";
             NSString *contentLength = [NSString stringWithFormat:@"%zi",[bodyHeadData length]];
             [request setValue:contentLength forHTTPHeaderField:@"Content-Length"];
             transferedBytes += [uploadData length];
+            self.taskInfo.transferedBytes = transferedBytes;
+            self.taskInfo.transferedBlocks = i;
             dispatch_semaphore_t semaphore =dispatch_semaphore_create(0);
             NSURLSessionUploadTask * dataTask = [self.session uploadTaskWithRequest:request fromData:bodyHeadData completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
                 dispatch_semaphore_signal(semaphore);
@@ -109,7 +132,9 @@ static NSString* boundary = @"----WebKitFormBoundaryT1HoybnYeFOGFlBR";
             dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
         }
     }
-    self.taskInfo.taskStatus = FINISHED;
+    if (i== httpBlockNum) {
+        self.taskInfo.taskStatus = FINISHED;
+    }
     [file closeFile];
 }
 
@@ -135,7 +160,7 @@ didCompleteWithError:(nullable NSError *)error{
 
 - (void)main {
     @try {
-        [self upload:self.ip port:@"" user:self.userName password:self.password remotePath:self.serverPath fileNamePath: self.localFileNamePath fileName:self.fileName];
+        [self upload:self.taskInfo.ip port:@"" user:self.taskInfo.userName password:self.taskInfo.password remotePath:self.taskInfo.serverPath fileNamePath: self.taskInfo.localFileNamePath fileName:self.taskInfo.fileName];
     }@catch (NSException *exception) {
         
     }

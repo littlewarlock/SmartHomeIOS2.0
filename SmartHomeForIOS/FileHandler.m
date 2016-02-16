@@ -12,8 +12,15 @@
 #import "NSUUIDTool.h"
 #import "FileUploadByBlockOperation.h"
 #import "FileDownloadOperation.h"
+#import "NSOperationUploadQueue.h"
 #import "FileInfo.h"
 #import "ValidateTool.h"
+@interface FileHandler ()
+{
+    NSString *fileName;
+}
+@end
+
 @implementation FileHandler
 
 - (id) init
@@ -64,6 +71,7 @@
         taskInfo.fileName = fileName;
         taskInfo.filePath = cpath;
         taskInfo.cachePath = [NSString stringWithFormat:@"%@/%@",cachePath,fileName];
+        taskInfo.taskStatus = RUNNING;
         taskInfo.transferedBlocks = 0;
         taskInfo.totalBytes = [self getFileSize:cpath fileName:fileName];
         FileDownloadOperation *operation = [[FileDownloadOperation alloc] initWithTaskInfo:taskInfo];
@@ -76,7 +84,7 @@
                 NSMutableDictionary * btnStateDic=[[NSMutableDictionary alloc] initWithObjectsAndKeys:taskInfo.taskId,@"taskId",@"disable" ,@"btnState", nil];
                 [[ProgressBarViewController sharedInstance] performSelectorOnMainThread:@selector(setPauseBtnState:) withObject:btnStateDic waitUntilDone:NO];
                 //更新进度条的状态信息
-                NSMutableDictionary * taskStatusDic=[[NSMutableDictionary alloc] initWithObjectsAndKeys:taskInfo.taskId,@"taskId",@"已完成" ,@"taskStatus", nil];
+                NSMutableDictionary * taskStatusDic=[[NSMutableDictionary alloc] initWithObjectsAndKeys:taskInfo.taskId,@"taskId",FINISHED ,@"taskStatus", nil];
                 //在主线程刷新UI
                 [[ProgressBarViewController sharedInstance] performSelectorOnMainThread:@selector(setTaskStatusInfo:) withObject:taskStatusDic waitUntilDone:NO];
             }
@@ -109,7 +117,7 @@
     
     TaskInfo* task = [[TaskInfo alloc] init];
     task.taskId = [NSUUIDTool gen_uuid];
-    task.taskName =fileName;
+    task.taskName = fileName;
     task.taskType = @"上传";
     ud.taskId =  task.taskId;
     [[ProgressBarViewController sharedInstance].uploadTaskDic setObject:task forKey:task.taskId];
@@ -119,11 +127,12 @@
 #pragma mark -
 #pragma mark deleteFiles 删除文件的处理
 -(void)deleteFiles:(NSMutableDictionary*) selectedItemsDic cpath:(NSString*)cpath
-{    if(selectedItemsDic.count==0 ){
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:@"请先选择文件" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] ;
-    [alertView show];
-    return ;
-}
+{
+    if(selectedItemsDic.count==0 ){
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:@"请先选择文件" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] ;
+        [alertView show];
+        return ;
+    }
     NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
     __block NSError *error = nil;
     
@@ -169,7 +178,6 @@
 #pragma mark -
 #pragma mark shareFile 共享文件的处理
 -(void)shareFile:(NSMutableDictionary*) selectedItemsDic cpath:(NSString*)cpath isShare:(NSString*) isShare{
-    
     if(selectedItemsDic.count==0 ){
         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:@"请先选择文件" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] ;
         [alertView show];
@@ -187,7 +195,7 @@
     for (NSString *fileName in [selectedItemsDic allKeys]){
         NSLog(@"%zi",selectedItemsDic.count);
         if(isFirstFile){
-            shareFileName =fileName;
+            shareFileName = fileName;
             isFirstFile =NO;
         }else{
             shareFileName =[NSString stringWithFormat:@"%@@%@",shareFileName,fileName];
@@ -200,12 +208,10 @@
         NSDictionary *responseJSON=[NSJSONSerialization JSONObjectWithData:[operation responseData] options:kNilOptions error:&error];
         if([[NSString stringWithFormat:@"%@",[responseJSON objectForKey:@"result"]] isEqualToString: @"1"])//操作成功
         {
-            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:@"共享/取消 文件夹成功" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] ;
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:@"共享/取消共享成功" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] ;
             [alertView show];
- 
-            
         }else if ([[NSString stringWithFormat:@"%@",[responseJSON objectForKey:@"result"]] isEqualToString: @"0"]){
-            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:@"共享/取消 文件夹失败" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] ;
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:@"共享/取消共享失败" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] ;
             [alertView show];
         }
         if ([self.fileHandlerDelegate respondsToSelector:@selector(requestSuccessCallback)]) {
@@ -217,6 +223,7 @@
     }];
     [engine enqueueOperation:op];
 }
+
 #pragma mark -
 #pragma mark shareFile 共享文件夹的处理
 -(void)shareFiles:(NSMutableDictionary*) selectedItemsDic cpath:(NSString*)cpath isShare:(NSString*) isShare{
@@ -263,35 +270,35 @@
             }
         }
         if(isAllSuccess){
-            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:@"共享/取消 文件夹成功" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] ;
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:@"共享/取消共享成功" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] ;
             [alertView show];
-
+            
         }else{
-            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:@"网络错误,共享/取消 未全部完成!" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] ;
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:@"网络错误,共享/取消共享未全部完成!" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] ;
             [alertView show];
         }
         if ([self.fileHandlerDelegate respondsToSelector:@selector(requestSuccessCallback)]) {
             [self.fileHandlerDelegate requestSuccessCallback];//调用委托方法
         }
-        
     }
     @catch (NSException *exception) {
         
     }
-    
 }
+
 -(void)renameFile:(NSString*)fileName alertViewDelegate:(nullable id)alertViewDelegate{
     NSString *fileNameNoExt = [fileName stringByDeletingPathExtension];
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"重命名文件名称" message:@"" delegate:alertViewDelegate cancelButtonTitle:@"确认" otherButtonTitles:@"取消",nil];
     [alertView setAlertViewStyle:UIAlertViewStylePlainTextInput];
-    [[alertView textFieldAtIndex:0] setKeyboardType:UIKeyboardTypeDefault];
-    UITextField *textField=[alertView textFieldAtIndex:0];
-    textField.text = fileNameNoExt;
     [alertView show];
+    UITextField *textField=[alertView textFieldAtIndex:0];
+    [[alertView textFieldAtIndex:0] setPlaceholder:@"请输入文件名称"];
+    textField.text = fileName;
+    textField.delegate = self;
 }
 
 -(void)createFolder :(nullable id)alertViewDelegate{
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"请输入文件夹名称" message:@"" delegate:alertViewDelegate cancelButtonTitle:@"确认" otherButtonTitles:@"取消",nil];
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"新建目录" message:@"" delegate:alertViewDelegate cancelButtonTitle:@"新建" otherButtonTitles:@"取消",nil];
     [alertView setAlertViewStyle:UIAlertViewStylePlainTextInput];
     [[alertView textFieldAtIndex:0] setKeyboardType:UIKeyboardTypeDefault];
     [alertView show];
@@ -321,9 +328,10 @@
                 UITextField *textField=[alertView textFieldAtIndex:0];
                 NSString *folderName = textField.text;
                 if([textField.text isEqualToString:@""] ){
-                    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"输入不能为空" message:@"" delegate:self cancelButtonTitle:@"确认" otherButtonTitles:@"取消",nil];
+                    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"请输入目录名称" message:@"" delegate:self cancelButtonTitle:@"确认" otherButtonTitles:@"取消",nil];
                     [alertView setAlertViewStyle:UIAlertViewStylePlainTextInput];
                     [[alertView textFieldAtIndex:0] setKeyboardType:UIKeyboardTypeDefault];
+                    [[alertView textFieldAtIndex:0] setPlaceholder:@"请输入目录名称"];
                     [alertView show];
                     return;
                 }
@@ -331,6 +339,7 @@
                     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:[NSString stringWithFormat:@"“%@”禁止新建!",folderName] message:@"" delegate:self cancelButtonTitle:@"确认" otherButtonTitles:@"取消",nil];
                     [alertView setAlertViewStyle:UIAlertViewStylePlainTextInput];
                     [[alertView textFieldAtIndex:0] setKeyboardType:UIKeyboardTypeDefault];
+                    [[alertView textFieldAtIndex:0] setPlaceholder:@"请输入目录名称"];
                     [alertView show];
                     return;
                 }
@@ -344,9 +353,10 @@
                     }
                 }
                 if(isExist){
-                    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"文件已存在,请重新输入！" message:@"" delegate:self cancelButtonTitle:@"确认" otherButtonTitles:@"取消",nil];
+                    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"目录已存在,请重新输入！" message:@"" delegate:self cancelButtonTitle:@"新建" otherButtonTitles:@"取消",nil];
                     [alertView setAlertViewStyle:UIAlertViewStylePlainTextInput];
                     [[alertView textFieldAtIndex:0] setKeyboardType:UIKeyboardTypeDefault];
+                    [[alertView textFieldAtIndex:0] setPlaceholder:@"请输入目录名称"];
                     [alertView show];
                     return;
                 }
@@ -387,27 +397,23 @@
                     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"名称不能为空" message:@"" delegate:self cancelButtonTitle:@"确认" otherButtonTitles:@"取消",nil];
                     [alertView setAlertViewStyle:UIAlertViewStylePlainTextInput];
                     [[alertView textFieldAtIndex:0] setKeyboardType:UIKeyboardTypeDefault];
+                    [[alertView textFieldAtIndex:0] setPlaceholder:@"请输入文件名称"];
                     [alertView show];
                     return;
                 }
                 NSString * fullFileName = self.selectedFileName;
-                NSString *fileName = textField.text;
+                fileName = textField.text;
                 NSString *extName = [fullFileName pathExtension];
-                if(![extName isEqualToString:@""])
-                {
-                    fileName = [fileName stringByAppendingString:@"."];
-                    fileName =[fileName stringByAppendingString:extName];
-                }
                 BOOL isExist =  NO;
-                BOOL isSpacialName =NO;
+                BOOL isSpecialName = NO;
                 for(NSString *dicKey in  self.tableDataDic) {
-                    FileInfo  *fileInfo = [ self.tableDataDic objectForKey:dicKey];
+                    FileInfo  *fileInfo = [self.tableDataDic objectForKey:dicKey];
                     if([fileInfo.fileName isEqualToString: fileName]){
                         isExist = YES;
                         break;
                     }
                     if([ValidateTool isEqualToKeyword:fileName]){
-                        isSpacialName = YES;
+                        isSpecialName = YES;
                         break;
                     }
                     
@@ -416,19 +422,32 @@
                     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"文件已存在,请重新输入！" message:@"" delegate:self cancelButtonTitle:@"确认" otherButtonTitles:@"取消",nil];
                     [alertView setAlertViewStyle:UIAlertViewStylePlainTextInput];
                     [[alertView textFieldAtIndex:0] setKeyboardType:UIKeyboardTypeDefault];
+                    [[alertView textFieldAtIndex:0] setPlaceholder:@"请输入文件名称"];
                     [alertView show];
+                    UITextField *textField=[alertView textFieldAtIndex:0];
+                    textField.text = self.selectedFileName;
+                    textField.delegate = self;
                     return;
                 }
                 
                 
-                if(isSpacialName){
+                if(isSpecialName){
                     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:[NSString stringWithFormat:@"文件名“%@”不能使用",fileName] message:@"" delegate:self cancelButtonTitle:@"确认" otherButtonTitles:@"取消",nil];
                     [alertView setAlertViewStyle:UIAlertViewStylePlainTextInput];
                     [[alertView textFieldAtIndex:0] setKeyboardType:UIKeyboardTypeDefault];
                     [alertView show];
+                    UITextField *textField=[alertView textFieldAtIndex:0];
+                    [[alertView textFieldAtIndex:0] setPlaceholder:@"请输入文件名称"];
+                    textField.text = self.selectedFileName;
+                    textField.delegate = self;
                     return;
                 }
-                
+                if(![extName isEqualToString:[fileName pathExtension]])//如果拓展名有改变
+                {
+                    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"扩展名修改后会导致文件不可使用，确定修改吗？" message:@"" delegate:self cancelButtonTitle:@"确认" otherButtonTitles:@"取消",nil];[alertView show];
+                    self.opType = 6;
+                    return;
+                }
                 
                 NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
                 __block NSError *error = nil;
@@ -455,8 +474,6 @@
                     oldName = [self.cpath stringByAppendingString:@"/"];
                     oldName =[oldName stringByAppendingString:fullFileName];
                 }
-                //oldName=[oldName stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-                //newName=[newName stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
                 [dic setValue:[g_sDataManager userName] forKey:@"uname"];
                 [dic setValue:[g_sDataManager password] forKey:@"upasswd"];
                 [dic setValue:newName forKey:@"newname"];
@@ -476,7 +493,7 @@
                         }
                         
                     }else if ([[NSString stringWithFormat:@"%@",[responseJSON objectForKey:@"result"]] isEqualToString: @"0"]){
-                        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:@"重命名失败" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] ;
+                        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:@"该文件已存在，请重新命名" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] ;
                         [alert show];
                     }else {
                         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:@"重命名失败" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] ;
@@ -490,6 +507,67 @@
                 [engine enqueueOperation:op];
                 break;
             }
+            case 6:{ //修改扩展名之后的重命名
+                NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
+                __block NSError *error = nil;
+                NSString * newName = nil;
+                NSString * fullFileName = self.selectedFileName;
+                if ([self.cpath isEqualToString:@"/"]) {
+                    newName = [self.cpath stringByAppendingString:fileName];
+                    
+                }else if([self.cpath isEqualToString:@""]){
+                    newName = self.cpath;
+                }else if([self.cpath length]>1){
+                    NSString *lastChar =[self.cpath substringFromIndex:self.cpath.length];
+                    if(![lastChar isEqualToString:@"/"])
+                    {
+                        newName = [self.cpath stringByAppendingString:@"/"];
+                        newName = [newName stringByAppendingString:fileName];
+                    }
+                    
+                }
+                NSString * oldName = nil;
+                if ([self.cpath isEqualToString:@"/"]) {
+                    oldName = [self.cpath stringByAppendingString:fullFileName];
+                }else if(![self.cpath isEqualToString:@""])
+                {
+                    oldName = [self.cpath stringByAppendingString:@"/"];
+                    oldName =[oldName stringByAppendingString:fullFileName];
+                }
+                [dic setValue:[g_sDataManager userName] forKey:@"uname"];
+                [dic setValue:[g_sDataManager password] forKey:@"upasswd"];
+                [dic setValue:newName forKey:@"newname"];
+                [dic setValue:oldName forKey:@"oldname"];
+                NSString* requestHost = [g_sDataManager requestHost];
+                NSString* requestUrl = [NSString stringWithFormat:@"%@",requestHost];
+                MKNetworkEngine *engine = [[MKNetworkEngine alloc] initWithHostName:requestUrl customHeaderFields:nil];
+                MKNetworkOperation *op = [engine operationWithPath:REQUEST_RENAME_URL params:dic httpMethod:@"POST" ssl:NO];
+                [op addCompletionHandler:^(MKNetworkOperation *operation) {
+                    NSDictionary *responseJSON=[NSJSONSerialization JSONObjectWithData:[operation responseData] options:kNilOptions error:&error];
+                    if([[NSString stringWithFormat:@"%@",[responseJSON objectForKey:@"result"]] isEqualToString: @"1"])//操作成功
+                    {
+                        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:@"重命名成功" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] ;
+                        [alert show];
+                        if ([self.fileHandlerDelegate respondsToSelector:@selector(requestSuccessCallback)]) {
+                            [self.fileHandlerDelegate requestSuccessCallback];//调用委托方法
+                        }
+                        
+                    }else if ([[NSString stringWithFormat:@"%@",[responseJSON objectForKey:@"result"]] isEqualToString: @"0"]){
+                        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:@"该文件已存在，请重新命名" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] ;
+                        [alert show];
+                    }else {
+                        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:@"重命名失败" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] ;
+                        [alert show];
+                    }
+                }errorHandler:^(MKNetworkOperation *errorOp, NSError* err) {
+                    NSLog(@"MKNetwork request error : %@", [err localizedDescription]);
+                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:@"重命名失败" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] ;
+                    [alert show];
+                }];
+                [engine enqueueOperation:op];
+                break;
+            }
+                
                 
             default:
                 break;
@@ -506,13 +584,13 @@
                 [self signal:@"0"];
                 break;
             }
-                
             default:
                 break;
         }
     }
 }
-- (void)uploadFileWithHttp:(NSOperationQueue *)uploadQueue fileName:(NSString*) fileName localFilePath:(NSString*)localFilePath    serverCpath:(NSString*)serverCpath{
+
+- (void)uploadFileWithHttp:(NSOperationUploadQueue *)uploadQueue fileName:(NSString*) fileName localFilePath:(NSString*)localFilePath    serverCpath:(NSString*)serverCpath{
     if (![localFilePath isEqualToString:@""] && ![localFilePath isEqualToString:@"/"]) {
         localFilePath = [localFilePath stringByAppendingString:@"/"];
         localFilePath = [localFilePath stringByAppendingString:fileName];
@@ -528,20 +606,27 @@
     //        }
     //    }
     if (!operationIsExist) {
-        FileUploadByBlockOperation *operation = [[FileUploadByBlockOperation alloc] initWithLocalPath:localFilePath ip:[g_sDataManager requestHost]withServer:uploadUrl withName:[g_sDataManager userName] withPass:[g_sDataManager password]];
-        TaskInfo* task = [[TaskInfo alloc] init];
-        task.taskId = [NSUUIDTool gen_uuid];
-        task.taskName =fileName;
-        task.taskType = @"上传";
-        operation.taskId =  task.taskId;
+        TaskInfo* taskInfo = [[TaskInfo alloc] init];
+        taskInfo.taskId = [NSUUIDTool gen_uuid];
+        taskInfo.taskName = fileName;
+        taskInfo.taskType = @"上传";
+        taskInfo.localFileNamePath = [localFilePath stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+        taskInfo.ip = [g_sDataManager requestHost] ;
+        taskInfo.serverPath = uploadUrl;
+        taskInfo.userName = [g_sDataManager userName];
+        taskInfo.fileName = fileName;
+        taskInfo.port = REQUEST_PORT;
+        taskInfo.password = [g_sDataManager password];
+        FileUploadByBlockOperation *operation = [[FileUploadByBlockOperation alloc] initWithTaskInfo:taskInfo];
+        operation.taskId = taskInfo.taskId;
         operation.fileName = fileName;
-        operation.taskId = task.taskId;
-        operation.taskInfo = task;
+        operation.taskId = taskInfo.taskId;
+        operation.taskInfo = taskInfo;
         [uploadQueue addOperation:operation];
-        [[ProgressBarViewController sharedInstance].uploadTaskDic  setObject:task forKey:task.taskId];
+        [[ProgressBarViewController sharedInstance].uploadTaskDic  setObject:taskInfo forKey:taskInfo.taskId];
         [ProgressBarViewController sharedInstance].showTabIndex = 0;
         [[ProgressBarViewController sharedInstance] setTabBarStyle];
-        [[ProgressBarViewController sharedInstance] addProgressBarRow:task];
+        [[ProgressBarViewController sharedInstance] addProgressBarRow:taskInfo];
     }
     
 }
@@ -602,10 +687,6 @@
                 NSError * jsonError=nil;
                 NSDictionary *responseJSON=[NSJSONSerialization JSONObjectWithData:received options:kNilOptions error:&jsonError];
                 NSLog(@"responseJSON。。。。。=======%@",responseJSON);
-                if([[NSString stringWithFormat:@"%@",[responseJSON objectForKey:@"result"]] isEqualToString: @"1"])//获取目录成功
-                {
-                    
-                }
             }
         }
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -766,6 +847,27 @@
         }
     }
     return fileLength;
+}
+
+
+#pragma mark -
+#pragma mark textField 的代理方法
+- (void)textFieldDidBeginEditing:(UITextField *)textField
+{
+    NSString * fileName = textField.text;
+    NSString * ext = [fileName pathExtension];
+    
+    UITextPosition * begin = [textField beginningOfDocument];
+    UITextPosition * end = nil;
+    
+    if ([ext length] == 0) {
+        end = [textField endOfDocument];
+    }
+    else {
+        end = [textField positionFromPosition:begin offset:([fileName length] - [ext length] - 1)];
+    }
+    
+    [textField setSelectedTextRange:[textField textRangeFromPosition:begin toPosition:end]];
 }
 
 @end

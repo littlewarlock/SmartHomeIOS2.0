@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "LocalFileHandlerDelegate.h"
 #import "FDTableViewCell.h"
-@interface LocalFileHandler : NSObject
+@interface LocalFileHandler : NSObject<UITextFieldDelegate>
 @property(assign, nonatomic) NSUInteger opType;
 @property(assign, nonatomic) id<LocalFileHandlerDelegate> localFileHandlerDelegate;
 @property (copy, nonatomic) NSString *selectedFileName;

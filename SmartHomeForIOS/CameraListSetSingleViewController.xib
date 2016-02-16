@@ -121,7 +121,7 @@
                         <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GGV-TK-YFU" userLabel="View04">
                             <rect key="frame" x="8" y="687" width="304" height="250"/>
                             <subviews>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Wi-Fi连接" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ue7-Tm-Eb4">
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="WiFi连接" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ue7-Tm-Eb4">
                                     <rect key="frame" x="8" y="16" width="89" height="21"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -369,13 +369,15 @@
                                     <rect key="frame" x="0.0" y="250" width="240" height="1"/>
                                     <color key="backgroundColor" red="0.93854561240000001" green="0.93854561240000001" blue="0.93854561240000001" alpha="1" colorSpace="calibratedRGB"/>
                                 </view>
-                                <slider opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="30" minValue="1" maxValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="fPr-1h-eZ5">
-                                    <rect key="frame" x="7" y="259" width="296" height="31"/>
-                                </slider>
                                 <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5Ta-Lc-S14">
                                     <rect key="frame" x="247" y="59" width="51" height="31"/>
                                     <color key="onTintColor" red="0.01666552273" green="0.66067584999999995" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 </switch>
+                                <slider opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="30" minValue="1" maxValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="fPr-1h-eZ5">
+                                    <rect key="frame" x="7" y="259" width="296" height="31"/>
+                                    <color key="minimumTrackTintColor" red="0.066666666666666666" green="0.41960784313725491" blue="0.61960784313725492" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="maximumTrackTintColor" red="0.13333333333333333" green="0.69019607843137254" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                </slider>
                             </subviews>
                             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             <constraints>

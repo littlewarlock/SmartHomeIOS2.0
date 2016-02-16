@@ -21,6 +21,7 @@
 @property (weak, nonatomic) IBOutlet UITableView *fileListTableView;
 @property (weak, nonatomic) IBOutlet UIButton *returnLastDirBtn;
 @property (strong, nonatomic) IBOutlet UIButton *returnRootDirBtn;
-
+@property (strong, nonatomic)NSMutableDictionary *filesDic; //存储当前路径下的所有文件
+@property (strong, nonatomic)NSMutableDictionary *dirsDic; //存储当前路径下的所有目录
 @property(assign, nonatomic) id<FileDialogDelegate> fileDialogDelegate; //文件选择控件的代理
 @end

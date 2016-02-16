@@ -15,7 +15,7 @@
 
 @property(weak,nonatomic) NSMutableArray * appList;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-
+@property (strong, nonatomic) NSString *opType; //0:home 1:egress 2:sleep
 
 @property BOOL modeChanging;
 @end

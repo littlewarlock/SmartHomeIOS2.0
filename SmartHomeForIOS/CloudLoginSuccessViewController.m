@@ -12,11 +12,13 @@
 #import "DataManager.h"
 #import "LoginViewController.h"
 #import "RequestConstant.h"
+#import <AVOSCloud/AVOSCloud.h>
 
 @interface CloudLoginSuccessViewController (){
     
     IBOutlet UIView *promotView;
     __weak IBOutlet UIActivityIndicatorView *move;
+    __weak IBOutlet UIButton *cancelBtn;
 }
 
 @end
@@ -56,6 +58,7 @@
     [op addCompletionHandler:^(MKNetworkOperation *completedOperation) {
         [move stopAnimating];
         [promotView setHidden:YES];
+        [cancelBtn setEnabled:NO];
         //get data
         NSString *result = completedOperation.responseJSON[@"result"];
         NSString *results = [NSString stringWithFormat:@"%@",result];
@@ -65,6 +68,9 @@
                 //                g_sDataManager.logoutFlag=@"1";
                 [g_sDataManager setUserName:@""];
                 [g_sDataManager setPassword:@""];
+                AVInstallation *currentInstallation = [AVInstallation currentInstallation];
+                [currentInstallation removeObject:[g_sDataManager cId] forKey:@"channels"];
+                [currentInstallation saveInBackground];
                 LoginViewController *loginView= [[LoginViewController alloc] initWithNibName:@"LoginViewController" bundle:nil];
                 loginView.isPushHomeView =YES;
                 loginView.isShowLocalFileBtn =YES;
@@ -93,6 +99,7 @@
     } errorHandler:^(MKNetworkOperation *completedOperation, NSError *error) {
         [move stopAnimating];
         [promotView setHidden:YES];
+        [cancelBtn setEnabled:NO];
         UIAlertView* alert=[[UIAlertView alloc]initWithTitle:@"系统提示" message:@"中转服务器连接失败。" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
         [alert show];
         NSLog(@"MKNetwork request error : %@", [error localizedDescription]);
@@ -123,6 +130,7 @@
 //选择按钮“是”时启动注销功能
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
     if(buttonIndex==0){
+        [cancelBtn setEnabled:NO];
         [self logoutCheck];
     }
 }

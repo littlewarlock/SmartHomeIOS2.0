@@ -11,6 +11,7 @@
 #import "DataManager.h"
 #import "LoginViewController.h"
 #import "RequestConstant.h"
+#import <AVOSCloud/AVOSCloud.h>
 
 @interface UpdatePasswordViewController (){
     
@@ -115,7 +116,7 @@
         [alert show];
         [self.NewPassword becomeFirstResponder];
         return;
-    }else if([@"" isEqualToString:self.NewPassword.text]){
+    }else if([@"" isEqualToString:self.passwordTwo.text]){
         UIAlertView* alert=[[UIAlertView alloc]initWithTitle:@"系统提示" message:@"确认密码不能为空。" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
         [alert show];
         [self.passwordTwo becomeFirstResponder];
@@ -193,6 +194,9 @@
                 //                g_sDataManager.logoutFlag=@"1";
                 [g_sDataManager setUserName:@""];
                 [g_sDataManager setPassword:@""];
+                AVInstallation *currentInstallation = [AVInstallation currentInstallation];
+                [currentInstallation removeObject:[g_sDataManager cId] forKey:@"channels"];
+                [currentInstallation saveInBackground];
                 LoginViewController *loginView= [[LoginViewController alloc] initWithNibName:@"LoginViewController" bundle:nil];
                 loginView.isPushHomeView =YES;
                 loginView.isShowLocalFileBtn =YES;

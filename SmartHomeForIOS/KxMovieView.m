@@ -866,18 +866,26 @@ static NSMutableDictionary * gHistory;
         [self.renderer play];
         self.isPlay = [self.renderer isPlayingDlna];
     }
-    
+
     //跳到播放器播放的视频的时间
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self.renderer seek:Videotime];
         
     });
     
-    //设置titleLabel显示文字
-    NSString *str = [[[app.videoUrl objectAtIndex:self.curIndex] componentsSeparatedByString:@"//"] lastObject];
-    NSString *titleStr = [[str componentsSeparatedByString:@"."] firstObject];
-    self.titleLabel.text = [NSString stringWithString:titleStr];
-    
+    //    设置titleLabel显示文字
+    if ([[app.videoUrl objectAtIndex:self.curIndex] containsString:@"//"]) {
+        NSString *str = [[[app.videoUrl objectAtIndex:self.curIndex] componentsSeparatedByString:@"//"] lastObject];
+        NSString *titleStr = [[str componentsSeparatedByString:@"."] firstObject];
+        self.titleLabel.text = [NSString stringWithString:titleStr];
+    }else {
+        NSRange range = [[app.videoUrl objectAtIndex:self.curIndex] rangeOfString:@"SmartHome/"];
+        NSString *title1 = [[app.videoUrl objectAtIndex:self.curIndex] substringFromIndex:(range.location + range.length)];
+        NSRange range2 = [title1 rangeOfString:@"."];
+        NSString *title2 = [title1 substringToIndex:range2.location];
+        self.titleLabel.text = title2;
+        
+    }
     
     //对定时器的操作
     [self removeProgressTimer];
@@ -936,14 +944,25 @@ static NSMutableDictionary * gHistory;
     }
     self.playOrPause.selected = NO;
     
-    //显示播放视频的title
-    NSString *str = [[[app.videoUrl objectAtIndex:preIndex] componentsSeparatedByString:@"//"] lastObject];
-    NSString *titleStr = [[str componentsSeparatedByString:@"."] firstObject];
-    self.titleLabel.text = [NSString stringWithString:titleStr];
+    self.curIndex = preIndex;
+    
+    //    设置titleLabel显示文字
+    if ([[app.videoUrl objectAtIndex:self.curIndex] containsString:@"//"]) {
+        NSString *str = [[[app.videoUrl objectAtIndex:self.curIndex] componentsSeparatedByString:@"//"] lastObject];
+        NSString *titleStr = [[str componentsSeparatedByString:@"."] firstObject];
+        self.titleLabel.text = [NSString stringWithString:titleStr];
+    }else {
+        NSRange range = [[app.videoUrl objectAtIndex:self.curIndex] rangeOfString:@"SmartHome/"];
+        NSString *title1 = [[app.videoUrl objectAtIndex:self.curIndex] substringFromIndex:(range.location + range.length)];
+        NSRange range2 = [title1 rangeOfString:@"."];
+        NSString *title2 = [title1 substringToIndex:range2.location];
+        self.titleLabel.text = title2;
+        
+    }
     
     //添加定时器
     [self addProgressTimer];
-    self.curIndex = preIndex;
+    
 }
 - (IBAction)next:(UIButton *)sender {
     
@@ -966,14 +985,25 @@ static NSMutableDictionary * gHistory;
     }
     self.playOrPause.selected = NO;
     
-    //显示下一个视频的title
-    NSString *str = [[[app.videoUrl objectAtIndex:nextIndex] componentsSeparatedByString:@"//"] lastObject];
-    NSString *titleStr = [[str componentsSeparatedByString:@"."] firstObject];
-    self.titleLabel.text = [NSString stringWithString:titleStr];
+    self.curIndex = nextIndex;
+    
+    //    设置titleLabel显示文字
+    if ([[app.videoUrl objectAtIndex:self.curIndex] containsString:@"//"]) {
+        NSString *str = [[[app.videoUrl objectAtIndex:self.curIndex] componentsSeparatedByString:@"//"] lastObject];
+        NSString *titleStr = [[str componentsSeparatedByString:@"."] firstObject];
+        self.titleLabel.text = [NSString stringWithString:titleStr];
+    }else {
+        NSRange range = [[app.videoUrl objectAtIndex:self.curIndex] rangeOfString:@"SmartHome/"];
+        NSString *title1 = [[app.videoUrl objectAtIndex:self.curIndex] substringFromIndex:(range.location + range.length)];
+        NSRange range2 = [title1 rangeOfString:@"."];
+        NSString *title2 = [title1 substringToIndex:range2.location];
+        self.titleLabel.text = title2;
+        
+    }
     
     //移除定时器
     [self addProgressTimer];
-    self.curIndex = nextIndex;
+    
 }
 
 //改变音量
@@ -1900,6 +1930,8 @@ static NSMutableDictionary * gHistory;
 //                _moviePosition = 0;
 //                // hgc end
                 [self updateHUD];
+                //add by lcw 20160128 set progressSlider to end
+                _progressSlider.value = 1;
                 return;
             }
             
@@ -1908,30 +1940,12 @@ static NSMutableDictionary * gHistory;
                 _buffered = YES;
                 [_activityIndicatorView startAnimating];
             }
+            
         }
         
         if (!leftFrames ||
             !(_bufferedDuration > _minBufferedDuration)) {
-            
-//            BOOL conditionMkv = [[_decoder.info[@"format"]lowercaseString] isEqualToString:@"mkv"] ;
-            
-            
-            
-//            if((_decoder.duration -_moviePosition)<2.0){
-//                _moviePosition = 0;
-//                _progressSlider.value= 0;
-//                [_decoder setPosition:0];
-//                
-//                self.playing =NO;
-//                _playBtn.hidden =NO;
-//                _pauseBtn.hidden = YES;
-//                [self updatePosition:0 playMode:NO];
-//                [self pause];
-//                //[_decoder closeFile];
-//                
-//            }else{
                 [self asyncDecodeFrames];
-//            }
         }
         
         const NSTimeInterval correction = [self tickCorrection];
@@ -2149,28 +2163,33 @@ static NSMutableDictionary * gHistory;
         startPosition = 0;
     }
     const CGFloat position = _moviePosition -startPosition;
-//    KxAudioFrameVer2 *frame;
-//    CGFloat position;
-//    if(_audioFrames.count != 0 ){
-//     frame = _audioFrames[0];
-//        position =  frame.position;
-//    }else{
-//        position=0;
-//    }
 
     //hgc 2015 11 26
-//        NSLog(@"duration==%f",duration);
-//        NSLog(@"_moviePosition===%f",_moviePosition);
-//        NSLog(@"_decoder.startTime===%f",_decoder.startTime);
+        NSLog(@"duration==%f",duration);
+        NSLog(@"_moviePosition===%f",_moviePosition);
+        NSLog(@"_decoder.startTime===%f",_decoder.startTime);
+    if(_audioFrames.count!=0 && _videoFrames.count !=0){
+        KxAudioFrameVer2 *frame = _audioFrames[0];
+        NSLog(@"_audioFrames[0]===%f",frame.position);
+        KxVideoFrameVer2 *frame2 = _videoFrames[0];
+        NSLog(@"_videoFrames[0]===%f",frame2.position);
+        NSLog(@"图像声音偏差＝＝＝＝＝＝＝＝＝＝＝＝%f＝＝＝＝＝＝＝＝＝＝＝＝＝",frame.position-frame2.position);
+//        if(frame.position-frame2.position >0.3){
+//            [_audioFrames removeObjectAtIndex:0];
+//        }
+//        
+//        if(frame.position-frame2.position <-0.3){
+//            [_videoFrames removeObjectAtIndex:0];
+//        }
+        
+        
+    }
+    
     //hgc 2015 11 26
+
     
     if (_progressSlider.state == UIControlStateNormal)
         _progressSlider.value = position / duration;
-        if(_audioFrames.count == 0 ){
-            if(_videoFrames.count == 0){
-                _progressSlider.value = 1;
-            }
-        }
     
     _progressLabel.text = [NSString stringWithFormat:@"%@/%@",[self convertTime:position],[self convertTime:duration]];
     

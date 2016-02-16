@@ -41,6 +41,7 @@
 @property (strong,nonatomic) NSString *recording;
 @property (strong,nonatomic) NSString *mode;
 @property (strong,nonatomic) UIImageView *imageViewModeRecord;
+@property (strong,nonatomic) UIImageView *imageViewSnapshot;
 
 @property UIView *toolBarView;
 @property (strong,nonatomic) UIButton *buttonFullScreen;
@@ -450,6 +451,10 @@ typedef NS_ENUM(NSUInteger, cameraControlDirection) {
 -(void)fullScreen{
     NSLog(@"fullScreenfullScreen");
     NSLog(@"setfullScreen");
+    if (self.imageViewSnapshot) {
+        [self.imageViewSnapshot removeFromSuperview];
+    }
+    
     if (self.isFullScreen) {
         //status bar
         self.isFullScreen = NO;
@@ -799,7 +804,9 @@ typedef NS_ENUM(NSUInteger, cameraControlDirection) {
     self.originalReceivedData = 0;
     //
     NSLog(@"self.kxvc==%@",self.kxvc);
-    
+    //2016 02 04
+    [self.buttonSnapshot setEnabled:YES];
+    [self.buttonSnapshotFullScreen setEnabled:YES];
 }
 
 - (void)getNetWorkSpeed{
@@ -984,10 +991,12 @@ typedef NS_ENUM(NSUInteger, cameraControlDirection) {
                     if (self.isFullScreen) {
                         NSLog(@"self.isRecord===%d",self.isRecord);
                         if (self.isRecord) {
-                            [self.buttonRecordFullScreen setImage:[UIImage imageNamed:@"transcribe-down-fullscreen"] forState:UIControlStateNormal];
+                            [self.buttonRecordFullScreen setImage:[UIImage imageNamed:@"transcribe_start-fullscreen"] forState:UIControlStateNormal];
+                            [self.buttonRecordFullScreen setImage:[UIImage imageNamed:@"transcribe_start-down-fullscreen"] forState:UIControlStateHighlighted];
 //                            self.imageViewRecord.frame = CGRectMake(self.kxvc.view.frame.size.height - 50, 10, 40, 20);
                         }else{
                             [self.buttonRecordFullScreen setImage:[UIImage imageNamed:@"transcribe-fullscreen"] forState:UIControlStateNormal];
+                            [self.buttonRecordFullScreen setImage:[UIImage imageNamed:@"transcribe-down-fullscreen"] forState:UIControlStateHighlighted];
                         }
                         NSLog(@"transcribe-down-fullscreen");
                     }
@@ -1016,10 +1025,12 @@ typedef NS_ENUM(NSUInteger, cameraControlDirection) {
                     if (self.isFullScreen) {
                         NSLog(@"self.isRecord===%d",self.isRecord);
                         if (self.isRecord) {
-                            [self.buttonRecordFullScreen setImage:[UIImage imageNamed:@"transcribe-down-fullscreen"] forState:UIControlStateNormal];
+                            [self.buttonRecordFullScreen setImage:[UIImage imageNamed:@"transcribe_start-fullscreen"] forState:UIControlStateNormal];
+                            [self.buttonRecordFullScreen setImage:[UIImage imageNamed:@"transcribe_start-down-fullscreen"] forState:UIControlStateHighlighted];
                             self.imageViewRecord.frame = CGRectMake(self.kxvc.view.frame.size.height - 50, 10, 40, 20);
                         }else{
                             [self.buttonRecordFullScreen setImage:[UIImage imageNamed:@"transcribe-fullscreen"] forState:UIControlStateNormal];
+                            [self.buttonRecordFullScreen setImage:[UIImage imageNamed:@"transcribe-down-fullscreen"] forState:UIControlStateHighlighted];
                         }
                         NSLog(@"transcribe-down-fullscreen");
                     }
@@ -1036,58 +1047,60 @@ typedef NS_ENUM(NSUInteger, cameraControlDirection) {
   
 }
 
+
 - (IBAction)buttonSnapshotPressed:(UIButton *)sender {
     NSLog(@"buttonSnapshotPressed");
     //
+    //2016 02 04
     [self.buttonSnapshot setEnabled:NO];
+    [self.buttonSnapshotFullScreen setEnabled:NO];
+    [self.buttonSnapshot setImage:[UIImage imageNamed:@"screenshot_down"] forState:UIControlStateDisabled];
+    [self.buttonSnapshotFullScreen setImage:[UIImage imageNamed:@"screenshot-down-fullscreen"] forState:UIControlStateDisabled];
     //
     [DeviceNetworkInterface realTimeCameraSnapshotWithDeviceId:_deviceID withBlock:^(NSString *result, NSString *message, NSString *image, NSError *error) {
         if (!error) {
-            
             NSLog(@"realTimeCameraSnapshotWithDeviceId result===%@",result);
             NSLog(@"realTimeCameraSnapshotWithDeviceId mseeage===%@",message);
             NSLog(@"realTimeCameraSnapshotWithDeviceId image===%@",image);
             // 2015 10 26
             if ([result isEqualToString:@"success"]) {
                 
-                
-                UIImageView *imageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, self.kxvc.view.frame.size.height - 90, 150, 90)];
-                imageView.image = [self getImageFromURL:image];
+                self.imageViewSnapshot = [[UIImageView alloc]initWithFrame:CGRectMake(0, self.kxvc.view.frame.size.height - 90, 150, 90)];
+                self.imageViewSnapshot.image = [self getImageFromURL:image];
                 //
                 //2016 01 21 start
                 if (self.isCurrentViewControllerVisible) {
-                    [self.kxvc.view addSubview:imageView];
-                    [self.buttonSnapshotFullScreen setEnabled:NO];
+                    [self.kxvc.view addSubview:self.imageViewSnapshot];
                 }
                 //2016 01 21 end
                 // 1112 start
                 if (self.isFullScreen) {
-                    imageView.frame = CGRectMake(0, self.kxvc.view.frame.size.width - 180 - 50, 300, 180);
+                    self.imageViewSnapshot.frame = CGRectMake(0, self.kxvc.view.frame.size.width - 180 - 50, 300, 180);
                 }
                 //1112 end
                 [UIImageView animateWithDuration:2.5 animations:^{
-                    imageView.alpha = 0.1;
+                    self.imageViewSnapshot.alpha = 0.1;
                 } completion:^(BOOL finished) {
-                    [imageView removeFromSuperview];
-                    //2016 01 21 start
-                    [self.buttonSnapshot setEnabled:YES];
-                    [self.buttonSnapshotFullScreen setEnabled:YES];
-                    //2016 01 21 end
+                    [self.imageViewSnapshot removeFromSuperview];
                 }];
             }
-
         }
         else{
             NSLog(@"cameraRecordwithDeviceId error");
             //2016 01 26
             [self.buttonSnapshot setEnabled:YES];
         }
+        //2016 02 04 start
+        [self.buttonSnapshot setEnabled:YES];
+        [self.buttonSnapshotFullScreen setEnabled:YES];
+        //2016 02 04 end
     }];
     
 }
 
 - (void)buttonControlFullScreenPressed{
     NSLog(@"buttonControlFullScreenPressed");
+
     if (self.isControl) {
         [self.buttonControlFullScreen setImage:[UIImage imageNamed:@"cloud-fullscreen"] forState:UIControlStateNormal];
     }else{

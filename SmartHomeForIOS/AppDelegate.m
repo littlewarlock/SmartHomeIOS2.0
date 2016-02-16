@@ -65,10 +65,10 @@ CLLocationManager * locationManager;
         if (![[NSFileManager defaultManager] fileExistsAtPath:kDocument_Folder]) {
             [[NSFileManager defaultManager] createDirectoryAtPath:kDocument_Folder withIntermediateDirectories:YES attributes:nil error:nil];
             _selectedAppArray = [NSMutableArray arrayWithCapacity:10];
-            [_selectedAppArray addObject:_appArray[0]]; //默认为用户添加前三个 app
+            [_selectedAppArray addObject:_appArray[0]]; //默认为用户添加前4个 app
             [_selectedAppArray addObject :_appArray[1]];
-            [_selectedAppArray addObject :_appArray[3]];
             [_selectedAppArray addObject :_appArray[5]];
+            [_selectedAppArray addObject :_appArray[3]];
             [FunctionManageTools saveSelectedApp];
         }
     }else{

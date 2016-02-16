@@ -68,7 +68,7 @@
     </objects>
     <resources>
         <image name="camera-edit-check-all-prohibt" width="80" height="43"/>
-        <image name="camera-edit-delete-down" width="16" height="17"/>
+        <image name="camera-edit-delete-down" width="80" height="44"/>
         <image name="camera-edit-make-as-read-down" width="80" height="44"/>
     </resources>
 </document>

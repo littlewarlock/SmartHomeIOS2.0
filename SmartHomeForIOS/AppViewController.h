@@ -13,6 +13,6 @@
 @interface AppViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,AppInfoDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
-@property(weak,nonatomic) NSMutableArray * appList;
+//@property(weak,nonatomic) NSMutableArray * appList;
 
 @end

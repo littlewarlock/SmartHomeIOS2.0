@@ -16,9 +16,12 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" alwaysBounceVertical="YES" scrollEnabled="NO" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="NYC-wR-c46">
-                    <rect key="frame" x="0.0" y="0.0" width="320" height="304"/>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" scrollEnabled="NO" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="NYC-wR-c46">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="374"/>
                     <color key="backgroundColor" red="0.8666666666666667" green="0.8666666666666667" blue="0.8666666666666667" alpha="1" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="374" id="JnR-hL-JhJ"/>
+                    </constraints>
                     <color key="sectionIndexBackgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                     <connections>
                         <outlet property="dataSource" destination="-1" id="w1Q-gW-8f1"/>
@@ -28,6 +31,7 @@
             </subviews>
             <color key="backgroundColor" red="0.8666666666666667" green="0.8666666666666667" blue="0.8666666666666667" alpha="1" colorSpace="calibratedRGB"/>
             <constraints>
+                <constraint firstItem="NYC-wR-c46" firstAttribute="top" secondItem="eOl-N6-CZL" secondAttribute="top" id="0Bv-0A-r9G"/>
                 <constraint firstItem="NYC-wR-c46" firstAttribute="leading" secondItem="eOl-N6-CZL" secondAttribute="leading" id="Hew-lx-SnJ"/>
                 <constraint firstAttribute="trailing" secondItem="NYC-wR-c46" secondAttribute="trailing" id="UM6-zF-gHJ"/>
             </constraints>

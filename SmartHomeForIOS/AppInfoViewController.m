@@ -18,6 +18,15 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.title = @"详情";
+    
+    
+    UIButton *left = [UIButton buttonWithType:UIButtonTypeCustom];
+    left.frame =CGRectMake(0, 0, 32, 32);
+    [left setBackgroundImage:[UIImage imageNamed:@"back"] forState:UIControlStateNormal];
+    [left addTarget: self action: @selector(returnAction:) forControlEvents: UIControlEventTouchUpInside];
+    UIBarButtonItem* itemLeft=[[UIBarButtonItem alloc]initWithCustomView:left];
+    self.navigationItem.leftBarButtonItem=itemLeft;
+    
     AppDelegate *myDelegate = [[UIApplication sharedApplication] delegate];
     if(_appInfo!=nil)
     {
@@ -38,6 +47,12 @@
     }
     
 }
+
+//后退按钮
+- (void)returnAction:(UIBarButtonItem *)sender {
+    [self.navigationController popToRootViewControllerAnimated:YES];
+}
+
 - (void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];

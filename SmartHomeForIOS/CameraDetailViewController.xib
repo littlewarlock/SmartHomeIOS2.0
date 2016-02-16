@@ -93,6 +93,7 @@
                     <state key="highlighted" image="arrowleft-down"/>
                     <connections>
                         <action selector="buttonUpPressed:" destination="-1" eventType="touchUpInside" id="Q4W-nC-AaA"/>
+                        <action selector="buttonUpPressed:" destination="-1" eventType="touchUpOutside" id="uf9-ry-ZL5"/>
                         <action selector="buttonUpPressing:" destination="-1" eventType="touchDown" id="s11-im-zXb"/>
                     </connections>
                 </button>
@@ -106,6 +107,7 @@
                     <state key="highlighted" image="arrowright-down"/>
                     <connections>
                         <action selector="buttonUpPressed:" destination="-1" eventType="touchUpInside" id="GqT-Nv-v2t"/>
+                        <action selector="buttonUpPressed:" destination="-1" eventType="touchUpOutside" id="dnC-I6-une"/>
                         <action selector="buttonUpPressing:" destination="-1" eventType="touchDown" id="3d6-8D-xlW"/>
                     </connections>
                 </button>
@@ -158,6 +160,7 @@
                     <state key="highlighted" image="arrowdown-down"/>
                     <connections>
                         <action selector="buttonUpPressed:" destination="-1" eventType="touchUpInside" id="7El-UO-DIX"/>
+                        <action selector="buttonUpPressed:" destination="-1" eventType="touchUpOutside" id="U61-EF-ATs"/>
                         <action selector="buttonUpPressing:" destination="-1" eventType="touchDown" id="JFb-Gh-Aw9"/>
                     </connections>
                 </button>
@@ -170,6 +173,7 @@
                     <state key="normal" title="上" image="arrowup"/>
                     <state key="highlighted" image="arrowup-down"/>
                     <connections>
+                        <action selector="buttonUpPressed:" destination="-1" eventType="touchUpOutside" id="9Tj-FY-MXu"/>
                         <action selector="buttonUpPressed:" destination="-1" eventType="touchUpInside" id="kHF-h0-fUX"/>
                         <action selector="buttonUpPressing:" destination="-1" eventType="touchDown" id="zqm-Vb-NGu"/>
                     </connections>

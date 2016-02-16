@@ -24,14 +24,14 @@
 #import "KxMovieView.h"
 #import "TableViewDelegate.h"
 #import "TaskStatusConstant.h"
+#import "NSOperationUploadQueue.h"
 #define RGBACOLOR(r,g,b,a) [UIColor colorWithRed:(r)/255.0f green:(g)/255.0f blue:(b)/255.0f alpha:(a)]
 #define AU_Cell_Height 52
 
 
-@interface CloudFileViewController ()
+@interface CloudFileViewController ()<UITabBarDelegate>
 {
     NSOperationQueue *downloadQueue;
-    NSOperationQueue *uploadQueue;
     NSMutableDictionary * tableDataDic;
     UIButton *leftBtn;
     UIButton* rightBtn;
@@ -83,8 +83,6 @@
     [self loadFileData];
     downloadQueue = [[NSOperationQueue alloc] init];
     [downloadQueue setMaxConcurrentOperationCount:1];
-    uploadQueue = [[NSOperationQueue alloc] init];
-    [uploadQueue setMaxConcurrentOperationCount:1];
     //添加滑动手势
     self.leftSwipeGestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleSwipes:)];
     self.rightSwipeGestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleSwipes:)];
@@ -104,7 +102,14 @@
     fileHandler = [[FileHandler alloc] init];
     fileHandler.fileHandlerDelegate = self;
     fileHandler.tableDataDic = tableDataDic;
-}
+    
+    
+    UITabBar *tabbar = self.tabbar;
+    tabbar.delegate = self;
+    self.moreBar.hidden = YES;
+    self.moreBar.delegate = self;
+    self.misButton.hidden = YES;
+ }
 
 - (void) viewWillAppear:(BOOL)animated
 {
@@ -161,39 +166,59 @@
     FDTableViewCell *cell = (FDTableViewCell *)[tableView dequeueReusableCellWithIdentifier:fileinfo.fileName];
     if (cell == nil) {
         cell = [[FDTableViewCell alloc] initWithFile:fileinfo];
+    }else{
+        if(![cell.fileinfo.isShare isEqualToString: fileinfo.isShare]){
+            cell = [[FDTableViewCell alloc] initWithFile:fileinfo];
+        }
     }
+    
     if ([cell.fileinfo.fileType isEqualToString:@"folder"]) {
         
         UIButton *accessoryButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        accessoryButton.frame = CGRectMake(100,5,50,50);
-        [accessoryButton setImage:[UIImage imageNamed:@"arrow"] forState:UIControlStateNormal];
+        
+        CGFloat btnW = 10.5;
+        CGFloat btnH = 20;
+        CGFloat btnX = [UIScreen mainScreen].bounds.size.width - 10 - btnW;
+        CGFloat btnY = AU_Cell_Height * 0.5 - btnH * 0.5;
+        
+        
+        accessoryButton.frame = CGRectMake(btnX,btnY,btnW,btnH);
+        accessoryButton.contentMode = UIViewContentModeCenter;
+        
+        [accessoryButton setImage:[UIImage imageNamed:@"arrow-right"] forState:UIControlStateNormal];
         [accessoryButton addTarget:self action:@selector(accessoryButtonIsTapped:event:)forControlEvents:UIControlEventTouchUpInside];
-        cell.accessoryView = accessoryButton;
-    }
-    NSString *subType = [cell.fileinfo.fileName pathExtension];
-    NSArray *documentArray=  [NSArray arrayWithObjects:@"doc",@"docx",@"xls",@"xlsx", nil];
-    BOOL isDocument = [documentArray containsObject:[subType lowercaseString]];
-    NSArray *audioArray=  [NSArray arrayWithObjects:@"mp3", nil];
-    BOOL isAudio = [audioArray containsObject:[subType lowercaseString]];
-    NSArray *videoArray=  [NSArray arrayWithObjects:@"mp4",@"mov",@"m4v",@"wav",@"flac",@"ape",@"wma",
-                           @"avi",@"wmv",@"rmvb",@"flv",@"f4v",@"swf",@"mkv",@"dat",@"vob",@"mts",@"ogg",@"mpg",@"h264", nil];
-    BOOL isVideo = [videoArray containsObject:[subType lowercaseString]];
-    
-    NSArray *picArray=  [NSArray arrayWithObjects:@"jpg",@"png",@"jpeg", nil];
-    BOOL isPic = [picArray containsObject:[subType lowercaseString]];
-    
-    if(isPic ){
-        UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
-        [cell addGestureRecognizer:tapRecognizer];
-        tapRecognizer.delegate = self;
-    }else if(isVideo ){
-        UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(playVideo:)];
-        [cell addGestureRecognizer:tapRecognizer];
-        tapRecognizer.delegate = self;
-    }else if(isAudio){
-        UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(playAudio:)];
-        [cell addGestureRecognizer:tapRecognizer];
-        tapRecognizer.delegate = self;
+        [cell addSubview:accessoryButton];
+    }else{
+        NSString *subType = [cell.fileinfo.fileName pathExtension];
+        NSArray *documentArray=  [NSArray arrayWithObjects:@"doc",@"docx",@"xls",@"xlsx", nil];
+        BOOL isDocument = [documentArray containsObject:[subType lowercaseString]];
+        NSArray *audioArray=  [NSArray arrayWithObjects:@"mp3", nil];
+        BOOL isAudio = [audioArray containsObject:[subType lowercaseString]];
+        NSArray *videoArray=  [NSArray arrayWithObjects:@"mp4",@"mov",@"m4v",@"wav",@"flac",@"ape",@"wma",
+                               @"avi",@"wmv",@"rmvb",@"flv",@"f4v",@"swf",@"mkv",@"dat",@"vob",@"mts",@"ogg",@"mpg",@"h264", nil];
+        BOOL isVideo = [videoArray containsObject:[subType lowercaseString]];
+        
+        NSArray *picArray=  [NSArray arrayWithObjects:@"jpg",@"png",@"jpeg", nil];
+        BOOL isPic = [picArray containsObject:[subType lowercaseString]];
+        
+        if(isPic ){
+            UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
+            [cell addGestureRecognizer:tapRecognizer];
+            tapRecognizer.delegate = self;
+        }else if(isVideo ){
+            UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(playVideo:)];
+            [cell addGestureRecognizer:tapRecognizer];
+            tapRecognizer.delegate = self;
+        }else if(isAudio){
+            UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(playAudio:)];
+            [cell addGestureRecognizer:tapRecognizer];
+            tapRecognizer.delegate = self;
+        }else{
+            
+            UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(openAlert:)];
+            [cell addGestureRecognizer:tapRecognizer];
+            tapRecognizer.delegate = self;
+        }
     }
     cell.fileinfo = fileinfo;
     [cell setDetailText];
@@ -274,8 +299,8 @@
                 [self setFooterButtonState]; //更新按钮的状态
                 if (tableDataDic.count>0 && selectedItemsDic.count == tableDataDic.count) {
                     isCheckedAll = YES;
-                    UIImage *image = [UIImage imageNamed:@"checkall"];
-                    [self.footerBtn_1 setImage:image forState:(UIControlStateNormal)];
+                    UIImage *image = [UIImage imageNamed:@"checbox"];
+                    self.item1.image = image;
                 }
                 
             }
@@ -295,8 +320,9 @@
             [selectedItemsDic removeObjectForKey:cell.fileinfo.fileName];
             [self setFooterButtonState]; //更新按钮的状态
             isCheckedAll = NO;
+            self.tabbar.selectedItem = nil;
             UIImage *image = [UIImage imageNamed:@"checkbox-down"];
-            [self.footerBtn_1 setImage:image forState:(UIControlStateNormal)];
+            self.item1.image = image;
         }
     }
 }
@@ -341,6 +367,7 @@
 #pragma mark requestFileData 返回dirPath下的所有文件
 -(void)requestFileData:(BOOL) isShowLoading refreshControl:(UIRefreshControl *)control
 {
+    self.tabbar.selectedItem = nil;
     NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
     __block NSError *error = nil;
     [dic setValue:[g_sDataManager userName] forKey:@"uname"];
@@ -539,7 +566,7 @@
     NSString* cpath = self.cpath;
     NSString* localFilePath = fileDialog.cpath;
     //[fileHandler uploadFile:fileName localFilePath:localFilePath serverCpath:cpath];
-    [fileHandler uploadFileWithHttp:uploadQueue fileName:fileName localFilePath:localFilePath serverCpath:cpath];
+    [fileHandler uploadFileWithHttp:[NSOperationUploadQueue sharedInstance] fileName:fileName localFilePath:localFilePath serverCpath:cpath];
     [self.navigationController pushViewController:[ProgressBarViewController sharedInstance] animated:YES];
 }
 
@@ -729,6 +756,7 @@
 
 - (void)refreshTableView:(UIRefreshControl *)control
 {
+
     [self requestFileData:NO refreshControl:control];
 }
 
@@ -744,21 +772,30 @@
         [rightBtn setTitleColor:[UIColor colorWithRed:255.0/255 green:255.0/255 blue:255.0/255 alpha:1]forState:UIControlStateNormal];
         [rightBtn setTitle:@"完成" forState:UIControlStateNormal];
         rightBtn.backgroundColor = [UIColor clearColor];
+        self.tabbar.selectedItem = nil;
         UIImage *image1 = [UIImage imageNamed:@"checkbox-down"];
         UIImage *image2 = [UIImage imageNamed:@"dounload-prohibt"];
         UIImage *image3 = [UIImage imageNamed:@"share-prohibt"];
         UIImage *image4 = [UIImage imageNamed:@"more"];
-        [self.footerBtn_1 setImage:image1 forState:(UIControlStateNormal)];
-        self.footerLabel_1.text=@"全选";
-        [self.footerBtn_2 setImage:image2 forState:(UIControlStateNormal)];
-        self.footerLabel_2.text=@"下载";
-        self.footerBtn_2.enabled = NO;
-        [self.footerBtn_3 setImage:image3 forState:(UIControlStateNormal)];
-        self.footerLabel_3.text=@"共享";
-        self.footerBtn_3.enabled = NO;
-        [self.footerBtn_4 setImage:image4 forState:(UIControlStateNormal)];
-        self.footerLabel_4.text=@"更多";
+        
+        self.item1.image = image1;
+        self.item1.enabled = YES;
+        self.item1.title = @"全选";
+        
+        self.item2.image = image2;
+        self.item2.enabled = NO;
+        self.item2.title = @"下载";
+        
+        self.item3.image = image3;
+        self.item3.enabled = NO;
+        self.item3.title = @"共享";
+        
+        self.item4.image = image4;
+        self.item4.title = @"更多";
+
     }else{
+        self.moreBar.hidden = YES;
+        self.misButton.hidden = YES;
         currentModel =0;
         self.fileListTableView.allowsMultipleSelectionDuringEditing=NO;
         [self.fileListTableView setEditing:NO animated:YES];
@@ -766,20 +803,26 @@
         [rightBtn setTitleColor:[UIColor colorWithRed:255.0/255 green:255.0/255 blue:255.0/255 alpha:1]forState:UIControlStateNormal];
         rightBtn.backgroundColor = [UIColor clearColor];
         [selectedItemsDic removeAllObjects];
+        self.tabbar.selectedItem = nil;
         UIImage *image1 = [UIImage imageNamed:@"home"];
         UIImage *image2 = [UIImage imageNamed:@"upload"];
         UIImage *image3 = [UIImage imageNamed:@"refurbish"];
         UIImage *image4 = [UIImage imageNamed:@"new-folder"];
-        [self.footerBtn_1 setImage:image1 forState:(UIControlStateNormal)];
-        self.footerLabel_1.text=@"主页";
-        [self.footerBtn_2 setImage:image2 forState:(UIControlStateNormal)];
-        self.footerBtn_2.enabled = YES;
-        self.footerLabel_2.text=@"上传";
-        [self.footerBtn_3 setImage:image3 forState:(UIControlStateNormal)];
-        self.footerBtn_3.enabled = YES;
-        self.footerLabel_3.text=@"刷新";
-        [self.footerBtn_4 setImage:image4 forState:(UIControlStateNormal)];
-        self.footerLabel_4.text=@"新建目录";
+        
+        self.item1.image = image1;
+        self.item1.enabled = YES;
+        self.item1.title = @"首页";
+        
+        self.item2.image = image2;
+        self.item2.enabled = YES;
+        self.item2.title = @"上传";
+
+        self.item3.image = image3;
+        self.item3.enabled = YES;
+        self.item3.title = @"刷新";
+        
+        self.item4.image = image4;
+        self.item4.title = @"新建目录";
         currentModel = 0;
     }
 }
@@ -803,6 +846,26 @@
             return;
         }
         
+        NSString *fileName;
+        BOOL isSpecialName =NO;
+        if(selectedItemsDic.count>0){
+            for (NSString *fileNameTmp in [selectedItemsDic allKeys]){
+                if (fileNameTmp) {
+                    if([ValidateTool isEqualToKeyword:fileNameTmp]){
+                        fileName = fileNameTmp;
+                        isSpecialName = YES;
+                        break;
+                    }
+                }
+            }
+        }
+        if(isSpecialName){
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:[NSString stringWithFormat:@"文件“%@”禁止复制操作，请重新选择！",fileName] delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] ;
+            [alert show];
+            return;
+        }
+        
+        
         opType=2;
         fileDialog= [[FileDialogViewController alloc] initWithNibName:@"FileDialogViewController" bundle:nil];
         fileDialog.isShowFile =YES;
@@ -819,6 +882,49 @@
             return;
         }
         
+        NSString *errorFileName;
+        BOOL isSpecialName =NO;
+        BOOL isSharedFolder = NO;
+        if(selectedItemsDic.count>0){
+            for (NSString *fileNameTmp in [selectedItemsDic allKeys]){
+                if (fileNameTmp) {
+                    if([ValidateTool isEqualToKeyword:fileNameTmp]){
+                        errorFileName = fileNameTmp;
+                        isSpecialName = YES;
+                        break;
+                    }
+                }
+            }
+        }
+        if(isSpecialName){
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:[NSString stringWithFormat:@"文件“%@”禁止移动操作，请重新选择！",errorFileName] delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] ;
+            [alert show];
+            return;
+        }
+        for (NSString *key in [tableDataDic allKeys]){
+            if (key) {
+                FileInfo *fileInfo = (FileInfo *)[tableDataDic objectForKey:key];
+                if([fileInfo.isShare isEqualToString:@"1"]){
+                    for (NSString *fileNameTmp in [selectedItemsDic allKeys]){
+                        if (fileNameTmp) {
+                            if([fileNameTmp isEqualToString: fileInfo.fileName]){
+                                isSharedFolder =YES;
+                                errorFileName = fileNameTmp;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        if(errorFileName && isSharedFolder){
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:[NSString stringWithFormat:@"文件“%@”已被共享，禁止移动操作，请重新选择！",errorFileName] delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] ;
+            [alert show];
+            return;
+        }
+
+        
+        
         opType=1;
         fileDialog= [[FileDialogViewController alloc] initWithNibName:@"FileDialogViewController" bundle:nil];
         fileDialog.isShowFile =YES;
@@ -827,8 +933,7 @@
         fileDialog.fileDialogDelegate = self;
         [self.navigationController pushViewController:fileDialog animated:YES];
         
-    }else if(buttonIndex==3){//重命名
-        
+    }else if(buttonIndex==3){//重命名        
         if([ValidateTool isInKeywordFolder:self.cpath]){
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:[NSString stringWithFormat:@"路径“%@”下禁重命名！",self.cpath] delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] ;
             [alert show];
@@ -845,7 +950,7 @@
             }
         }
         if([ValidateTool isEqualToKeyword:fileName]){
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:[NSString stringWithFormat:@"文件“%@”禁重命名重命名操作，请重新选择！",fileName] delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] ;
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:[NSString stringWithFormat:@"文件“%@”禁止重命名操作，请重新选择！",fileName] delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] ;
             [alert show];
             return;
         }
@@ -854,7 +959,7 @@
             if (key) {
                 FileInfo *fileInfo = (FileInfo *)[tableDataDic objectForKey:key];
                 if([fileInfo.isShare isEqualToString:@"1"] && [fileInfo.fileName isEqualToString:fileName]){
-                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:[NSString stringWithFormat:@"共享文件“%@”禁重命名操作，请重新选择！",fileName] delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] ;
+                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:[NSString stringWithFormat:@"共享文件“%@”禁止重命名操作，请重新选择！",fileName] delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] ;
                     [alert show];
                     return;
                 }
@@ -892,7 +997,7 @@
 - (void)setFooterButtonState{
     if(selectedItemsDic.count>0){
         BOOL isContainFoler = NO;
-        //        BOOL isContainSpecialFolder = NO;
+
         NSString *specialFolderName = [[NSString alloc] init];
         for (NSString *fileName in [selectedItemsDic allKeys]){
             if (fileName) {
@@ -900,11 +1005,6 @@
                 if ([fileInfo.fileType isEqualToString:@"folder"]) {
                     isContainFoler = YES;
                 }
-                //                if ([[self.cpath stringByAppendingPathComponent: fileInfo.fileName] isEqualToString:SHARE_FOLDER_URL] || [[self.cpath stringByAppendingPathComponent: fileInfo.fileName] isEqualToString:USB_FOLDER_URL]) {
-                //                    isContainSpecialFolder = YES;
-                //                    specialFolderName = fileInfo.fileName;
-                //                    break;
-                //                }
             }
         }
         
@@ -919,72 +1019,80 @@
             }
         }
         
+        
         if (isContainFoler) {//如果包含文件夹则下载按钮禁用
             UIImage *image2 = [UIImage imageNamed:@"dounload-prohibt"];
-            [self.footerBtn_2 setImage:image2 forState:(UIControlStateNormal)];
-            self.footerBtn_2.enabled = NO;
-            
-            //            if(isContainSpecialFolder){
-            //                UIImage *image3 = [UIImage imageNamed:@"share-prohibt"];
-            //                [self.footerBtn_3 setImage:image3 forState:(UIControlStateNormal)];
-            //                self.footerBtn_3.enabled = NO;
-            //            }else{
+            self.item2.image = image2;
+            self.item2.enabled = NO;
+        
             UIImage *image3 = [UIImage imageNamed:@"share"];
-            [self.footerBtn_3 setImage:image3 forState:(UIControlStateNormal)];
-            self.footerBtn_3.enabled = YES;
-            //            }
+            self.item3.image = image3;
+            self.item3.enabled = YES;
+
         }else{
             UIImage *image2 = [UIImage imageNamed:@"download"];
-            [self.footerBtn_2 setImage:image2 forState:(UIControlStateNormal)];
-            self.footerBtn_2.enabled = YES;
+            self.item2.image = image2;
+            self.item2.enabled = YES;
+
             UIImage *image3 = [UIImage imageNamed:@"share-prohibt"];
-            [self.footerBtn_3 setImage:image3 forState:(UIControlStateNormal)];
-            self.footerBtn_3.enabled = NO;
+            self.item3.image = image3;
+            self.item3.enabled = NO;
+
         }
     }else{
         if (self.fileListTableView.allowsMultipleSelectionDuringEditing){
+            
             UIImage *image2 = [UIImage imageNamed:@"dounload-prohibt"];
             UIImage *image3 = [UIImage imageNamed:@"share-prohibt"];
-            [self.footerBtn_2 setImage:image2 forState:(UIControlStateNormal)];
-            self.footerBtn_2.enabled = NO;
-            [self.footerBtn_3 setImage:image3 forState:(UIControlStateNormal)];
-            self.footerBtn_3.enabled = NO;
+            self.item1.image = [UIImage imageNamed:@"checkbox-down"];
+            self.item2.image = image2;
+            self.item2.enabled = NO;
+
+            self.item3.image = image3;
+            self.item3.enabled = NO;
         }else{
             UIImage *image2 = [UIImage imageNamed:@"upload"];
             UIImage *image3 = [UIImage imageNamed:@"refurbish"];
-            [self.footerBtn_2 setImage:image2 forState:(UIControlStateNormal)];
-            self.footerBtn_2.enabled = YES;
-            [self.footerBtn_3 setImage:image3 forState:(UIControlStateNormal)];
-            self.footerBtn_3.enabled = YES;
+            self.item2.image = image2;
+            self.item2.enabled = YES;
+            
+            self.item3.image = image3;
+            self.item3.enabled = YES;
         }
     }
 }
+
+
 #pragma mark -
 #pragma mark footerButtonEventHandleAction 底部按钮点击处理事件
-- (void)footerButtonEventHandleAction:(id)sender {
-    if(currentModel==0){//正常模式下的处理
-        if(sender==self.footerBtn_1){ //主页
+- (void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item {
+    
+//    self.tabbar.selectedItem = nil;
+    if (tabBar == self.tabbar) {
+
+    if(currentModel == 0){//正常模式下的处理
+        if (item == self.item1){//首页
+            self.item1.selectedImage = [UIImage imageNamed:@"home"];
             DeckTableViewController* leftController = [[DeckTableViewController alloc] initWithNibName:@"DeckTableViewController" bundle:nil];
             leftController = [[UINavigationController alloc] initWithRootViewController:leftController];
-            
+        
             UIViewController *centerController = [[HomeViewController alloc] initWithNibName:@"HomeViewController" bundle:nil];
-            
+        
             centerController = [[UINavigationController alloc] initWithRootViewController:centerController];
-            
-            IIViewDeckController* deckController =  [[IIViewDeckController alloc] initWithCenterViewController:centerController
-                                                                                            leftViewController:leftController];
-            
+        
+            IIViewDeckController* deckController =  [[IIViewDeckController alloc] initWithCenterViewController:centerController leftViewController:leftController];
+        
             deckController.delegateMode = IIViewDeckDelegateOnly;
-            // self.window.rootViewController = deckController;
             [self presentViewController:deckController animated:NO completion:nil];
-        }
-        else if(sender==self.footerBtn_2){//上传
+
+        }else if(item == self.item2){//上传
+        
             if([ValidateTool isInKeywordFolder:self.cpath]){
                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:[NSString stringWithFormat:@"路径“%@”下禁止上传！",self.cpath] delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] ;
                 [alert show];
                 return;
             }
-            
+        
             fileDialog= [[FileDialogViewController alloc] initWithNibName:@"FileDialogViewController" bundle:nil];
             fileDialog.isShowFile =YES;
             fileDialog.isServerFile = NO;
@@ -993,46 +1101,44 @@
             NSString* documentsPath = kDocument_Folder;
             fileDialog.cpath = documentsPath;
             fileDialog.rootUrl = documentsPath;
-            //UINavigationController *fileDialogNav =[[UINavigationController alloc]initWithRootViewController:fileDialog];
-            //  [self.navigationController presentViewController:fileDialogNav animated:YES completion:nil];
+
             [self.navigationController pushViewController:fileDialog animated:YES];
-            
-        }
-        else if(sender==self.footerBtn_3){//刷新
+    
+        }else if(item == self.item3) {//刷新
+        
             [self requestFileData:YES refreshControl:nil];
-        }
-        else if(sender==self.footerBtn_4){//新建文件夹
+        
+        }else if(item == self.item4){//新建文件夹
+            self.tabbar.selectedItem = nil;
             if([ValidateTool isInKeywordFolder:self.cpath]){
                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:[NSString stringWithFormat:@"路径“%@”下禁止新建文件夹！",self.cpath] delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] ;
                 [alert show];
                 return;
             }
-            
-            if(self.isInSharedFolder){
+        
+            if(self.isInSharedFolder) {
                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:@"被共享文件夹下禁止新建文件夹！" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] ;
                 [alert show];
                 return;
-            }else{
+            }else {
                 opType =4;
                 fileHandler.opType = 4;
                 fileHandler.cpath =self.cpath;
                 [fileHandler createFolder:fileHandler];
             }
         }
-    }else if(currentModel==1){
-        if(sender==self.footerBtn_1){ //全选
+    }else if(currentModel == 1){//编辑模式下的处理
+        if(item == self.item1){ //全选
             isCheckedAll = !isCheckedAll;
             if (isCheckedAll) {
                 [self selectAllRows];
-                UIImage *image = [UIImage imageNamed:@"checkall"];
-                [self.footerBtn_1 setImage:image forState:(UIControlStateNormal)];
+                self.item1.selectedImage = [UIImage imageNamed:@"checbox"];
             }else{
                 [self didDeSelectAllRows];
-                UIImage *image = [UIImage imageNamed:@"checkbox-down"];
-                [self.footerBtn_1 setImage:image forState:(UIControlStateNormal)];
+                self.tabbar.selectedItem = nil;
+                self.item1.selectedImage = [UIImage imageNamed:@"checkbox-down"];
             }
-        }
-        else if(sender==self.footerBtn_2){//下载
+        }else if(item == self.item2){//下载
             NSString *targetPath =[kDocument_Folder stringByAppendingPathComponent:[NSString stringWithFormat:@"/%@",[g_sDataManager userName]]];
             //1.先判断队列中是否已有该文件
             for(FileDownloadOperation *operation in [NSOperationDownloadQueue sharedInstance].operations) {
@@ -1046,11 +1152,11 @@
             for(NSString *taskId in [[ProgressBarViewController sharedInstance].downloadTaskDic allKeys] ){
                 TaskInfo *taskInfo = [[ProgressBarViewController sharedInstance].downloadTaskDic objectForKey:taskId];
                 for (NSString *fileName in [selectedItemsDic allKeys]) {
-                    if ([taskInfo.taskName isEqualToString:fileName] && ([taskInfo.taskStatus isEqualToString:CANCLED]|| [taskInfo.taskStatus isEqualToString:FAILURE])) {
+                    if (([taskInfo.taskName isEqualToString:fileName] && [taskInfo.cachePath isEqualToString:[targetPath stringByAppendingPathComponent:fileName]]) && ([taskInfo.taskStatus isEqualToString:CANCLED]|| [taskInfo.taskStatus isEqualToString:FAILURE])) {
                         [selectedItemsDic removeObjectForKey:fileName];
                     }
                 }
-                
+            
             }
             //3.判断是否目标路径下已经包含一个同名的文件
             duplicateFileNamesArray =[FileTools getDuplicateFileNames: targetPath fileNames:[selectedItemsDic allKeys]];
@@ -1061,9 +1167,8 @@
                 [self.navigationController pushViewController:[ProgressBarViewController sharedInstance] animated:YES];
                 [selectedItemsDic removeAllObjects];
             }
-        }
-        else if(sender==self.footerBtn_3){//共享
-            
+        }else if(item == self.item3){//共享
+        
             BOOL isContainSpecialFolder = NO;
             NSString *specialFolderName = [[NSString alloc] init];
             for (NSString *fileName in [selectedItemsDic allKeys]){
@@ -1088,41 +1193,133 @@
                 [alert show];
                 return;
             }
-            
+        
             if(![self.cpath isEqualToString:@"/"]){
                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:@"根目录以外文件夹禁止共享！" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] ;
                 [alert show];
                 return;
             }
-            
+        
             opType =6;
             fileHandler.opType = 6;
             fileHandler.cpath =self.cpath;
             [fileHandler shareFiles:selectedItemsDic cpath:self.cpath isShare:@"1"];
-        }
-        else if(sender==self.footerBtn_4){//更多
-            sheet= [CustomActionSheet styleDefault];
-            sheet.delegate = self;
-            if (selectedItemsDic.count==0) {
-                [sheet setButtonState:1 buttonState:NO];
-                [sheet setButtonState:2 buttonState:NO];
-                [sheet setButtonState:3 buttonState:NO];
-                [sheet setButtonState:4 buttonState:NO];
-            }else if(selectedItemsDic.count==1) {
-                [sheet setButtonState:1 buttonState:YES];
-                [sheet setButtonState:2 buttonState:YES];
-                [sheet setButtonState:3 buttonState:YES];
-                [sheet setButtonState:4 buttonState:YES];
-            }else if(selectedItemsDic.count>=2) {
-                [sheet setButtonState:1 buttonState:YES];
-                [sheet setButtonState:2 buttonState:YES];
-                [sheet setButtonState:3 buttonState:NO];
-                [sheet setButtonState:4 buttonState:YES];
+        }else if(item == self.item4){//更多
+            self.misButton.hidden = NO;
+            self.moreBar.hidden = NO;
+            self.tabbar.selectedItem = nil;
+            if (selectedItemsDic.count == 0) {
+
+                [self setItemState:1 itemState:NO];
+                [self setItemState:2 itemState:NO];
+                [self setItemState:3 itemState:NO];
+                [self setItemState:4 itemState:NO];
+             
+            }else if(selectedItemsDic.count == 1) {
+                
+                [self setItemState:1 itemState:YES];
+                [self setItemState:2 itemState:YES];
+                [self setItemState:3 itemState:YES];
+                [self setItemState:4 itemState:YES];
+                
+            }else if(selectedItemsDic.count >= 2) {
+                
+                [self setItemState:1 itemState:YES];
+                [self setItemState:2 itemState:YES];
+                [self setItemState:3 itemState:NO];
+                [self setItemState:4 itemState:YES];
             }
-            [sheet showSheet:self];
         }
     }
+    }else if (tabBar == self.moreBar) {
+        self.moreBar.selectedItem = nil;
+        self.moreBar.hidden = YES;
+        self.misButton.hidden = YES;
+        if (item == self.moreItem1) {
+            
+            [self customActionSheet:1];
+        }else if (item == self.moreItem2) {
+            [self customActionSheet:2];
+        }else if (item == self.moreItem3) {
+            [self customActionSheet:3];
+        }else if (item == self.moreItem4) {
+            [self customActionSheet:4];
+        }
+        
+    }
 }
+
+- (IBAction)moreBarMiss:(id)sender {
+    self.moreBar.hidden = YES;
+    self.tabbar.selectedItem = nil;
+    [self setFooterButtonState];
+    self.misButton.hidden = YES;
+    
+}
+
+- (void)setItemState:(NSInteger)itemIndex itemState:(BOOL)enabled
+{
+    switch (itemIndex) {
+        case 1:
+        {
+            self.moreItem1.enabled = enabled;
+            
+            if (enabled) {
+                UIImage *image = [UIImage imageNamed:@"copy"];
+                self.moreItem1.image = image;
+            }else{
+                UIImage *image = [UIImage imageNamed:@"copy-prohibt"];
+                self.moreItem1.image = image;
+            }
+            
+        }
+            break;
+        case 2:
+        {
+            self.moreItem2.enabled = enabled;
+            if (enabled) {
+                UIImage *image = [UIImage imageNamed:@"move"];
+                self.moreItem2.image = image;
+            }else{
+                UIImage *image = [UIImage imageNamed:@"move-prohibt"];
+
+                 self.moreItem2.image = image;
+            }
+            
+        }
+            break;
+        case 3:
+        {
+            self.moreItem3.enabled = enabled;
+            if (enabled) {
+                UIImage *image = [UIImage imageNamed:@"rechristen"];
+                self.moreItem3.image = image;
+            }else{
+                UIImage *image = [UIImage imageNamed:@"rechristen-prohibt"];
+
+                self.moreItem3.image = image;
+            }
+        }
+            break;
+        case 4:
+        {
+            self.moreItem4.enabled = enabled;
+            if (enabled) {
+                UIImage *image = [UIImage imageNamed:@"delete"];
+                self.moreItem4.image = image;
+            }else{
+                UIImage *image = [UIImage imageNamed:@"delete-prohibt"];
+                
+                self.moreItem4.image = image;
+            }
+        }
+            break;
+        default:
+            break;
+    }
+}
+
+
 
 
 #pragma mark -
@@ -1130,14 +1327,15 @@
 - (void)requestSuccessCallback{
     [self loadFileData];
     [selectedItemsDic removeAllObjects];
-    if (sheet) {
-        [sheet dismissSheet:self];
+    if (self.moreBar.hidden == NO) {
+        self.moreBar.hidden = YES;
     }
     if (loadingView)
     {
         [loadingView removeFromSuperview];
         loadingView = nil;
     }
+    [self setFooterButtonState];
 }
 
 #pragma mark -
@@ -1300,7 +1498,10 @@
     }
 }
 
-
+- (void)openAlert:(UITapGestureRecognizer *)sender{
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:@"当前文件不支持远程打开，请下载到本地打开" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] ;
+    [alert show];
+}
 
 - (BOOL)prefersStatusBarHidden
 {

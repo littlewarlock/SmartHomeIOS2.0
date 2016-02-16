@@ -23,7 +23,7 @@
 + (int)deleteFileByUrl:(NSString*)fileUrl;//删除本地单个文件
 
 //+ (int) copyFileByUrl:(NSString*)fileUrl toPath: (NSString*)destinationUrl;
-//+ (int)moveFileByUrl:(NSString*)fileUrl toPath: (NSString*)destinationUrl;
++ (int)moveFileByUrl:(NSString*)fileUrl toPath: (NSString*)destinationUrl;
 
 + (int) saveFileFromAsset:(ALAsset *)cellAsset toPath: (NSString*)destinationUrl;
 //获取用户设置信息的保存路径
@@ -47,4 +47,6 @@
 #pragma mark -
 #pragma mark getDuplicateFileNames 返回指定目录下的所有重名文件名称
 +(NSMutableArray*)getDuplicateFileNames:(NSString*)path fileNames:(NSArray*)fileNamesArray;
+//获取path目录下的所有文件，不递归
++ (NSArray *)getFilesByPath:(NSString *)path;
 @end

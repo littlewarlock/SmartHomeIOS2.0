@@ -9,10 +9,14 @@
 #import "LocalFileHandler.h"
 #import "FileInfo.h"
 #import "FileTools.h"
-#import "FileCopyAndMoveTools.h"
+#import "FileCopyTools.h"
 #import "DataManager.h"
 #import "UIHelper.h"
-
+@interface LocalFileHandler ()
+{
+    NSString *fileReName;
+}
+@end
 @implementation LocalFileHandler
 
 #pragma mark -
@@ -23,7 +27,9 @@
     [[alertView textFieldAtIndex:0] setKeyboardType:UIKeyboardTypeDefault];
 
     UITextField *textField=[alertView textFieldAtIndex:0];
-    textField.text = [fileInfo.fileName stringByDeletingPathExtension];
+    [[alertView textFieldAtIndex:0] setPlaceholder:@"请输入文件名称"];
+    textField.text = fileInfo.fileName;
+    textField.delegate = self;
     [alertView show];
     
     self.fileInfo =fileInfo;
@@ -55,9 +61,10 @@
 #pragma mark -
 #pragma mark createFolderAction 新建文件夹的处理
 - (void)createFolderAction{
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"请输入文件夹名称" message:@"" delegate:self cancelButtonTitle:@"确认" otherButtonTitles:@"取消",nil];
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"新建目录" message:@"" delegate:self cancelButtonTitle:@"新建" otherButtonTitles:@"取消",nil];
     [alertView setAlertViewStyle:UIAlertViewStylePlainTextInput];
     [[alertView textFieldAtIndex:0] setKeyboardType:UIKeyboardTypeDefault];
+    [[alertView textFieldAtIndex:0] setPlaceholder:@"请输入目录名称"];
     [alertView show];
     
 }
@@ -82,17 +89,14 @@
                     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"名称不能为空" message:@"" delegate:self cancelButtonTitle:@"确认" otherButtonTitles:@"取消",nil];
                     [alertView setAlertViewStyle:UIAlertViewStylePlainTextInput];
                     [[alertView textFieldAtIndex:0] setKeyboardType:UIKeyboardTypeDefault];
+                    [[alertView textFieldAtIndex:0] setPlaceholder:@"请输入文件名称"];
                     [alertView show];
                     return;
                 }
                 NSString * fullFileName = self.fileInfo.fileName;
                 NSString *fileName = textField.text;
+                fileReName = fileName;
                 NSString *extName = [fullFileName pathExtension];
-                if(![extName isEqualToString:@""])
-                {
-                    fileName = [fileName stringByAppendingString:@"."];
-                    fileName =[fileName stringByAppendingString:extName];
-                }
                 BOOL isExist =  NO;
                 for(NSString *dicKey in self.tableDataDic) {
                     FileInfo  *fileInfo = [self.self.tableDataDic objectForKey:dicKey];
@@ -102,33 +106,24 @@
                     }
                 }
                 if(isExist){
-                    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"文件已存在,请重新输入！" message:@"" delegate:self cancelButtonTitle:@"确认" otherButtonTitles:@"取消",nil];
+                    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"目录已存在,请重新输入！" message:@"" delegate:self cancelButtonTitle:@"新建" otherButtonTitles:@"取消",nil];
                     [alertView setAlertViewStyle:UIAlertViewStylePlainTextInput];
                     [[alertView textFieldAtIndex:0] setKeyboardType:UIKeyboardTypeDefault];
+                    [[alertView textFieldAtIndex:0] setPlaceholder:@"请输入目录名称"];
                     [alertView show];
                     return;
                 }
-                NSString *path = self.cpath;
-                //NSRange range = [path rangeOfString:self.curCel.textLabel.text];//匹配得到的下标
-                //
-                //path=[path substringToIndex:range.location];
-                path=[path stringByAppendingPathComponent:fileName];
-               //[FileTools moveFileByUrl:self.fileInfo.fileUrl   toPath:path];
                 
-                BOOL  opreationIsExist= false;
-                opreationIsExist= false;
-                for (FileCopyAndMoveTools *operation in [self.queue operations]) {
-                    if ([operation.fileUrl isEqualToString:self.fileInfo.fileUrl]) {
-                        opreationIsExist = true;
-                    }
+                
+                if(![[fileName pathExtension] isEqualToString:extName])//如果拓展名有改变
+                {
+                    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"扩展名修改后会导致文件不可使用，确定修改吗？" message:@"" delegate:self cancelButtonTitle:@"确认" otherButtonTitles:@"取消",nil];[alertView show];
+                    self.opType = 8;
+                    return;
                 }
-                if (!opreationIsExist) {
-                    FileCopyAndMoveTools *opreation = [[FileCopyAndMoveTools alloc] initWithFileInfo];
-                    opreation.fileUrl = self.fileInfo.fileUrl;
-                    opreation.destinationUrl = path;
-                    opreation.opType = @"move";
-                    [self.queue addOperation:opreation];
-                }
+                NSString *path = self.cpath;
+                path=[path stringByAppendingPathComponent:fileName];
+                [FileTools moveFileByUrl:self.fileInfo.fileUrl toPath:path];
 
                 if ([self.localFileHandlerDelegate respondsToSelector:@selector(requestSuccessCallback)]) {
                     [self.localFileHandlerDelegate requestSuccessCallback];//调用委托方法
@@ -145,9 +140,10 @@
                 UITextField *textField=[alertView textFieldAtIndex:0];
                 NSString *folderName = textField.text;
                 if([textField.text isEqualToString:@""] ){
-                    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"输入不能为空" message:@"" delegate:self cancelButtonTitle:@"确认" otherButtonTitles:@"取消",nil];
+                    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"请输入目录名称" message:@"" delegate:self cancelButtonTitle:@"确认" otherButtonTitles:@"取消",nil];
                     [alertView setAlertViewStyle:UIAlertViewStylePlainTextInput];
                     [[alertView textFieldAtIndex:0] setKeyboardType:UIKeyboardTypeDefault];
+                    [[alertView textFieldAtIndex:0] setPlaceholder:@"请输入目录名称"];
                     [alertView show];
                     return;
                 }
@@ -161,9 +157,10 @@
                     }
                 }
                 if(isExist){
-                    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"文件已存在,请重新输入！" message:@"" delegate:self cancelButtonTitle:@"确认" otherButtonTitles:@"取消",nil];
+                    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"目录已存在，请重新命名" message:@"" delegate:self cancelButtonTitle:@"确认" otherButtonTitles:@"取消",nil];
                     [alertView setAlertViewStyle:UIAlertViewStylePlainTextInput];
                     [[alertView textFieldAtIndex:0] setKeyboardType:UIKeyboardTypeDefault];
+                    [[alertView textFieldAtIndex:0] setPlaceholder:@"请输入目录名称"];
                     [alertView show];
                     return;
                 }
@@ -192,11 +189,38 @@
                 [UIHelper showLoginViewWithDelegate:self loginViewDelegate:self];
             }
             break;
-            
+        case 8://重命名（修改拓展名）
+            if(buttonIndex ==0){ //下载时用户未登录
+                NSString *path = self.cpath;
+                path=[path stringByAppendingPathComponent:fileReName];
+                [FileTools moveFileByUrl:self.fileInfo.fileUrl toPath:path];
+                if ([self.localFileHandlerDelegate respondsToSelector:@selector(requestSuccessCallback)]) {
+                    [self.localFileHandlerDelegate requestSuccessCallback];//调用委托方法
+                }
+            }
+            break;
         default:
             break;
     }
-    
 }
 
+#pragma mark -
+#pragma mark textField 的代理方法
+- (void)textFieldDidBeginEditing:(UITextField *)textField
+{
+    NSString * fileName = textField.text;
+    NSString * ext = [fileName pathExtension];
+    
+    UITextPosition * begin = [textField beginningOfDocument];
+    UITextPosition * end = nil;
+    
+    if ([ext length] == 0) {
+        end = [textField endOfDocument];
+    }
+    else {
+        end = [textField positionFromPosition:begin offset:([fileName length] - [ext length] - 1)];
+    }
+    
+    [textField setSelectedTextRange:[textField textRangeFromPosition:begin toPosition:end]];
+}
 @end

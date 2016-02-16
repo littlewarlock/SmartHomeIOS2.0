@@ -213,22 +213,25 @@ static void * MWVideoPlayerObservation = &MWVideoPlayerObservation;
     
     UIButton *forscreenBtn = [UIButton buttonWithType:UIButtonTypeCustom];
 
-    [forscreenBtn setBackgroundImage:[UIImage imageNamed:@"for-screen"] forState:UIControlStateNormal];
-    forscreenBtn.frame = CGRectMake(200, 100, 20, 16);
+//    [forscreenBtn setBackgroundImage:[UIImage imageNamed:@"for-screen"] forState:UIControlStateNormal];
+    [forscreenBtn setImage:[UIImage imageNamed:@"for-screen"] forState:UIControlStateNormal];
+    forscreenBtn.imageView.contentMode = UIViewContentModeCenter;
+    forscreenBtn.frame = CGRectMake(200, 100, 100, 100);
+
     forscreenBtn.translatesAutoresizingMaskIntoConstraints = NO;
     self.btn = forscreenBtn;
     [self.view addSubview:self.btn];
     [forscreenBtn addTarget:self
                  action:@selector(showTableView)
        forControlEvents:UIControlEventTouchUpInside];
-    [forscreenBtn setBackgroundColor:[UIColor clearColor]];
+//    [forscreenBtn setBackgroundColor:[UIColor clearColor]];
     
-    NSArray *constraints1=[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[forscreenBtn(==20)]-25-|"
+    NSArray *constraints1=[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[forscreenBtn(==40)]-25-|"
                            　　　　　　　　　　　　　　　　　　　　　　　　　　　　options:0
                            　　　　　　　　　　　　　　　　　　　　　　　　　　　　metrics:nil
                            　　　　　　　　　　　　　　　　　　　　　　　　　　　　views:NSDictionaryOfVariableBindings(forscreenBtn)];
     
-    NSArray *constraints2=[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-20-[forscreenBtn(==16)]"
+    NSArray *constraints2=[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-20-[forscreenBtn(==32)]"
                            　　　　　　　　　　　　　　　　　　　　　　　　　　　　options:0
                            　　　　　　　　　　　　　　　　　　　　　　　　　　　　metrics:nil
                            　　　　　　　　　　　　　　　　　　　　　　　　　　　　views:NSDictionaryOfVariableBindings(forscreenBtn)];
@@ -427,11 +430,21 @@ static void * MWVideoPlayerObservation = &MWVideoPlayerObservation;
         [self.renderer play];
     }
     
-    //设置titleLabel显示文字
-    NSString *str = [[[app.picUrl objectAtIndex:self.curIndex] componentsSeparatedByString:@"&fileName="] lastObject];
-    NSString *titleStr = [[str componentsSeparatedByString:@"."] firstObject];
-    self.titleLabel.text = [NSString stringWithString:titleStr];
+    //    设置titleLabel显示文字
+    if ([[app.picUrl objectAtIndex:self.curIndex] containsString:@"&fileName="]) {
+        NSString *str = [[[app.picUrl objectAtIndex:self.curIndex] componentsSeparatedByString:@"&fileName="] lastObject];
+        NSString *titleStr = [[str componentsSeparatedByString:@"."] firstObject];
+        self.titleLabel.text = [NSString stringWithString:titleStr];
+    }else {
+        NSRange range = [[app.picUrl objectAtIndex:self.curIndex] rangeOfString:@"SmartHome/"];
+        NSString *title1 = [[app.picUrl objectAtIndex:self.curIndex] substringFromIndex:(range.location + range.length)];
+        NSRange range2 = [title1 rangeOfString:@"."];
+        NSString *title2 = [title1 substringToIndex:range2.location];
+        self.titleLabel.text = title2;
     
+    }
+
+   
 }
 
 - (void)handleSwipes:(UISwipeGestureRecognizer *)sender
@@ -448,12 +461,22 @@ static void * MWVideoPlayerObservation = &MWVideoPlayerObservation;
         if ([self.renderer setAVTransportURI:[app.picUrl objectAtIndex:nextIndex]]) {
             [self.renderer play];
         }
-        //设置titleLabel显示文字
-        NSString *str = [[[app.picUrl objectAtIndex:nextIndex] componentsSeparatedByString:@"&fileName="] lastObject];
-        NSString *titleStr = [[str componentsSeparatedByString:@"."] firstObject];
-        self.titleLabel.text = [NSString stringWithString:titleStr];
+        
         
         self.curIndex = nextIndex;
+        //设置titleLabel显示文字
+        if ([[app.picUrl objectAtIndex:self.curIndex] containsString:@"&fileName="]) {
+            NSString *str = [[[app.picUrl objectAtIndex:self.curIndex] componentsSeparatedByString:@"&fileName="] lastObject];
+            NSString *titleStr = [[str componentsSeparatedByString:@"."] firstObject];
+            self.titleLabel.text = [NSString stringWithString:titleStr];
+        }else {
+            NSRange range = [[app.picUrl objectAtIndex:self.curIndex] rangeOfString:@"SmartHome/"];
+            NSString *title1 = [[app.picUrl objectAtIndex:self.curIndex] substringFromIndex:(range.location + range.length)];
+            NSRange range2 = [title1 rangeOfString:@"."];
+            NSString *title2 = [title1 substringToIndex:range2.location];
+            self.titleLabel.text = title2;
+            
+        }
         
     }
     
@@ -471,12 +494,21 @@ static void * MWVideoPlayerObservation = &MWVideoPlayerObservation;
         if ([self.renderer setAVTransportURI:[app.picUrl objectAtIndex:preIndex]]) {
             [self.renderer play];
         }
-        //设置titleLabel显示文字
-        NSString *str = [[[app.picUrl objectAtIndex:preIndex] componentsSeparatedByString:@"&fileName="] lastObject];
-        NSString *titleStr = [[str componentsSeparatedByString:@"."] firstObject];
-        self.titleLabel.text = [NSString stringWithString:titleStr];
         
         self.curIndex = preIndex;
+        //设置titleLabel显示文字
+        if ([[app.picUrl objectAtIndex:self.curIndex] containsString:@"&fileName="]) {
+            NSString *str = [[[app.picUrl objectAtIndex:self.curIndex] componentsSeparatedByString:@"&fileName="] lastObject];
+            NSString *titleStr = [[str componentsSeparatedByString:@"."] firstObject];
+            self.titleLabel.text = [NSString stringWithString:titleStr];
+        }else {
+            NSRange range = [[app.picUrl objectAtIndex:self.curIndex] rangeOfString:@"SmartHome/"];
+            NSString *title1 = [[app.picUrl objectAtIndex:self.curIndex] substringFromIndex:(range.location + range.length)];
+            NSRange range2 = [title1 rangeOfString:@"."];
+            NSString *title2 = [title1 substringToIndex:range2.location];
+            self.titleLabel.text = title2;
+            
+        }
 
     }
 }
@@ -510,12 +542,21 @@ static void * MWVideoPlayerObservation = &MWVideoPlayerObservation;
         [self.renderer play];
     }
     
-    //设置titleLabel显示文字
-    NSString *str = [[[app.picUrl objectAtIndex:preIndex] componentsSeparatedByString:@"&fileName="] lastObject];
-    NSString *titleStr = [[str componentsSeparatedByString:@"."] firstObject];
-    self.titleLabel.text = [NSString stringWithString:titleStr];
-    
     self.curIndex = preIndex;
+    
+    //设置titleLabel显示文字
+    if ([[app.picUrl objectAtIndex:self.curIndex] containsString:@"&fileName="]) {
+        NSString *str = [[[app.picUrl objectAtIndex:self.curIndex] componentsSeparatedByString:@"&fileName="] lastObject];
+        NSString *titleStr = [[str componentsSeparatedByString:@"."] firstObject];
+        self.titleLabel.text = [NSString stringWithString:titleStr];
+    }else {
+        NSRange range = [[app.picUrl objectAtIndex:self.curIndex] rangeOfString:@"SmartHome/"];
+        NSString *title1 = [[app.picUrl objectAtIndex:self.curIndex] substringFromIndex:(range.location + range.length)];
+        NSRange range2 = [title1 rangeOfString:@"."];
+        NSString *title2 = [title1 substringToIndex:range2.location];
+        self.titleLabel.text = title2;
+        
+    }
     
 }
 
@@ -534,13 +575,22 @@ static void * MWVideoPlayerObservation = &MWVideoPlayerObservation;
         [self.renderer play];
     }
     
-    //设置titleLabel显示文字
-    NSString *str = [[[app.picUrl objectAtIndex:nextIndex] componentsSeparatedByString:@"&fileName="] lastObject];
-    NSString *titleStr = [[str componentsSeparatedByString:@"."] firstObject];
-    self.titleLabel.text = [NSString stringWithString:titleStr];
-    
     self.curIndex = nextIndex;
-    
+    //设置titleLabel显示文字
+    self.titleLabel.text = nil;
+    if ([[app.picUrl objectAtIndex:self.curIndex] containsString:@"&fileName="]) {
+        NSString *str = [[[app.picUrl objectAtIndex:self.curIndex] componentsSeparatedByString:@"&fileName="] lastObject];
+        NSString *titleStr = [[str componentsSeparatedByString:@"."] firstObject];
+        self.titleLabel.text = [NSString stringWithString:titleStr];
+    }else {
+        NSRange range = [[app.picUrl objectAtIndex:self.curIndex] rangeOfString:@"SmartHome/"];
+        NSString *title1 = [[app.picUrl objectAtIndex:self.curIndex] substringFromIndex:(range.location + range.length)];
+        NSRange range2 = [title1 rangeOfString:@"."];
+        NSString *title2 = [title1 substringToIndex:range2.location];
+        self.titleLabel.text = title2;
+        
+    }
+  
 }
 
 

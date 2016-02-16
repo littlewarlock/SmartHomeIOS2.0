@@ -24,11 +24,10 @@
 @property (nonatomic,strong)NSURLSession * session;
 @property (nonatomic,assign) BOOL  isBackup;
 @property (nonatomic,assign) long long totalBytes;
-
+- (id)initWithTaskInfo:(TaskInfo*) taskInfo;
 - (void)upload: (NSString*) ip port:(NSString*) port user:(NSString*) user password:(NSString*) password remotePath:(NSString*) remotePath fileNamePath:(NSString*)fileNamePath fileName:(NSString*)fileName;
 - (id)initWithLocalPath:(NSString *)localStr ip:(NSString*)ip withServer:(NSString*)serverStr
                withName:(NSString*)theName withPass:(NSString*)thePass;
-
 @end
 
 

@@ -103,7 +103,7 @@ AppDelegate *appDelegate ;
     [homeButton setImage:[UIImage imageNamed:@"home-down"] forState:(UIControlStateNormal)];
     //[homeButton centerImageAndTitle];
     homeButton.tag=100;
-    [homeButton addTarget:self action:@selector(homeAction:) forControlEvents:UIControlEventTouchUpInside];
+    [homeButton addTarget:self action:@selector(modeChange:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:homeButton];
     
     UIButton *egressButton = [[UIButton alloc] initWithFrame:CGRectMake(width/3,height - 50,width/3,50)];
@@ -113,7 +113,7 @@ AppDelegate *appDelegate ;
     [egressButton setImage:[UIImage imageNamed:@"egress"] forState:(UIControlStateNormal)];
     //[homeButton centerImageAndTitle];
     egressButton.tag=101;
-    [egressButton addTarget:self action:@selector(egressAction:) forControlEvents:UIControlEventTouchUpInside];
+    [egressButton addTarget:self action:@selector(modeChange:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:egressButton];
     
 
@@ -124,7 +124,7 @@ AppDelegate *appDelegate ;
     [sleepButton setImage:[UIImage imageNamed:@"sleep"] forState:(UIControlStateNormal)];
     //[homeButton centerImageAndTitle];
     sleepButton.tag=102;
-    [sleepButton addTarget:self action:@selector(sleepAction:) forControlEvents:UIControlEventTouchUpInside];
+    [sleepButton addTarget:self action:@selector(modeChange:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:sleepButton];
  
     // 添加底部蓝色滑块
@@ -297,7 +297,9 @@ AppDelegate *appDelegate ;
     AppInfo *appInfo = (AppInfo *)_appList[index];
     //判断迅雷app是否被用户打开
     BOOL isOn = [appInfo.appName isEqualToString:@"迅雷"];
-    [thunderTools thunderOn:isOn];
+    if (isOn == YES) {
+        [thunderTools thunderOn:isOn];
+    }
     
     return cell;
 }
@@ -462,20 +464,9 @@ AppDelegate *appDelegate ;
 
 
 - (void) homeAction:(UIButton *)sender {
+    
     loadingView = [UIHelper addLoadingViewWithSuperView: self.view text:@"模式切换中，请等待..." ];
     [self.view addSubview:loadingView];
-    UIButton *homeButton = (UIButton *)[self.view viewWithTag:100];
-    UIButton *egressButton = (UIButton *)[self.view viewWithTag:101];
-    UIButton *sleepButton = (UIButton *)[self.view viewWithTag:102];
-    [homeButton setImage:[UIImage imageNamed:@"home-down"] forState:(UIControlStateNormal)];
-    [egressButton setImage:[UIImage imageNamed:@"egress"] forState:(UIControlStateNormal)];
-    [sleepButton setImage:[UIImage imageNamed:@"sleep"] forState:(UIControlStateNormal)];
-    [homeButton setTitleColor:[UIColor colorWithRed:0.0/255 green:160.0/255 blue:226.0/255 alpha:1] forState:UIControlStateNormal];
-    [egressButton setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
-    [sleepButton setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
-    // 设置底部滑动条
-    CGRect frame = CGRectMake(0, kMainScreenHeight - 4, kMainScreenWidth / 3, 4);
-    bottomView.frame = frame;
     NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
     __block NSError *error = nil;
     [dic setValue:@"setmode" forKey:@"opt"];
@@ -493,6 +484,18 @@ AppDelegate *appDelegate ;
         
         if([[NSString stringWithFormat:@"%@",[responseJSON objectForKey:@"result"]] isEqualToString: @"success"])//成功
         {
+            UIButton *homeButton = (UIButton *)[self.view viewWithTag:100];
+            UIButton *egressButton = (UIButton *)[self.view viewWithTag:101];
+            UIButton *sleepButton = (UIButton *)[self.view viewWithTag:102];
+            [homeButton setImage:[UIImage imageNamed:@"home-down"] forState:(UIControlStateNormal)];
+            [egressButton setImage:[UIImage imageNamed:@"egress"] forState:(UIControlStateNormal)];
+            [sleepButton setImage:[UIImage imageNamed:@"sleep"] forState:(UIControlStateNormal)];
+            [homeButton setTitleColor:[UIColor colorWithRed:0.0/255 green:160.0/255 blue:226.0/255 alpha:1] forState:UIControlStateNormal];
+            [egressButton setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
+            [sleepButton setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
+            // 设置底部滑动条
+            CGRect frame = CGRectMake(0, kMainScreenHeight - 4, kMainScreenWidth / 3, 4);
+            bottomView.frame = frame;
 
         }
         if (loadingView)
@@ -519,18 +522,6 @@ AppDelegate *appDelegate ;
     loadingView = [UIHelper addLoadingViewWithSuperView: self.view text:@"模式切换中，请等待..." ];
     [self.view addSubview:loadingView];
     
-    UIButton *homeButton = (UIButton *)[self.view viewWithTag:100];
-    UIButton *egressButton = (UIButton *)[self.view viewWithTag:101];
-    UIButton *sleepButton = (UIButton *)[self.view viewWithTag:102];
-    [homeButton setImage:[UIImage imageNamed:@"home1"] forState:(UIControlStateNormal)];
-    [egressButton setImage:[UIImage imageNamed:@"egress_down"] forState:(UIControlStateNormal)];
-    [sleepButton setImage:[UIImage imageNamed:@"sleep"] forState:(UIControlStateNormal)];
-    [homeButton setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
-    [egressButton setTitleColor:[UIColor colorWithRed:0.0/255 green:160.0/255 blue:226.0/255 alpha:1] forState:UIControlStateNormal];
-    [sleepButton setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
-    // 设置底部滑动条
-    CGRect frame = CGRectMake(kMainScreenWidth / 3, kMainScreenHeight - 4, kMainScreenWidth / 3, 4);
-    bottomView.frame = frame;
     NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
     __block NSError *error = nil;
     [dic setValue:@"setmode" forKey:@"opt"];
@@ -548,6 +539,18 @@ AppDelegate *appDelegate ;
         
         if([[NSString stringWithFormat:@"%@",[responseJSON objectForKey:@"result"]] isEqualToString: @"success"])//成功
         {
+            UIButton *homeButton = (UIButton *)[self.view viewWithTag:100];
+            UIButton *egressButton = (UIButton *)[self.view viewWithTag:101];
+            UIButton *sleepButton = (UIButton *)[self.view viewWithTag:102];
+            [homeButton setImage:[UIImage imageNamed:@"home1"] forState:(UIControlStateNormal)];
+            [egressButton setImage:[UIImage imageNamed:@"egress_down"] forState:(UIControlStateNormal)];
+            [sleepButton setImage:[UIImage imageNamed:@"sleep"] forState:(UIControlStateNormal)];
+            [homeButton setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
+            [egressButton setTitleColor:[UIColor colorWithRed:0.0/255 green:160.0/255 blue:226.0/255 alpha:1] forState:UIControlStateNormal];
+            [sleepButton setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
+            // 设置底部滑动条
+            CGRect frame = CGRectMake(kMainScreenWidth / 3, kMainScreenHeight - 4, kMainScreenWidth / 3, 4);
+            bottomView.frame = frame;
 
         }
         if (loadingView)
@@ -570,23 +573,13 @@ AppDelegate *appDelegate ;
 
 }
 
+
+
 - (void) sleepAction:(UIButton *)sender {
 
     loadingView = [UIHelper addLoadingViewWithSuperView: self.view text:@"模式切换中，请等待..." ];
     [self.view addSubview:loadingView];
     
-    UIButton *homeButton = (UIButton *)[self.view viewWithTag:100];
-    UIButton *egressButton = (UIButton *)[self.view viewWithTag:101];
-    UIButton *sleepButton = (UIButton *)[self.view viewWithTag:102];
-    [homeButton setImage:[UIImage imageNamed:@"home1"] forState:(UIControlStateNormal)];
-    [egressButton setImage:[UIImage imageNamed:@"egress"] forState:(UIControlStateNormal)];
-    [sleepButton setImage:[UIImage imageNamed:@"sleep-down"] forState:(UIControlStateNormal)];
-    [homeButton setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
-    [egressButton setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
-    [sleepButton setTitleColor:[UIColor colorWithRed:0.0/255 green:160.0/255 blue:226.0/255 alpha:1] forState:UIControlStateNormal];
-    // 设置底部滑动条
-    CGRect frame = CGRectMake(kMainScreenWidth * 2 / 3, kMainScreenHeight - 4, kMainScreenWidth / 3, 4);
-    bottomView.frame = frame;
     NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
     __block NSError *error = nil;
     [dic setValue:@"setmode" forKey:@"opt"];
@@ -604,6 +597,18 @@ AppDelegate *appDelegate ;
         
         if([[NSString stringWithFormat:@"%@",[responseJSON objectForKey:@"result"]] isEqualToString: @"success"])//成功
         {
+            UIButton *homeButton = (UIButton *)[self.view viewWithTag:100];
+            UIButton *egressButton = (UIButton *)[self.view viewWithTag:101];
+            UIButton *sleepButton = (UIButton *)[self.view viewWithTag:102];
+            [homeButton setImage:[UIImage imageNamed:@"home1"] forState:(UIControlStateNormal)];
+            [egressButton setImage:[UIImage imageNamed:@"egress"] forState:(UIControlStateNormal)];
+            [sleepButton setImage:[UIImage imageNamed:@"sleep-down"] forState:(UIControlStateNormal)];
+            [homeButton setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
+            [egressButton setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
+            [sleepButton setTitleColor:[UIColor colorWithRed:0.0/255 green:160.0/255 blue:226.0/255 alpha:1] forState:UIControlStateNormal];
+            // 设置底部滑动条
+            CGRect frame = CGRectMake(kMainScreenWidth * 2 / 3, kMainScreenHeight - 4, kMainScreenWidth / 3, 4);
+            bottomView.frame = frame;
 
 
         }
@@ -627,6 +632,32 @@ AppDelegate *appDelegate ;
 
 }
 
+- (void) modeChange:(UIButton *)sender {
+    
+    if(sender.tag == 100){
+        self.opType = @"在家";
+    }else if (sender.tag == 101){
+        self.opType = @"外出";
+    }else if (sender.tag == 102){
+        self.opType = @"睡眠";
+    }
+    
+    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:[NSString stringWithFormat:@"是否切换到“%@”模式",sender.titleLabel.text] message:nil delegate:self cancelButtonTitle:@"确定" otherButtonTitles:@"取消", nil];
+    [alert show];
+}
+-(void) alertView : (UIAlertView*)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    //delete user
+    if(buttonIndex ==0 ){
+        if([self.opType isEqualToString:@"在家"]){
+            [self homeAction:nil ];
+        }else if([self.opType isEqualToString:@"外出"]){
+            [self egressAction:nil ];
+        }else if([self.opType isEqualToString:@"睡眠"]){
+            [self sleepAction:nil ];
+        }
+    }
+}
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -684,4 +715,7 @@ AppDelegate *appDelegate ;
     }
     
 }
+
+
+
 @end
