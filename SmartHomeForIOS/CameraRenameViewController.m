@@ -18,6 +18,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    //2016 02 24 category
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(checkServerSessionOutOfTime) name:@"letuserlogout" object:nil];
+    
     self.cameraNameField.text = _cameraName;
     
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemSave target:self action:@selector(cameraNameSaved:)];

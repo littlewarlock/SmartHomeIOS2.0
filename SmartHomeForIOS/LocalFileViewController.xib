@@ -27,7 +27,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="cYJ-PS-NeS">
-                    <rect key="frame" x="0.0" y="0.0" width="320" height="519"/>
+                    <rect key="frame" x="0.0" y="11" width="320" height="508"/>
                     <animations/>
                     <color key="backgroundColor" red="0.94117647058823528" green="0.94117647058823528" blue="0.94117647058823528" alpha="1" colorSpace="calibratedRGB"/>
                     <connections>
@@ -57,7 +57,7 @@
                     </items>
                 </tabBar>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1CW-WC-M9B">
-                    <rect key="frame" x="0.0" y="0.0" width="320" height="519"/>
+                    <rect key="frame" x="0.0" y="11" width="320" height="508"/>
                     <animations/>
                     <connections>
                         <action selector="moreBarMiss:" destination="-1" eventType="touchUpInside" id="B1r-s0-nB3"/>
@@ -70,7 +70,7 @@
                 <constraint firstAttribute="trailing" secondItem="QTC-K6-oAQ" secondAttribute="trailing" id="5p3-pX-q5i"/>
                 <constraint firstItem="cYJ-PS-NeS" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="D7I-0Z-sy0"/>
                 <constraint firstItem="QTC-K6-oAQ" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="FSl-kJ-xbV"/>
-                <constraint firstItem="cYJ-PS-NeS" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="ITd-cH-iXh"/>
+                <constraint firstItem="cYJ-PS-NeS" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="11" id="ITd-cH-iXh"/>
                 <constraint firstAttribute="trailing" secondItem="1CW-WC-M9B" secondAttribute="trailing" id="M18-9k-lt9"/>
                 <constraint firstAttribute="bottom" secondItem="gzh-c1-j3a" secondAttribute="bottom" id="Mdi-i9-F02"/>
                 <constraint firstAttribute="trailing" secondItem="gzh-c1-j3a" secondAttribute="trailing" id="Myu-M7-2Y9"/>
@@ -80,7 +80,7 @@
                 <constraint firstAttribute="trailing" secondItem="cYJ-PS-NeS" secondAttribute="trailing" id="k7R-R9-BAF"/>
                 <constraint firstItem="gzh-c1-j3a" firstAttribute="top" secondItem="1CW-WC-M9B" secondAttribute="bottom" id="rYH-aX-FwS"/>
                 <constraint firstItem="gzh-c1-j3a" firstAttribute="top" secondItem="cYJ-PS-NeS" secondAttribute="bottom" id="rcL-uM-21p"/>
-                <constraint firstItem="1CW-WC-M9B" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="sJ2-f4-1vG"/>
+                <constraint firstItem="1CW-WC-M9B" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="11" id="sJ2-f4-1vG"/>
                 <constraint firstItem="1CW-WC-M9B" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="y4B-7j-yD1"/>
             </constraints>
             <point key="canvasLocation" x="438" y="280"/>

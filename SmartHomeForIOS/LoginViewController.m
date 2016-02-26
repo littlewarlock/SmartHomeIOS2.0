@@ -42,7 +42,7 @@
     [self.tvList setBackgroundColor:[UIColor colorWithRed:94.0/255 green:94.0/255 blue:94.0/255 alpha:0.0]];
     [self.tvSearch setTableFooterView:[[UIView alloc] initWithFrame:CGRectZero]];//设置表尾不显示，就不显示多余的横线
     [self.tvList setTableFooterView:[[UIView alloc] initWithFrame:CGRectZero]];//设置表尾不显示，就不显示多余的横线
-    
+    [self setupTvSearch];
     self.tvSearch.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tvSearch.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
     self.tvList.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -56,6 +56,8 @@
 //    {
 //        [self.tableView setLayoutMargins:UIEdgeInsetsZero];
 //    }
+    
+    self.nonNetView.hidden = YES;
     
     
     //设置本地文档按钮是否可见
@@ -152,6 +154,28 @@
     self.passwordView.layer.borderColor = [[UIColor whiteColor] CGColor];
 
 }
+
+- (void)setupTvSearch
+{
+    UILabel *la = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.tvSearch.bounds.size.width, 45)];
+    la.backgroundColor = [UIColor whiteColor];
+    la.textColor = [UIColor colorWithRed:0/255 green:153.0/255 blue:255.0/255 alpha:1.0];
+    la.font = [UIFont systemFontOfSize:18];
+    la.text = @"    搜索到的IP";
+//    la.textAlignment = NSTextAlignmentCenter;
+    
+    UIView *sepa = [[UIView alloc] initWithFrame:CGRectMake(0, 45,self.tvSearch.bounds.size.width + 100, 1)];
+    sepa.backgroundColor = [UIColor colorWithRed:0/255 green:153.0/255 blue:255.0/255 alpha:1.0];
+    [la addSubview:sepa];
+    
+    
+    
+    
+    
+    self.tvSearch.tableHeaderView = la;
+
+
+}
 //下拉列表按钮按下
 - (IBAction)listBtn:(UIButton *)sender {
     if (self.arrayIps1.count>0) {
@@ -195,6 +219,7 @@
 }
 
 //下面是发送的相关回调函数
+//login的广播回调主要处理点击搜索按钮后相关 handler的广播回调主要处理内网通过id查询并匹配ip相关
 -(BOOL)onUdpSocket:(AsyncUdpSocket *)sock didReceiveData:(NSData *)data withTag:(long)tag
           fromHost:(NSString *)host port:(UInt16)port{
     NSString* rData= [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
@@ -211,7 +236,7 @@
             [self.arrayIps2 addObject:dataDecodeAfter];
             [self.tvSearch reloadData];
         }
-    }else{
+    }else{//返回带“＝”时不显示＝以及后边的内容
         NSRange range  = [dataDecodeAfter rangeOfString:@"="];
         //self.textFieldIp.text = [searchedOrSavedAdressStr  substringToIndex:range.location];
         if(![self.arrayIps2 containsObject:[dataDecodeAfter  substringToIndex:range.location]]){
@@ -243,6 +268,10 @@
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:@"网络错误!" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] ;
     [alertView show];
 }
+- (IBAction)ConfirmNoNet:(id)sender {
+    
+    self.nonNetView.hidden = YES;
+}
 
 -(void)onUdpSocket:(AsyncUdpSocket *)sock didNotReceiveDataWithTag:(long)tag dueToError:(NSError *)error{
     //NSLog(@"didNotReceiveDataWithTag----");
@@ -252,8 +281,9 @@
         self.loadingView = nil;
     }
     if (!self.arrayIps2 || self.arrayIps2.count<=0) {
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:@"无搜索结果!" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] ;
-        [alertView show];
+        
+        self.nonNetView.hidden = false;
+
     }
 }
 
@@ -277,7 +307,7 @@
         [self.loadingView removeFromSuperview];
         self.loadingView = nil;
     }
-    self.postLoginIp = loginHandler.postLoginIp;
+    self.postLoginIpOrId = loginHandler.postLoginIp;
     [self loginAction :nil];
     //NSLog(@"handlerDidReceiveData----");
 }
@@ -299,7 +329,7 @@
         self.loadingView = nil;
     }
     //内网搜索无结果采用外网登录
-    if(![self isIP:self.postLoginIp]){
+    if(![self isIP:self.postLoginIpOrId]){
         self.isConnetNetServer =YES;
         [self loginAction:nil];
         self.isConnetNetServer =NO;
@@ -423,28 +453,25 @@
         cell.layer.borderWidth = 0;
         IpInfo *selectedIp = self.arrayIps1[indexPath.row];
         
-        //自定义label的坐标
-        CGFloat x = self.textFieldIp.frame.origin.x;
-        UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(x, 10,160, 30)];
+        //label
+        UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(47,10,160, 30)];
         label.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         [label setText:selectedIp.ipAddress];
         label.font = [UIFont systemFontOfSize:15];
         label.textColor = [UIColor blackColor];
-        label.textAlignment = NSTextAlignmentCenter;
+        label.textAlignment = NSTextAlignmentLeft;
         label.backgroundColor = [UIColor clearColor];
         [cell.contentView addSubview:label];
-        //
-        /*
-        cell.textLabel.text = selectedIp.ipAddress;
-        cell.textLabel.font = [UIFont systemFontOfSize: 20.0];*/
-        CGFloat accessoryButtonX = self.listButton.frame.origin.x;
+       
+        //accessoryButton
+        CGFloat accessoryButtonX = self.tvList.frame.size.width - 52;
         UIButton *accessoryButton = [UIButton buttonWithType:UIButtonTypeCustom];
         accessoryButton.frame = CGRectMake(accessoryButtonX,15,20,20);
         [accessoryButton setImage:[UIImage imageNamed:@"clear"] forState:UIControlStateNormal];
         [accessoryButton addTarget:self action:@selector(accessoryButtonIsTapped:event:)
                   forControlEvents:UIControlEventTouchUpInside];
-       // cell.accessoryView = accessoryButton;
         [cell.contentView addSubview:accessoryButton];
+        
         cell.backgroundColor = [UIColor whiteColor];
         return cell;
     }else{
@@ -457,11 +484,10 @@
                     reuseIdentifier:cellId];
         cell.layer.borderWidth = 0;
         CGFloat x = self.textFieldIp.frame.origin.x;
-        UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(x, 10,160, 30)];
+        UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(19, 10,cell.frame.size.width, 30)];
         label.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         label.font = [UIFont systemFontOfSize:15];
         label.textColor = [UIColor blackColor];
-        label.textAlignment = NSTextAlignmentCenter;
         label.backgroundColor = [UIColor clearColor];
         
         NSRange range  = [self.arrayIps2[indexPath.row] rangeOfString:@"="];
@@ -593,21 +619,27 @@
     }
     
     self.loadingView = [self addLoadingViewWithSuperView:self.view text:[NSString stringWithFormat: @"正在登录%@",self.textFieldIp.text] ];
-    if(![self isIP:self.postLoginIp] && !self.isConnetNetServer ){//id mac 登录 转成ip
+    if(![self isIP:self.postLoginIpOrId] && !self.isConnetNetServer ){//id mac 登录 转成ip
         [self.arrayIps2 removeAllObjects];
         loginHandler.udpSocket = udpSocket;
-        loginHandler.postLoginIp = self.postLoginIp;
+        loginHandler.postLoginIp = self.postLoginIpOrId;
         [loginHandler sendSearchBroadcast: @""];//发送广播
         return;
     }
-    
+    NSDate *currentDate = [NSDate date];//获取当前时间，日期
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"YYYY-MM-dd hh:mm:ss"];
+    NSString *dateString = [dateFormatter stringFromDate:currentDate];
+    NSLog(@"dateString===========%@",dateString);
     NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
     __block NSError *error = nil;
     [dic setValue:self.userNameField.text forKey:@"uname"];
+    [dic setValue:dateString forKey:@"utime"];
+    
     [dic setValue:self.userPasswordField.text forKey:@"upasswd"];
-    NSString * requestHost = [NSString stringWithFormat:@"%@:%@",self.postLoginIp,REQUEST_PORT];
+    NSString * requestHost = [NSString stringWithFormat:@"%@:%@",self.postLoginIpOrId,REQUEST_PORT];
     if (self.isConnetNetServer) {
-        requestHost = [NSString stringWithFormat:@"%@%@%@",Server_URL,@"/find/",self.postLoginIp];
+        requestHost = [NSString stringWithFormat:@"%@%@%@",Server_URL,@"/find/",self.postLoginIpOrId];
     }
     NSMutableDictionary *header = [[NSMutableDictionary alloc] init];
     [header setValue:@"text/xml; charset=utf-8" forKey:@"Content-Type"];
@@ -811,13 +843,13 @@
     if([searchedOrSavedAdressStr containsString:@"="] && ![self isIP:searchedOrSavedAdressStr]){//非ip也非id 转成ip
         NSRange range  = [searchedOrSavedAdressStr rangeOfString:@"="];
         self.textFieldIp.text = [searchedOrSavedAdressStr  substringToIndex:range.location];
-        self.postLoginIp =[searchedOrSavedAdressStr  substringToIndex:range.location];
+        self.postLoginIpOrId =[searchedOrSavedAdressStr  substringToIndex:range.location];
     }else if(![searchedOrSavedAdressStr containsString:@"="] && [self isIP:searchedOrSavedAdressStr]){//ip 登录
         self.textFieldIp.text = searchedOrSavedAdressStr;
-        self.postLoginIp =searchedOrSavedAdressStr;
+        self.postLoginIpOrId =searchedOrSavedAdressStr;
     }else if(![searchedOrSavedAdressStr containsString:@"="] && ![self isIP:searchedOrSavedAdressStr]){//id 登录 转成ip
         self.textFieldIp.text = searchedOrSavedAdressStr;
-        self.postLoginIp =searchedOrSavedAdressStr;
+        self.postLoginIpOrId =searchedOrSavedAdressStr;
     }
     
 }

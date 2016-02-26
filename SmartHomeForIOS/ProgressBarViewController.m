@@ -261,14 +261,9 @@
 
 #pragma mark clearProgressBarAction 清除所有进度条方法
 - (IBAction)clearProgressBarAction:(id)sender {
-    [self.uploadScrollView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
-    [self.downloadScrollView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
-    [self.uploadTaskDic removeAllObjects];
-    [self.downloadTaskDic removeAllObjects];
-    [self.uploadProgressBarDic removeAllObjects];
-    [self.downloadProgressBarDic removeAllObjects];
-    [[NSOperationDownloadQueue sharedInstance] cancelAllOperations];
-    [[NSOperationUploadQueue sharedInstance] cancelAllOperations];
+    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"提示" message:@"确定删除所有的任务吗？" delegate:self cancelButtonTitle:@"确定"  otherButtonTitles: @"取消",nil];
+    [alert show];
+
 }
 
 #pragma mark 设置progressView的TaskInfo对象
@@ -349,5 +344,19 @@
         [self addProgressView:progressView];
     }
 }
-
+#pragma mark -
+#pragma mark alertView的委托方法
+-(void) alertView:(UIAlertView*)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex==0) {
+        [self.uploadScrollView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+        [self.downloadScrollView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+        [self.uploadTaskDic removeAllObjects];
+        [self.downloadTaskDic removeAllObjects];
+        [self.uploadProgressBarDic removeAllObjects];
+        [self.downloadProgressBarDic removeAllObjects];
+        [[NSOperationDownloadQueue sharedInstance] cancelAllOperations];
+        [[NSOperationUploadQueue sharedInstance] cancelAllOperations];
+    }
+}
 @end

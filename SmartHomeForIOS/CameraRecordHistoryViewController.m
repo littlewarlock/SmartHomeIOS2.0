@@ -52,8 +52,15 @@
 @property Boolean isEditCollectionViewCell;
 @property UIToolbar *toolbarForDelete;
 @property Boolean isCollectionAllSelected;
+//
+@property UIBarButtonItem *selectAll;
+//2016 02 26
+@property NSTimer *serverSessionTimer;
 
 @end
+
+
+
 
 static NSString *cellID = @"cameraRecordHistoryCell";
 static NSString *headerId = @"headerId";
@@ -64,6 +71,10 @@ static NSString *footerId = @"footerId";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    //2016 02 24 category
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(checkServerSessionOutOfTime) name:@"letuserlogout" object:nil];
+    
     NSLog(@"viewDidLoad");
     //fullscreen
     self.isFullScreen = NO;
@@ -89,12 +100,18 @@ static NSString *footerId = @"footerId";
     [self doLayoutForOrientation:currentOrientation];
     
     //2016 02 16
-    self.toolbarForDelete = [[UIToolbar alloc]initWithFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height - 54, [UIScreen mainScreen].bounds.size.width, 54)];
-    UIBarButtonItem *selectAll = [[UIBarButtonItem alloc]initWithTitle:@"全选" style:UIBarButtonItemStylePlain target:self action:@selector(selectAllCell:)];
+    self.toolbarForDelete = [[UIToolbar alloc]initWithFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height - 50, [UIScreen mainScreen].bounds.size.width, 50)];
+    [self.toolbarForDelete setAutoresizesSubviews:YES];
+    
+    self.selectAll = [[UIBarButtonItem alloc]initWithTitle:@"全选" style:UIBarButtonItemStylePlain target:self action:@selector(selectAllCell:)];
     UIBarButtonItem *delete = [[UIBarButtonItem alloc]initWithTitle:@"删除" style:UIBarButtonItemStylePlain target:self action:@selector(deleteCell)];
-    UIBarButtonItem *left=[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:self action:nil];
-    UIBarButtonItem *right=[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:self action:nil];
-    [self.toolbarForDelete setItems:  [NSArray arrayWithObjects:left,selectAll,left,delete,right, nil]];
+    UIBarButtonItem *fixedSpace=[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:self action:nil];
+    UIBarButtonItem *flexibleSpace=[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:self action:nil];
+    [self.toolbarForDelete setItems:  [NSArray arrayWithObjects:fixedSpace,self.selectAll,flexibleSpace,delete,fixedSpace, nil]];
+    //
+//    [self.toolbarForDelete setBarStyle:UIBarStyleBlackTranslucent];
+    [self.toolbarForDelete setBarTintColor:[UIColor colorWithRed:240/255.0 green:240/255.0 blue:240/255.0 alpha:1.0]];
+    
     
     [self.view addSubview:self.toolbarForDelete];
     [self.toolbarForDelete setHidden: YES];
@@ -289,7 +306,9 @@ static NSString *footerId = @"footerId";
 
 - (void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
-
+    
+    [self.serverSessionTimer invalidate];
+    
     if (self.isFullScreen) {
         [self closeKXVC];
     }
@@ -507,14 +526,14 @@ static NSString *footerId = @"footerId";
     
     //2016 02 16
     if (self.isEditCollectionViewCell) {
-        [cell.imageForMulSelect setImage:[UIImage imageNamed:@"check"]];
+        [cell.imageForMulSelect setImage:[UIImage new]];
         NSLog(@"cell notx selected");
         for (NSIndexPath *tempIndexPath in [self.collectionView indexPathsForSelectedItems]) {
             NSLog(@"indexPath====%ld===%ld",(long)indexPath.row,(long)indexPath.section);
             NSLog(@"del == %@",self.doubleArrayUrl[indexPath.section][indexPath.row]);
             if ([tempIndexPath isEqual:indexPath]) {
                 NSLog(@"cell selected");
-                [cell.imageForMulSelect setImage:[UIImage imageNamed:@"check-down"]];
+                [cell.imageForMulSelect setImage:[UIImage imageNamed:@"choose"]];
             }
         }
     }else{
@@ -563,7 +582,7 @@ static NSString *footerId = @"footerId";
     if (self.isEditCollectionViewCell) {
         NSLog(@"select while sortedByMegId");
         CameraRecordHistoryViewCell *cell =  [self.collectionView cellForItemAtIndexPath:indexPath];
-        [cell.imageForMulSelect setImage:[UIImage imageNamed:@"check-down"]];
+        [cell.imageForMulSelect setImage:[UIImage imageNamed:@"choose"]];
         return;
     }
     
@@ -629,6 +648,10 @@ static NSString *footerId = @"footerId";
         [self.kxvc removeFromParentViewController];
         // 2015 12 23 hgc ended
     }
+    //2016 02 26
+    self.serverSessionTimer = [NSTimer scheduledTimerWithTimeInterval:600.0f target:self selector:@selector(serverSessionRefresh) userInfo:nil repeats:YES];
+    [self.serverSessionTimer fire];
+    //
     self.kxvc = [KxMovieViewController movieViewControllerWithContentPath:_doubleArrayUrl[section][row] parameters:parameters];
 //    self.kxvc = [KxMovieViewController movieViewControllerWithContentPath:stream parameters:parameters];
 //    kxvc set
@@ -721,6 +744,8 @@ static NSString *footerId = @"footerId";
 
 - (void)closeKXVC{
     NSLog(@"closeKXVC");
+    //2016 02 26
+    [self.serverSessionTimer invalidate];
     
     if (self.isFullScreen){
         //status bar
@@ -804,8 +829,7 @@ static NSString *footerId = @"footerId";
     }
 }
 
-- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)
-toInterfaceOrientation duration:(NSTimeInterval)duration {
+- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation) toInterfaceOrientation duration:(NSTimeInterval)duration {
     [self doLayoutForOrientation:toInterfaceOrientation];
 }
 
@@ -985,6 +1009,7 @@ toInterfaceOrientation duration:(NSTimeInterval)duration {
     [self.bottomView setHidden:NO];
     [self.toolbarForDelete setHidden:YES];
     self.isCollectionAllSelected = NO;
+    [self.selectAll setTitle:@"全选"];
 }
 
 - (void)editCollectionViewCell{
@@ -1008,6 +1033,13 @@ toInterfaceOrientation duration:(NSTimeInterval)duration {
         [self.navigationItem.rightBarButtonItem setTitle:@"取消"];
         [self tabButtonHidden];
         self.collectionView.allowsMultipleSelection = YES;
+//deselect
+        //2016 02 22
+        for (NSIndexPath *indexPath in [self.collectionView indexPathsForSelectedItems]) {
+            NSLog(@"deselect indexPath====%ld===%ld",(long)indexPath.row,(long)indexPath.section);
+            [self.collectionView deselectItemAtIndexPath:indexPath animated:YES];
+        }
+
         //
         for (int i = 0; i< self.collectionView.numberOfSections; i++) {
             NSLog(@"section===%d",i);
@@ -1016,14 +1048,9 @@ toInterfaceOrientation duration:(NSTimeInterval)duration {
                 NSLog(@"row==%d",j);
                 NSIndexPath *indexPath = [NSIndexPath indexPathForRow:j inSection:i];
                 CameraRecordHistoryViewCell *cell =  [self.collectionView cellForItemAtIndexPath:indexPath];
-                [cell.imageForMulSelect setImage:[UIImage imageNamed:@"check"]];
+                [cell.imageForMulSelect setImage:[UIImage new]];
             }
         }
-        
-//        for (CameraRecordHistoryViewCell *cell in self.collectionView.visibleCells) {
-//            NSLog(@"something");
-//            [cell.imageForMulSelect setImage:[UIImage imageNamed:@"check"]];
-//        }
     }
     self.isEditCollectionViewCell = !self.isEditCollectionViewCell;
 }
@@ -1032,7 +1059,7 @@ toInterfaceOrientation duration:(NSTimeInterval)duration {
 - (void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath{
     if (self.isEditCollectionViewCell) {
         CameraRecordHistoryViewCell *cell =  [self.collectionView cellForItemAtIndexPath:indexPath];
-        [cell.imageForMulSelect setImage:[UIImage imageNamed:@"check"]];
+        [cell.imageForMulSelect setImage:[UIImage new]];
     }
 }
 
@@ -1060,6 +1087,7 @@ toInterfaceOrientation duration:(NSTimeInterval)duration {
         //取消全选
         self.isCollectionAllSelected = !self.isCollectionAllSelected;
 //        [sender setTitle:@"全选"];
+        [self.selectAll setTitle:@"全选"];
         for (int i = 0; i< self.collectionView.numberOfSections; i++) {
             NSLog(@"section===%d",i);
             NSLog(@"rows==%ld",(long)[self.collectionView numberOfItemsInSection:i]);
@@ -1069,13 +1097,14 @@ toInterfaceOrientation duration:(NSTimeInterval)duration {
                 //                [self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
                 [self.collectionView deselectItemAtIndexPath:indexPath animated:YES];
                 CameraRecordHistoryViewCell *cell =  [self.collectionView cellForItemAtIndexPath:indexPath];
-                [cell.imageForMulSelect setImage:[UIImage imageNamed:@"check"]];
+                [cell.imageForMulSelect setImage:[UIImage new]];
             }
         }
     }else{
         //全选
         self.isCollectionAllSelected = !self.isCollectionAllSelected;
 //        [sender setTitle:@"取消"];
+        [self.selectAll setTitle:@"取消全选"];
         for (int i = 0; i< self.collectionView.numberOfSections; i++) {
             NSLog(@"section===%d",i);
             NSLog(@"rows==%ld",(long)[self.collectionView numberOfItemsInSection:i]);
@@ -1084,7 +1113,7 @@ toInterfaceOrientation duration:(NSTimeInterval)duration {
                 indexPath = [NSIndexPath indexPathForRow:j inSection:i];
                 [self.collectionView selectItemAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
                 CameraRecordHistoryViewCell *cell =  [self.collectionView cellForItemAtIndexPath:indexPath];
-                [cell.imageForMulSelect setImage:[UIImage imageNamed:@"check-down"]];
+                [cell.imageForMulSelect setImage:[UIImage imageNamed:@"choose"]];
             }
         }
     }
@@ -1094,30 +1123,69 @@ toInterfaceOrientation duration:(NSTimeInterval)duration {
 - (void)deleteCell{
     NSLog(@"deleteCell");
     NSLog(@"del.....");
-    NSIndexPath *indexPath;
-    NSMutableArray *array = [[NSMutableArray alloc]init];
-    for (indexPath in [self.collectionView indexPathsForSelectedItems]) {
-        NSLog(@"indexPath====%ld===%ld",(long)indexPath.row,(long)indexPath.section);
-        NSLog(@"del == %@",self.doubleArrayUrl[indexPath.section][indexPath.row]);
-        [array addObject:self.doubleArrayUrl[indexPath.section][indexPath.row]];
-    }
-    NSLog(@"del array==%@",array);
-//    [DeviceNetworkInterface delAlarmMsgWithMsgIds:array withBlock:^(NSString *result, NSString *message, NSError *error) {
-//        if (!error) {
-//            if ([result isEqualToString:@"success"]) {
-//                NSLog(@"success");
-//                //tableview delete
-//                
-//                [self refreshData];
-//                
-//            }else{
-//                NSLog(@"false");
-//            }
-//        }
-//        else{
-//            NSLog(@"delAlarmMsgWithMsgIds error");
-//        }
-//    }];
+    
+    UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"文件删除"
+                                 message:@"文件删除后将不可恢复。确定要进行删除吗？"
+                                 preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel
+                                      handler:^(UIAlertAction * action) {
+                                          return;
+                                      }];
+    UIAlertAction* commitAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        //
+        NSIndexPath *indexPath;
+        NSMutableArray *array = [[NSMutableArray alloc]init];
+        for (indexPath in [self.collectionView indexPathsForSelectedItems]) {
+            NSLog(@"indexPath====%ld===%ld",(long)indexPath.row,(long)indexPath.section);
+            NSLog(@"del == %@",self.doubleArrayUrl[indexPath.section][indexPath.row]);
+            [array addObject:self.doubleArrayUrl[indexPath.section][indexPath.row]];
+            
+            //        NSMutableArray *temp = self.doubleArrayUrl[indexPath.section];
+            //        [temp removeObject:temp[indexPath.row]];
+            //        //
+            //        NSMutableArray *temp1 = self.testArray[indexPath.section];
+            //        [temp1 removeObject:temp1[indexPath.row]];
+        }
+        //tableview delete
+        //    [self.collectionView deleteItemsAtIndexPaths:[self.collectionView indexPathsForSelectedItems]];
+        
+        NSLog(@"del array==%@",array);
+        //
+        //server delete
+        //
+        [DeviceNetworkInterface delHistoryRecordSnapshotWithPaths:array withBlock:^(NSString *result, NSString *message, NSError *error) {
+            if (!error) {
+                if ([result isEqualToString:@"success"]) {
+                    NSLog(@"success");
+                    
+                    //get data
+                    if (self.isVideoPressing) {
+                        [self loadData];
+                    }else if (self.isSnapshotPressing){
+                        [self loadDataForSnapshot];
+                    }else if (self.isModeVideoPressing){
+                        [self loadDataForModeVideo];
+                    }
+                    
+                }else{
+                    NSLog(@"false");
+                    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"删除文件失败" message:message delegate:self
+                                                         cancelButtonTitle:@"OK" otherButtonTitles: nil];
+                    [alert show];
+                }
+            }
+            else{
+                NSLog(@"delAlarmMsgWithMsgIds error");
+            }
+        }];
+    }];
+    [alert addAction:defaultAction];
+    [alert addAction:commitAction];
+    [self presentViewController:alert animated:YES completion:nil];
+    
+    
+    
+    //
 }
 
 @end

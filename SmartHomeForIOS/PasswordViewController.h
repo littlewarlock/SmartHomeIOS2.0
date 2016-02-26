@@ -15,6 +15,7 @@
 
 @property NSString *passwordOldOriginal;
 @property (weak, nonatomic) NSString *userName;
+@property (weak, nonatomic) IBOutlet UIButton *confirmButton;
 
 @property (weak, nonatomic) IBOutlet UITextField *passwordOld;
 

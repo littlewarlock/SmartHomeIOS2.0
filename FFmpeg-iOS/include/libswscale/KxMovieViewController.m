@@ -557,7 +557,7 @@ _messageLabel.hidden = YES;
         [_activityIndicatorView startAnimating];
     }
    
-    NSLog(@"sdfsdkfsldjkflklkhello");
+    NSLog(@"hgc kxmovieViewC appear");
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(applicationWillResignActive:)
                                                  name:UIApplicationWillResignActiveNotification
@@ -565,7 +565,8 @@ _messageLabel.hidden = YES;
 }
 
 - (void) viewWillDisappear:(BOOL)animated
-{    
+{
+    NSLog(@"hgc kxmovieViewC disappear");
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     
     [super viewWillDisappear:animated];
@@ -717,6 +718,11 @@ _messageLabel.hidden = YES;
     [self enableAudio:NO];
     [self updatePlayButton];
     LoggerStream(1, @"pause movie");
+    //2016 02 26
+    if (self.isRTSPMovie) {
+        [self awakeFromLocking];
+    }
+    
 }
 
 - (void) setMoviePosition: (CGFloat) position

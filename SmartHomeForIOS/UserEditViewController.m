@@ -45,7 +45,7 @@ static NSString * UserCell = @"UserCell";
     [self.tableView setTableFooterView:[[UIView alloc] initWithFrame:CGRectZero]];//设置表尾不显示，就不显示多余的横线    self.tableView.allowsSelection = NO;
     [self.tableView setSeparatorInset:UIEdgeInsetsZero]  ;
     [self.tableView registerClass:[UserEditCell class] forCellReuseIdentifier:UserCell];
-    self.tableView.rowHeight =40;
+    self.tableView.rowHeight =48;
     UINib *nib = [UINib nibWithNibName:@"UserEditCell" bundle:nil];
     [self.tableView registerNib:nib forCellReuseIdentifier:UserCell];
     UIEdgeInsets contentInset = self.tableView.contentInset;

@@ -327,7 +327,6 @@ AppDelegate *appDelegate ;
         case 1:{
             CloudFileViewController *cloudView = [[CloudFileViewController alloc]initWithNibName:@"CloudFileViewController" bundle:nil];
             cloudView.isShowFile =YES;
-            cloudView.isServerFile = YES;
             cloudView.isInSharedFolder = NO;
             cloudView.cpath =@"/";
             [self.navigationController pushViewController:cloudView animated:YES];
@@ -497,6 +496,9 @@ AppDelegate *appDelegate ;
             CGRect frame = CGRectMake(0, kMainScreenHeight - 4, kMainScreenWidth / 3, 4);
             bottomView.frame = frame;
 
+        }else{
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:@"网络错误" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] ;
+            [alert show];
         }
         if (loadingView)
         {
@@ -552,6 +554,9 @@ AppDelegate *appDelegate ;
             CGRect frame = CGRectMake(kMainScreenWidth / 3, kMainScreenHeight - 4, kMainScreenWidth / 3, 4);
             bottomView.frame = frame;
 
+        }else{
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:@"网络错误" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] ;
+            [alert show];
         }
         if (loadingView)
         {
@@ -572,8 +577,6 @@ AppDelegate *appDelegate ;
     [engine enqueueOperation:op];
 
 }
-
-
 
 - (void) sleepAction:(UIButton *)sender {
 
@@ -611,6 +614,9 @@ AppDelegate *appDelegate ;
             bottomView.frame = frame;
 
 
+        }else{
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:@"网络错误" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] ;
+            [alert show];
         }
         if (loadingView)
         {

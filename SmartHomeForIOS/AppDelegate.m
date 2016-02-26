@@ -29,6 +29,7 @@
 #import "NSOperationDownloadQueue.h"
 #import <CoreLocation/CoreLocation.h>
 #import "CameraTestBase64Code.h"
+#import<SystemConfiguration/SCNetworkReachability.h>
 
 // 2016 01 21
 #define definedAlarmType01      @"移动侦测报警"
@@ -47,6 +48,7 @@
 
 @implementation AppDelegate
 CLLocationManager * locationManager;
+
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
@@ -119,18 +121,49 @@ CLLocationManager * locationManager;
 //    [testObject setObject:@"bar" forKey:@"foo"];
 //    [testObject save];
     
-    //创建avController，进行搜索
-    CGUpnpAvController *avCtrl = [[CGUpnpAvController alloc] init];
-    avCtrl.delegate = self;
-    self.avCtrl = avCtrl;
-    [self.avCtrl search];
+    //如果联网，创建avController，进行搜索
+    if ([AppDelegate connectedToNetwork]) {
+        
+        CGUpnpAvController *avCtrl = [[CGUpnpAvController alloc] init];
+        avCtrl.delegate = self;
+        self.avCtrl = avCtrl;
+        [self.avCtrl search];
+    }
     
     return YES;
+}
+//判断设备是否联网
++ (BOOL)connectedToNetwork{
+    
+    //创建零地址，0.0.0.0的地址表示查询本机的网络连接状态
+    struct sockaddr_storage zeroAddress;
+    
+    bzero(&zeroAddress, sizeof(zeroAddress));
+    zeroAddress.ss_len = sizeof(zeroAddress);
+    zeroAddress.ss_family = AF_INET;
+    
+    // Recover reachability flags
+    SCNetworkReachabilityRef defaultRouteReachability = SCNetworkReachabilityCreateWithAddress(NULL, (struct sockaddr *)&zeroAddress);
+    SCNetworkReachabilityFlags flags;
+    
+    //获得连接的标志
+    BOOL didRetrieveFlags = SCNetworkReachabilityGetFlags(defaultRouteReachability, &flags);
+    CFRelease(defaultRouteReachability);
+    
+    //如果不能获取连接标志，则不能连接网络，直接返回
+    if (!didRetrieveFlags)
+    {
+        return NO;
+    }
+    //根据获得的连接标志进行判断
+    BOOL isReachable = flags & kSCNetworkFlagsReachable;
+    BOOL needsConnection = flags & kSCNetworkFlagsConnectionRequired;
+    return (isReachable && !needsConnection) ? YES : NO;
 }
 
 #pragma mark - CGUpnpControlPointDelegate
 - (void)controlPoint:(CGUpnpControlPoint *)controlPoint deviceUpdated:(NSString *)deviceUdn {
-    NSLog(@"deviceUdn：%@", deviceUdn);
+
     
     self.dataSource =  [((CGUpnpAvController*)controlPoint) renderers];
     

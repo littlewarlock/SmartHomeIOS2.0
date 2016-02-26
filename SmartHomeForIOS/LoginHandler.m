@@ -28,6 +28,7 @@
 }
 
 //下面是发送的相关回调函数
+//login的广播回调主要处理点击搜索按钮后相关 handler的广播回调主要处理内网通过id查询并匹配ip相关
 -(BOOL)onUdpSocket:(AsyncUdpSocket *)sock didReceiveData:(NSData *)data withTag:(long)tag
           fromHost:(NSString *)host port:(UInt16)port{
     NSString* rData= [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];

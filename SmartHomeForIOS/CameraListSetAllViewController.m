@@ -30,6 +30,8 @@ NSString *stringAlarmValue;
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     
+    //2016 02 24 category
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(checkServerSessionOutOfTime) name:@"letuserlogout" object:nil];
     self.navigationItem.title = @"全局设置";
     
     //取得摄像头全局设置数据
@@ -92,20 +94,27 @@ NSString *stringAlarmValue;
              }else{
                  self.alarmByte.text = alarmVolume;
              }
-             
-             self.segmentRecordSet.selectedSegmentIndex = recLoop.integerValue;
-             self.segmentAlarmSet.selectedSegmentIndex = alarmLoop.integerValue;
-             
 //             [self.segmentAlarmSet setSelectedSegmentIndex:recLoop.integerValue];
-
-             stringRecordValue = recLoop;
-             stringAlarmValue = alarmLoop;
          }
          else{
              NSLog(@"getDeviceAllSetting error");
-             UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"网络错误" message:@"数据取得失败，请检查网络设置" delegate:self cancelButtonTitle:@"确认" otherButtonTitles: nil];
+             UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"网络错误" message:@"请您检查网络设置" delegate:self cancelButtonTitle:@"确认" otherButtonTitles: nil];
              [alert show];
          }
+         //
+         if (recLoop) {
+             stringRecordValue = recLoop;
+             self.segmentRecordSet.selectedSegmentIndex = recLoop.integerValue;
+         }else{
+             stringRecordValue = toggleOFF;
+         }
+         if (alarmLoop) {
+             stringAlarmValue = alarmLoop;
+             self.segmentAlarmSet.selectedSegmentIndex = alarmLoop.integerValue;
+         }else{
+             stringAlarmValue = toggleOFF;
+         }
+         //
          [self webViewDidFinishLoad];
          [self.navigationItem.rightBarButtonItem setEnabled:YES];
      }];
@@ -123,7 +132,17 @@ NSString *stringAlarmValue;
     //self.recondByte.text
     if ([DeviceCurrentVariable isPureFloat:self.recondByte.text]) {
         NSLog(@"isPureFloat");
+        if (self.recondByte.text.doubleValue < 0.1) {
+            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"录像存储空间" message:@"存储空间不应小于0.1GB，请重新输入" delegate:self cancelButtonTitle:@"确认" otherButtonTitles: nil];
+            [alert show];
+            return;
+        }
     }else if ([DeviceCurrentVariable isPureInt:self.recondByte.text]){
+        if (self.recondByte.text.intValue <= 0) {
+            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"录像存储空间" message:@"存储空间不应小于0.1GB，请重新输入" delegate:self cancelButtonTitle:@"确认" otherButtonTitles: nil];
+            [alert show];
+            return;
+        }
         NSLog(@"isPureInt");
     }else{
         UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"录像存储空间" message:@"只能输入浮点数或者整数，请重新输入" delegate:self cancelButtonTitle:@"确认" otherButtonTitles: nil];
@@ -133,8 +152,19 @@ NSString *stringAlarmValue;
     //self.recondByte.text
     if ([DeviceCurrentVariable isPureFloat:self.alarmByte.text]) {
         NSLog(@"isPureFloat");
+        if (self.alarmByte.text.doubleValue < 0.1) {
+            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"报警存储空间" message:@"存储空间不应小于0.1GB，请重新输入" delegate:self cancelButtonTitle:@"确认" otherButtonTitles: nil];
+            [alert show];
+            return;
+        }
+        
     }else if ([DeviceCurrentVariable isPureInt:self.alarmByte.text]){
         NSLog(@"isPureInt");
+        if (self.alarmByte.text.intValue <= 0) {
+            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"报警存储空间" message:@"存储空间不应小于0.1GB，请重新输入" delegate:self cancelButtonTitle:@"确认" otherButtonTitles: nil];
+            [alert show];
+            return;
+        }
     }else{
         UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"报警存储空间" message:@"只能输入浮点数或者整数，请重新输入" delegate:self cancelButtonTitle:@"确认" otherButtonTitles: nil];
         [alert show];
@@ -143,7 +173,7 @@ NSString *stringAlarmValue;
     //
     _recordToggleValue = stringRecordValue;
     _alarmToggleValue = stringAlarmValue;
-    _recordValue =  self.recondByte.text;
+    _recordValue = [NSString stringWithFormat:@"%f",self.recondByte.text.doubleValue] ;
     _alarmValue = self.alarmByte.text;
     NSLog(@"1_recordValue==%@",_recordValue);
     NSLog(@"2_recordToggleValue==%@",_recordToggleValue);
@@ -176,6 +206,8 @@ NSString *stringAlarmValue;
 
         else{
             NSLog(@"getDeviceAllSetting error");
+            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"网络错误" message:@"请您检查网络设置" delegate:self cancelButtonTitle:@"确认" otherButtonTitles: nil];
+            [alert show];
         }
         //2016 01 29
         [self.navigationItem.rightBarButtonItem setEnabled:YES];

@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="8191" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9060" systemVersion="15B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9051"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="AppNameAndIconCell"/>
@@ -11,13 +12,16 @@
             <rect key="frame" x="0.0" y="0.0" width="313" height="84"/>
             <autoresizingMask key="autoresizingMask"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" restorationIdentifier="CellTableIdentifier" tableViewCell="aqB-NM-yhZ" id="4YJ-Aq-LRe">
-                <rect key="frame" x="0.0" y="0.0" width="313" height="83"/>
+                <rect key="frame" x="0.0" y="0.0" width="313" height="83.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="3cq-iq-zT1">
-                        <rect key="frame" x="14" y="26" width="36" height="31"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3cq-iq-zT1">
+                        <rect key="frame" x="19" y="21" width="40" height="40"/>
                         <animations/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="40" id="Jp6-Ki-zlS"/>
+                            <constraint firstAttribute="height" constant="40" id="jkZ-9D-qxW"/>
+                        </constraints>
                         <state key="normal">
                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                         </state>
@@ -25,32 +29,54 @@
                             <action selector="chooseAppAction:" destination="aqB-NM-yhZ" eventType="touchUpInside" id="JKc-jH-9yq"/>
                         </connections>
                     </button>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="E1b-7c-MaB">
-                        <rect key="frame" x="96" y="31" width="142" height="22"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="E1b-7c-MaB">
+                        <rect key="frame" x="78" y="32" width="150" height="20.5"/>
                         <animations/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="150" id="3tj-rs-qpe"/>
+                            <constraint firstAttribute="height" constant="20.5" id="JDu-wQ-xa1"/>
+                        </constraints>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" id="awk-Kl-9g0">
-                        <rect key="frame" x="246" y="26" width="51" height="31"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="awk-Kl-9g0">
+                        <rect key="frame" x="245" y="26" width="51" height="31"/>
                         <animations/>
                         <connections>
                             <action selector="enableDisableAppAction:" destination="aqB-NM-yhZ" eventType="valueChanged" id="sdL-pg-Med"/>
                         </connections>
                     </switch>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6Os-vf-FWl">
+                        <rect key="frame" x="0.0" y="83.5" width="313" height="1"/>
+                        <animations/>
+                        <color key="backgroundColor" red="0.7843137255" green="0.78039215689999997" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="1" id="KDU-GF-QsU"/>
+                        </constraints>
+                    </view>
                 </subviews>
                 <animations/>
+                <constraints>
+                    <constraint firstAttribute="trailingMargin" secondItem="awk-Kl-9g0" secondAttribute="trailing" constant="11" id="1W9-KM-xfL"/>
+                    <constraint firstItem="awk-Kl-9g0" firstAttribute="centerY" secondItem="4YJ-Aq-LRe" secondAttribute="centerY" id="1wy-dN-O9q"/>
+                    <constraint firstItem="E1b-7c-MaB" firstAttribute="centerY" secondItem="4YJ-Aq-LRe" secondAttribute="centerY" id="6P8-Rt-hP8"/>
+                    <constraint firstItem="6Os-vf-FWl" firstAttribute="bottom" secondItem="4YJ-Aq-LRe" secondAttribute="bottomMargin" constant="9" id="OuZ-3l-XZr"/>
+                    <constraint firstItem="6Os-vf-FWl" firstAttribute="leading" secondItem="4YJ-Aq-LRe" secondAttribute="leadingMargin" constant="-8" id="RIq-gQ-1nv"/>
+                    <constraint firstItem="E1b-7c-MaB" firstAttribute="leading" secondItem="4YJ-Aq-LRe" secondAttribute="leadingMargin" constant="70" id="Xml-1p-0hE"/>
+                    <constraint firstItem="3cq-iq-zT1" firstAttribute="centerY" secondItem="4YJ-Aq-LRe" secondAttribute="centerY" id="hYd-Xf-e5E"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="6Os-vf-FWl" secondAttribute="trailing" constant="-8" id="igd-hM-tIo"/>
+                    <constraint firstItem="3cq-iq-zT1" firstAttribute="leading" secondItem="4YJ-Aq-LRe" secondAttribute="leadingMargin" constant="11" id="jJX-To-WQd"/>
+                </constraints>
             </tableViewCellContentView>
             <animations/>
+            <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
             <connections>
                 <outlet property="enableDisableSwitch" destination="awk-Kl-9g0" id="Z8V-6C-iWU"/>
                 <outlet property="iconButton" destination="3cq-iq-zT1" id="kf4-Sh-yO0"/>
                 <outlet property="nameLabel" destination="E1b-7c-MaB" id="NLT-5S-BN5"/>
             </connections>
-            <point key="canvasLocation" x="130.5" y="114"/>
+            <point key="canvasLocation" x="141.5" y="195"/>
         </tableViewCell>
     </objects>
 </document>

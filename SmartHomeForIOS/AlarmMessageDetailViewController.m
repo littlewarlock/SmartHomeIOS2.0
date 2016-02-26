@@ -11,6 +11,7 @@
 #import "KxMovieViewController.h"
 #import "AlarmMessagePopUpViewController.h"
 #import "CameraDetailViewController.h"
+#import "UIViewController+UserLogout.h"
 
 // 2016 01 21
 #define definedAlarmType01      @"移动侦测报警"
@@ -46,6 +47,10 @@ static NSString *AlarmMessageDetailCellIdentifier = @"AlarmMessageDetailCellIden
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    //2016 02 24 category
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(checkServerSessionOutOfTime) name:@"letuserlogout" object:nil];
+    
     //
     [self.navigationItem setTitle:@"消息详细"];
     //

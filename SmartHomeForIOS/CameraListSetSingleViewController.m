@@ -43,6 +43,10 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    //2016 02 24 category
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(checkServerSessionOutOfTime) name:@"letuserlogout" object:nil];
+    
     // Do any additional setup after loading the view from its nib.
     NSLog(@"Welcome to 摄像头单独设置");
     NSLog(@"_deviceID=====%@",_deviceID);
@@ -90,6 +94,13 @@
     //get data
     [DeviceNetworkInterface getCameraSettingWithDeviceId:_deviceID withBlock:^(NSString *result, NSString *message, NSArray *devices, NSError *error) {
         if (!error) {
+            //2016 02 24
+            if ([devices[0][@"brand"] isEqualToString:@"Dahua"]) {
+                [self.screenOverturnBTN setEnabled:NO];
+            }
+            
+            
+            //
             NSLog(@"camera getCameraSettingWithDeviceId result===%@",result);
             NSLog(@"camera getCameraSettingWithDeviceId mseeage===%@",message);
             NSLog(@"camera getCameraSettingWithDeviceId devices===%@",devices);
@@ -493,7 +504,7 @@
 // 2015 11 10 hgc add
 - (IBAction)buttonCameraDeletePressed:(UIButton *)sender {
     UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"删除摄像头"
-                                                   message:@"确定要删除摄像头吗?"
+                                                   message:@"是否同时删除录像截图文件?"
                                                   delegate:self
                                          cancelButtonTitle:@"取消"
 //                                         otherButtonTitles:@"确定",nil];

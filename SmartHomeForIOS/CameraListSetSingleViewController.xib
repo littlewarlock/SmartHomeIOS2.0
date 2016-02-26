@@ -121,19 +121,19 @@
                         <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GGV-TK-YFU" userLabel="View04">
                             <rect key="frame" x="8" y="687" width="304" height="250"/>
                             <subviews>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="WiFi连接" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ue7-Tm-Eb4">
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="WiFi连接" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ue7-Tm-Eb4">
                                     <rect key="frame" x="8" y="16" width="89" height="21"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                     <nil key="highlightedColor"/>
                                 </label>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="IP地址" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nIB-cb-6Hc">
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="IP地址" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nIB-cb-6Hc">
                                     <rect key="frame" x="8" y="65" width="58" height="21"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                     <nil key="highlightedColor"/>
                                 </label>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="设备固件版本" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fzU-fC-OH5">
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="设备固件版本" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fzU-fC-OH5">
                                     <rect key="frame" x="8" y="114" width="121" height="21"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -193,16 +193,22 @@
                             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             <constraints>
                                 <constraint firstAttribute="trailing" secondItem="aYT-Z1-5n4" secondAttribute="trailing" id="5S4-vq-2mv"/>
+                                <constraint firstItem="2cQ-Cf-vtg" firstAttribute="leading" secondItem="fzU-fC-OH5" secondAttribute="trailing" constant="11" id="Ddn-ZO-SmP"/>
+                                <constraint firstItem="ue7-Tm-Eb4" firstAttribute="leading" secondItem="GGV-TK-YFU" secondAttribute="leading" constant="8" id="HAa-eS-v8y"/>
+                                <constraint firstItem="nIB-cb-6Hc" firstAttribute="leading" secondItem="GGV-TK-YFU" secondAttribute="leading" constant="8" id="Qsi-hc-37t"/>
                                 <constraint firstItem="Oqj-lR-i5Q" firstAttribute="leading" secondItem="GGV-TK-YFU" secondAttribute="leading" id="Uuz-dh-n4O"/>
                                 <constraint firstItem="6DB-XR-JBp" firstAttribute="leading" secondItem="GGV-TK-YFU" secondAttribute="leading" id="WTi-28-1xb"/>
                                 <constraint firstItem="vK9-lS-l6T" firstAttribute="leading" secondItem="GGV-TK-YFU" secondAttribute="leading" id="Zvh-b3-VKB"/>
                                 <constraint firstAttribute="trailing" secondItem="OhI-PG-kRW" secondAttribute="trailing" constant="8" id="eI8-ZY-1Ev"/>
+                                <constraint firstItem="OhI-PG-kRW" firstAttribute="leading" secondItem="nIB-cb-6Hc" secondAttribute="trailing" constant="74" id="eUW-ff-pb2"/>
                                 <constraint firstAttribute="trailing" secondItem="Oqj-lR-i5Q" secondAttribute="trailing" id="gSm-Ra-L07"/>
                                 <constraint firstAttribute="trailing" secondItem="2cQ-Cf-vtg" secondAttribute="trailing" constant="8" id="kOk-GA-uM5"/>
                                 <constraint firstItem="aYT-Z1-5n4" firstAttribute="leading" secondItem="GGV-TK-YFU" secondAttribute="leading" id="nFT-Li-YxI"/>
                                 <constraint firstAttribute="trailing" secondItem="vK9-lS-l6T" secondAttribute="trailing" id="t7B-e6-sui"/>
                                 <constraint firstAttribute="trailing" secondItem="6DB-XR-JBp" secondAttribute="trailing" id="wGW-ou-Q0U"/>
+                                <constraint firstItem="fzU-fC-OH5" firstAttribute="leading" secondItem="GGV-TK-YFU" secondAttribute="leading" constant="8" id="wct-Z7-XcE"/>
                                 <constraint firstAttribute="trailing" secondItem="hwl-kW-oke" secondAttribute="trailing" constant="8" id="wvM-26-TkO"/>
+                                <constraint firstItem="hwl-kW-oke" firstAttribute="leading" secondItem="ue7-Tm-Eb4" secondAttribute="trailing" constant="43" id="y93-CA-axe"/>
                             </constraints>
                         </view>
                         <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="350-jV-sPS" userLabel="View02">

@@ -7,6 +7,7 @@
 //
 
 #import "FileCopyTools.h"
+#import "FileTools.h"
 
 @implementation FileCopyTools
 
@@ -30,6 +31,10 @@
             NSError *err;
             BOOL bRet = [fileMgr fileExistsAtPath:self.fileUrl];
             if (bRet) {
+                if([fileMgr fileExistsAtPath:self.destinationUrl]){
+                    [FileTools deleteFileByUrl:self.destinationUrl];
+                }
+                
                 if ([fileMgr copyItemAtPath:self.fileUrl toPath:self.destinationUrl error:&err] != YES){
                     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:[err localizedDescription] delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil] ;
                     [alert show];

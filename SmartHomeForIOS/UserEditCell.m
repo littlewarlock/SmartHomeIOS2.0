@@ -96,7 +96,7 @@ static CGFloat const kBounceValue = 20.0f;
     
     NSLog(@"%f",self.myContentView.frame.size.width);
     
-    return  self.deleteButton.bounds.size.width+self.updateButton.bounds.size.width -20;
+    return  self.deleteButton.bounds.size.width+self.updateButton.bounds.size.width;
 }
 
 - (void)panThisCell:(UIPanGestureRecognizer *)recognizer

@@ -30,12 +30,12 @@ static NSString *CellTableIdentifier = @"CellTableIdentifier";
     [super viewDidLoad];
     self.title = @"更多功能";
     [_tableView registerClass:[AppNameAndIconCell class] forCellReuseIdentifier:CellTableIdentifier];
-    _tableView.rowHeight =80;
+    _tableView.rowHeight = 60;
     UINib *nib = [UINib nibWithNibName:@"AppNameAndIconCell" bundle:nil];
     
     [_tableView registerNib:nib forCellReuseIdentifier:CellTableIdentifier];
     
-
+    
     UIButton *left = [UIButton buttonWithType:UIButtonTypeCustom];
     left.frame =CGRectMake(200, 0, 32, 32);
     [left setBackgroundImage:[UIImage imageNamed:@"back"] forState:UIControlStateNormal];
@@ -43,8 +43,7 @@ static NSString *CellTableIdentifier = @"CellTableIdentifier";
     UIBarButtonItem* itemLeft=[[UIBarButtonItem alloc]initWithCustomView:left];
     self.navigationItem.leftBarButtonItem=itemLeft;
 
-    
-    
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     UIEdgeInsets contentInset = _tableView.contentInset;
     contentInset.top = 36;
     [_tableView setContentInset:contentInset];
@@ -95,7 +94,7 @@ static NSString *CellTableIdentifier = @"CellTableIdentifier";
     UIImage *appImage = [UIImage imageNamed:appInfo.appIconName];
 
     [cell.iconButton setBackgroundImage:appImage forState:UIControlStateNormal];
-        cell.iconButton.frame =  CGRectMake(cell.iconButton.frame.origin.x, cell.iconButton.frame.origin.y, 30, 30);
+        cell.iconButton.frame =  CGRectMake(cell.iconButton.frame.origin.x, cell.iconButton.frame.origin.y, 50, 30);
     [cell.iconButton setTag:(int)appInfo.appKey];
     [cell.enableDisableSwitch setTag:(int)appInfo.appKey];
     

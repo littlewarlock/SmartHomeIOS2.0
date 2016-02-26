@@ -20,12 +20,13 @@
 @property (strong,nonatomic) NSMutableArray* arrayIps1;
 @property (strong,nonatomic) NSMutableArray* arrayIps2;
 @property (weak, nonatomic) UIView* loadingView;
+@property (weak, nonatomic) IBOutlet UIView *nonNetView;
 
 
 
 //是否访问网络接口
 @property (assign, nonatomic) BOOL isConnetNetServer;
-@property (strong, nonatomic) NSString *postLoginIp;//提交的ip
+@property (strong, nonatomic) NSString *postLoginIpOrId;//提交的ip 或 cid
 
 @property (weak, nonatomic) IBOutlet UIButton *listButton;
 @property (strong, nonatomic) IBOutlet UITextField *textFieldIp;//展示的ip

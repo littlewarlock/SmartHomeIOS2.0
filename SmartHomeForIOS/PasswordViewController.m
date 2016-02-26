@@ -9,6 +9,7 @@
 #import "PasswordViewController.h"
 #import "DataManager.h"
 #import "RequestConstant.h"
+#import "HomeViewController.h"
 
 @implementation PasswordViewController
 
@@ -16,6 +17,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    //设置修改密码边框及圆角
+    [self setupBorder];
     
     self.title = @"修改密码";
     [self.passwordOld setSecureTextEntry:YES];
@@ -35,6 +39,22 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
+
+//设置修改密码圆角
+- (void)setupBorder
+{
+    //旧密码
+    self.passwordOld.layer.cornerRadius = 2.0;
+    
+    //新密码
+    self.passwordNew.layer.cornerRadius = 2.0;
+    
+    //确认密码
+    self.passwordNewConfirm.layer.cornerRadius = 2.0;
+    
+    //确认修改按钮
+    self.confirmButton.layer.cornerRadius = 2.0;
+}
 
 
 - (IBAction)confirmAction:(id)sender {

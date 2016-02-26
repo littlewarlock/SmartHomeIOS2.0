@@ -28,6 +28,7 @@
     
     self.navigationItem.title = @"co-cloud账户注册";
     
+    self.registerButton.layer.cornerRadius = 0;
     UIButton *left = [UIButton buttonWithType:UIButtonTypeCustom];
     left.frame =CGRectMake(0, 0, 32, 32);
     [left setBackgroundImage:[UIImage imageNamed:@"back"] forState:UIControlStateNormal];
@@ -42,6 +43,9 @@
     [self.registerButton setEnabled:NO];
     [self.email becomeFirstResponder];
 }
+
+
+
 //是否同意开关的切换
 - (IBAction)change:(UIButton*)sender{
     sender.selected = !sender.selected;

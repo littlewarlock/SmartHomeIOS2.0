@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="8191" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9060" systemVersion="15B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9051"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="RootLoginViewController">
             <connections>
+                <outlet property="backgroundView" destination="J9P-zQ-KLF" id="1ae-9p-KBL"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -14,7 +15,93 @@
         <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
             <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="J9P-zQ-KLF">
+                    <rect key="frame" x="0.0" y="76" width="375" height="586"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="使用远程登录，可以通过申请co-cloud ID，远程访问co-cloud服务器，并且在设备报警时，收到报警消息。" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sMB-Ae-KiG">
+                            <rect key="frame" x="26" y="19" width="323" height="60"/>
+                            <animations/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="60" id="gHV-1t-cB8"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xOP-Nz-6M8">
+                            <rect key="frame" x="122" y="158" width="130" height="22"/>
+                            <subviews>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KmW-P0-zFL">
+                                    <rect key="frame" x="0.0" y="0.0" width="130" height="22"/>
+                                    <animations/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                    <state key="normal" title="注册co-cloud账户">
+                                        <color key="titleColor" red="0.19215686274509802" green="0.65490196078431373" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                    </state>
+                                    <connections>
+                                        <action selector="resign:" destination="-1" eventType="touchUpInside" id="U2g-5i-icL"/>
+                                    </connections>
+                                </button>
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bBx-id-q9J">
+                                    <rect key="frame" x="5" y="18" width="120" height="1"/>
+                                    <animations/>
+                                    <color key="backgroundColor" red="0.19215686274509802" green="0.65490196078431373" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="1" id="i5g-aH-gtH"/>
+                                    </constraints>
+                                </view>
+                            </subviews>
+                            <animations/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            <constraints>
+                                <constraint firstItem="KmW-P0-zFL" firstAttribute="leading" secondItem="xOP-Nz-6M8" secondAttribute="leading" id="0Tm-T2-ze5"/>
+                                <constraint firstItem="bBx-id-q9J" firstAttribute="leading" secondItem="xOP-Nz-6M8" secondAttribute="leading" constant="5" id="8HH-GH-mUJ"/>
+                                <constraint firstAttribute="width" constant="130" id="DGv-78-XdK"/>
+                                <constraint firstAttribute="width" constant="240" id="J3i-h8-Xn7"/>
+                                <constraint firstItem="KmW-P0-zFL" firstAttribute="top" secondItem="xOP-Nz-6M8" secondAttribute="top" id="Tb9-8R-9LH"/>
+                                <constraint firstAttribute="bottom" secondItem="KmW-P0-zFL" secondAttribute="bottom" id="bWt-4C-Z6L"/>
+                                <constraint firstAttribute="trailing" secondItem="KmW-P0-zFL" secondAttribute="trailing" id="fPe-jl-tnS"/>
+                                <constraint firstAttribute="trailing" secondItem="bBx-id-q9J" secondAttribute="trailing" constant="5" id="kK4-WK-h5j"/>
+                                <constraint firstAttribute="height" constant="128" id="sLb-PH-c96"/>
+                                <constraint firstAttribute="height" constant="22" id="xW0-Iw-zna"/>
+                                <constraint firstAttribute="bottom" secondItem="bBx-id-q9J" secondAttribute="bottom" constant="3" id="xaE-v9-UHa"/>
+                            </constraints>
+                            <variation key="default">
+                                <mask key="constraints">
+                                    <exclude reference="J3i-h8-Xn7"/>
+                                    <exclude reference="sLb-PH-c96"/>
+                                </mask>
+                            </variation>
+                        </view>
+                    </subviews>
+                    <animations/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstItem="sMB-Ae-KiG" firstAttribute="top" secondItem="J9P-zQ-KLF" secondAttribute="top" constant="19" id="0HN-Dm-1Hs"/>
+                        <constraint firstItem="sMB-Ae-KiG" firstAttribute="leading" secondItem="J9P-zQ-KLF" secondAttribute="leading" constant="26" id="IU5-BM-qoc"/>
+                        <constraint firstItem="xOP-Nz-6M8" firstAttribute="top" secondItem="J9P-zQ-KLF" secondAttribute="top" constant="158" id="N1K-vp-ugm"/>
+                        <constraint firstItem="xOP-Nz-6M8" firstAttribute="centerX" secondItem="J9P-zQ-KLF" secondAttribute="centerX" id="iPx-h3-xYf"/>
+                        <constraint firstItem="xOP-Nz-6M8" firstAttribute="top" secondItem="J9P-zQ-KLF" secondAttribute="top" constant="158" id="p9R-uT-5vX"/>
+                        <constraint firstItem="xOP-Nz-6M8" firstAttribute="centerX" secondItem="J9P-zQ-KLF" secondAttribute="centerX" id="vbX-BS-c6z"/>
+                        <constraint firstAttribute="trailing" secondItem="sMB-Ae-KiG" secondAttribute="trailing" constant="26" id="z8g-4d-6CI"/>
+                    </constraints>
+                    <variation key="default">
+                        <mask key="constraints">
+                            <exclude reference="p9R-uT-5vX"/>
+                            <exclude reference="vbX-BS-c6z"/>
+                        </mask>
+                    </variation>
+                </view>
+            </subviews>
+            <animations/>
+            <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
+            <constraints>
+                <constraint firstItem="J9P-zQ-KLF" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="76" id="JdL-0C-ONo"/>
+                <constraint firstAttribute="bottom" secondItem="J9P-zQ-KLF" secondAttribute="bottom" constant="5" id="OS8-ok-MlX"/>
+                <constraint firstAttribute="trailing" secondItem="J9P-zQ-KLF" secondAttribute="trailing" id="glo-Ys-qFc"/>
+                <constraint firstItem="J9P-zQ-KLF" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="twj-RK-18S"/>
+            </constraints>
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
         </view>
     </objects>

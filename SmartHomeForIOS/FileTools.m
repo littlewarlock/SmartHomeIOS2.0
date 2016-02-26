@@ -298,6 +298,11 @@
     NSError *err;
     BOOL bRet = [fileMgr fileExistsAtPath:fileUrl];
     if (bRet) {
+        
+        if([fileMgr fileExistsAtPath:destinationUrl]){
+            [FileTools deleteFileByUrl:destinationUrl];
+        }
+        
         if ([fileMgr moveItemAtPath:fileUrl toPath:destinationUrl error:&err] != YES){
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:[err localizedDescription] delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil] ;
             [alert show];

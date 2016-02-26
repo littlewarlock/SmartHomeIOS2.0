@@ -29,6 +29,9 @@ static NSString *CellTableIdentifier = @"CellTableIdentifier";
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    //2016 02 24 category
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(checkServerSessionOutOfTime) name:@"letuserlogout" object:nil];
+    
     self.isVisible = NO;
     //
     self.isCameraListFull = NO;
@@ -191,6 +194,15 @@ static NSString *CellTableIdentifier = @"CellTableIdentifier";
             }
         }
         else{
+            //
+            if ([self isCurrentViewControllerVisible]) {
+                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"网络错误" message:@"请您检查网络设置" delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
+                [alert show];
+            }
+            //
+            
+            _devices = [NSArray new];
+            [self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
              NSLog(@"cameraDiscovery error");
         }
 //        [self webViewDidFinishLoad];
@@ -206,13 +218,15 @@ static NSString *CellTableIdentifier = @"CellTableIdentifier";
 //}
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return _devices.count;
+    return self.devices.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     CameraAddViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellTableIdentifier
                                                               forIndexPath:indexPath];
     
+    NSLog(@"indexPath.row==%d",indexPath.row);
+    NSLog(@"self.devices.count== %d",self.devices.count);
     NSDictionary *rowData = self.devices[indexPath.row];
 // hgc 2015 11 05 start
 //    if (
@@ -459,6 +473,11 @@ static NSString *CellTableIdentifier = @"CellTableIdentifier";
     // 马上进入刷新状态
 //    [self.tableView.mj_header beginRefreshing];
 }
-
+//
+//2016 01 20
+- (BOOL)isCurrentViewControllerVisible
+{
+    return (self.isViewLoaded && self.view.window);
+}
 
 @end

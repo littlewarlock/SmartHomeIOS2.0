@@ -25,6 +25,10 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    //2016 02 24 category
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(checkServerSessionOutOfTime) name:@"letuserlogout" object:nil];
+    
     //
     self.isDataReload = NO;
     

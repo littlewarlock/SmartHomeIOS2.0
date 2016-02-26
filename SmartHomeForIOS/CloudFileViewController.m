@@ -25,12 +25,15 @@
 #import "TableViewDelegate.h"
 #import "TaskStatusConstant.h"
 #import "NSOperationUploadQueue.h"
+
+#import "KeyWordConstant.h"
 #define RGBACOLOR(r,g,b,a) [UIColor colorWithRed:(r)/255.0f green:(g)/255.0f blue:(b)/255.0f alpha:(a)]
 #define AU_Cell_Height 52
 
 
 @interface CloudFileViewController ()<UITabBarDelegate>
 {
+    NSMutableArray *tableDataArray;//存储所有返回的文件（夹）
     NSOperationQueue *downloadQueue;
     NSMutableDictionary * tableDataDic;
     UIButton *leftBtn;
@@ -109,6 +112,7 @@
     self.moreBar.hidden = YES;
     self.moreBar.delegate = self;
     self.misButton.hidden = YES;
+    NSLog(@"viewDidLoad:%@",tableDataDic);
  }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -126,31 +130,8 @@
 - (void)loadFileData
 {
     tableDataDic = [[NSMutableDictionary alloc] init];
-    //1.如果是选择本地文件夹，则直接从根目录下开始展示
-    if (!self.isServerFile) {
-        NSString* documentsPath= @"";
-        if(self.cpath!=nil && [self.cpath length]>0)
-        {
-            documentsPath =self.cpath;
-        }
-        else
-        {
-            documentsPath=kDocument_Folder;
-            self.rootUrl =documentsPath;//指定当前根目录为doucuments
-        }
-        self.cpath =documentsPath;
-        if (tableDataDic != nil) {
-            [tableDataDic removeAllObjects];
-        }
-        if(!self.isShowFile && !self.isServerFile) //只显示本地的目录
-        {
-            tableDataDic=[FileTools getAllFiles:documentsPath skipDescendents:YES isShowAlbum:YES];
-        }
-        [self.fileListTableView reloadData];
-    }else if(self.isServerFile){//2.如果是选择服务器端文件夹，则需要发送请求到服务器端
-        self.rootUrl = @"/";
-        [self requestFileData:YES refreshControl:nil];
-    }
+    self.rootUrl = @"/";
+    [self requestFileData:YES refreshControl:nil];
 }
 
 //UITableViewDataSource协议中的方法
@@ -172,6 +153,9 @@
         }
     }
     
+    
+    
+    
     if ([cell.fileinfo.fileType isEqualToString:@"folder"]) {
         
         UIButton *accessoryButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -189,6 +173,34 @@
         [accessoryButton addTarget:self action:@selector(accessoryButtonIsTapped:event:)forControlEvents:UIControlEventTouchUpInside];
         [cell addSubview:accessoryButton];
     }else{
+        
+        //从时间信息中截取出年、月、日
+        NSString *timeStr = cell.fileinfo.fileChangeTime;
+        NSMutableArray *timeArray = [NSMutableArray array];
+        timeArray = (NSMutableArray *)[timeStr componentsSeparatedByString:@"-"];
+        NSString *yearStr = (NSString *)timeArray[0];
+        
+        //创建label，设置相关参数，使label作为accessoryView
+        UILabel *accessoryLabel = [[UILabel alloc] initWithFrame:CGRectMake(50, 0, 100, 20)];
+        accessoryLabel.adjustsFontSizeToFitWidth = YES;
+        accessoryLabel.textAlignment = NSTextAlignmentRight;
+        //截取截取出日期里面的year信息
+        NSString *yearStr2 = [yearStr substringFromIndex:2];
+    
+        //截取截取出日期里面的month信息
+        NSString *monthStr = (NSString *)timeArray[1];
+    
+        //截取出日期里面的day信息
+        NSString *dayStr = (NSString *)timeArray[2];
+        NSMutableArray *dayArray = (NSMutableArray *)[dayStr componentsSeparatedByString:@" "];
+        
+        
+        accessoryLabel.text = [NSString stringWithFormat:@"%@/%@/%@",yearStr2,monthStr,dayArray[0]];
+        accessoryLabel.textColor = [UIColor lightGrayColor];
+        accessoryLabel.font = [UIFont systemFontOfSize:14];
+        cell.accessoryView = accessoryLabel;
+        
+        
         NSString *subType = [cell.fileinfo.fileName pathExtension];
         NSArray *documentArray=  [NSArray arrayWithObjects:@"doc",@"docx",@"xls",@"xlsx", nil];
         BOOL isDocument = [documentArray containsObject:[subType lowercaseString]];
@@ -222,7 +234,7 @@
     }
     cell.fileinfo = fileinfo;
     [cell setDetailText];
-    cell.textLabel.text = fileinfo.fileName;
+
     return cell;
 }
 
@@ -242,88 +254,51 @@
 - (void)tableView:(UITableView*)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     FileInfo *fileinfo = (FileInfo *)[tableDataDic objectForKey: [NSString stringWithFormat:@"%zi",indexPath.row]];
     if(!self.fileListTableView.allowsMultipleSelectionDuringEditing){
-        //    如果是文件夹的时候，进入下一级文件夹
-        if (!self.isServerFile) {
-            if ([fileinfo.fileType isEqualToString:@"folder"])
-            {
-                if (tableDataDic != nil) {
-                    [tableDataDic removeAllObjects];
-                }
-                self.cpath = [self.cpath stringByAppendingPathComponent:fileinfo.fileName];
-                tableDataDic=[FileTools getAllFiles:self.cpath skipDescendents:YES isShowAlbum:NO];
-                [self.fileListTableView reloadData];
-                
-            }
-            else{
-                FDTableViewCell * cell=(FDTableViewCell*)[self tableView:self.fileListTableView cellForRowAtIndexPath:indexPath];
-                if(cell && !([[selectedItemsDic allKeys] containsObject:cell.fileinfo.fileName])){
-                    [selectedItemsDic setObject:cell.fileinfo.fileName forKey:cell.fileinfo.fileName];
+        if ([fileinfo.fileType isEqualToString:@"folder"] )
+        {
+            CloudFileViewController *cloudFileView = [[CloudFileViewController alloc] initWithNibName:@"CloudFileViewController" bundle:nil];
+            cloudFileView.cpath =[self.cpath stringByAppendingPathComponent: fileinfo.fileName];
+            cloudFileView.isInSharedFolder = self.isInSharedFolder;
+            if([self.cpath isEqualToString:@"/"]){
+                if([fileinfo.isShare isEqualToString:@"1"]){
+                    cloudFileView.isInSharedFolder = YES;
+                }else{
+                    cloudFileView.isInSharedFolder = NO;
                 }
             }
+            
+            [self.navigationController pushViewController:cloudFileView  animated:YES];
         }else{
-            if ([fileinfo.fileType isEqualToString:@"folder"] )
-            {
-                CloudFileViewController *cloudFileView = [[CloudFileViewController alloc] initWithNibName:@"CloudFileViewController" bundle:nil];
-                cloudFileView.cpath =[self.cpath stringByAppendingPathComponent: fileinfo.fileName];
-                cloudFileView.isServerFile = YES;
-                cloudFileView.isInSharedFolder = self.isInSharedFolder;
-                if([self.cpath isEqualToString:@"/"]){
-                    if([fileinfo.isShare isEqualToString:@"1"]){
-                        cloudFileView.isInSharedFolder = YES;
-                    }else{
-                        cloudFileView.isInSharedFolder = NO;
-                    }
-                }
-                
-                [self.navigationController pushViewController:cloudFileView  animated:YES];
-            }
-            else{
-                FDTableViewCell * cell=(FDTableViewCell*)[self tableView:self.fileListTableView cellForRowAtIndexPath:indexPath];
-                if(cell && !([[selectedItemsDic allKeys] containsObject:cell.fileinfo.fileName])){
-                    //  [selectedItemsDic setObject:cell.fileinfo.fileName forKey:cell.fileinfo];
-                }
+            FDTableViewCell * cell=(FDTableViewCell*)[self tableView:self.fileListTableView cellForRowAtIndexPath:indexPath];
+            if(cell && !([[selectedItemsDic allKeys] containsObject:cell.fileinfo.fileName])){
+                //  [selectedItemsDic setObject:cell.fileinfo.fileName forKey:cell.fileinfo];
             }
         }
     }else{
-        if (!self.isServerFile) {
-            FDTableViewCell * cell=(FDTableViewCell*)[self tableView:self.fileListTableView cellForRowAtIndexPath:indexPath];
-            if(cell && !([[selectedItemsDic allKeys] containsObject:cell.fileinfo.fileUrl])){
-                [selectedItemsDic setObject:cell.fileinfo.fileUrl forKey:cell.fileinfo.fileUrl];
+        FDTableViewCell * cell=(FDTableViewCell*)[self tableView:self.fileListTableView cellForRowAtIndexPath:indexPath];
+        
+        if(cell && !([[selectedItemsDic allKeys] containsObject:cell.fileinfo.fileName])){
+            [selectedItemsDic setObject:cell.fileinfo forKey:cell.fileinfo.fileName];
+            [self setFooterButtonState]; //更新按钮的状态
+            if (tableDataDic.count>0 && selectedItemsDic.count == tableDataDic.count) {
+                isCheckedAll = YES;
+                UIImage *image = [UIImage imageNamed:@"checbox"];
+                self.item1.image = image;
             }
-        }else{
             
-            FDTableViewCell * cell=(FDTableViewCell*)[self tableView:self.fileListTableView cellForRowAtIndexPath:indexPath];
-            
-            if(cell && !([[selectedItemsDic allKeys] containsObject:cell.fileinfo.fileName])){
-                [selectedItemsDic setObject:cell.fileinfo forKey:cell.fileinfo.fileName];
-                [self setFooterButtonState]; //更新按钮的状态
-                if (tableDataDic.count>0 && selectedItemsDic.count == tableDataDic.count) {
-                    isCheckedAll = YES;
-                    UIImage *image = [UIImage imageNamed:@"checbox"];
-                    self.item1.image = image;
-                }
-                
-            }
         }
     }
 }
 - (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (!self.isServerFile) {
-        FDTableViewCell * cell=(FDTableViewCell*)[self tableView:self.fileListTableView cellForRowAtIndexPath:indexPath];
-        if(cell && [[selectedItemsDic allKeys] containsObject:cell.fileinfo.fileUrl]){
-            [selectedItemsDic removeObjectForKey:cell.fileinfo.fileUrl];
-        }
-    }else{
-        FDTableViewCell * cell=(FDTableViewCell*)[self tableView:self.fileListTableView cellForRowAtIndexPath:indexPath];
-        if(cell && [[selectedItemsDic allKeys] containsObject:cell.fileinfo.fileName]){
-            [selectedItemsDic removeObjectForKey:cell.fileinfo.fileName];
-            [self setFooterButtonState]; //更新按钮的状态
-            isCheckedAll = NO;
-            self.tabbar.selectedItem = nil;
-            UIImage *image = [UIImage imageNamed:@"checkbox-down"];
-            self.item1.image = image;
-        }
+    FDTableViewCell * cell=(FDTableViewCell*)[self tableView:self.fileListTableView cellForRowAtIndexPath:indexPath];
+    if(cell && [[selectedItemsDic allKeys] containsObject:cell.fileinfo.fileName]){
+        [selectedItemsDic removeObjectForKey:cell.fileinfo.fileName];
+        [self setFooterButtonState]; //更新按钮的状态
+        isCheckedAll = NO;
+        self.tabbar.selectedItem = nil;
+        UIImage *image = [UIImage imageNamed:@"checkbox-down"];
+        self.item1.image = image;
     }
 }
 //UITableViewDelegate协议中的方法
@@ -343,6 +318,8 @@
 {
     [self tableView:self.fileListTableView didSelectRowAtIndexPath:indexPath];
 }
+
+
 
 #pragma mark -
 #pragma mark 右侧箭头点击时的处理事件
@@ -434,7 +411,10 @@
                     *stop = YES;
                 }
             }];
+            
+
             __block NSUInteger index =[tableDataDic count];
+            NSInteger index1 = [tableDataDic count];
             //再获取文件
             [responseJSONResult enumerateObjectsUsingBlock:^(NSDictionary *dict, NSUInteger idx, BOOL *stop) {
                 
@@ -478,7 +458,10 @@
                     *stop = YES;
                 }
                 
+                
             }];
+            [self sortWithIndex:0];
+
             [self.fileListTableView reloadData];
         }
         if (isShowLoading) {
@@ -506,7 +489,49 @@
     [engine enqueueOperation:op];
 }
 
+//返回的数据进行排序(共享文件等不参与排序)
+- (void)sortWithIndex:(NSInteger)index
+{
 
+    NSMutableArray *folderArray = [NSMutableArray array];
+    NSMutableArray *fileArray = [NSMutableArray array];
+    NSMutableArray *tmpArray = [NSMutableArray array];
+    
+    //遍历tableDataDic中的文件，将特殊文件、文件夹和文件分别存到不同的数组中
+    for (int i = 0; i < tableDataDic.count; i++) {
+        FileInfo *file = (FileInfo *)[tableDataDic objectForKey:[NSString stringWithFormat:@"%zi", i]];
+        NSString *cpath = [self.cpath stringByAppendingPathComponent: file.fileName];
+        if([cpath isEqualToString:[@"/" stringByAppendingPathComponent: SHARE_FOLDER]] || [cpath isEqualToString:[@"/" stringByAppendingPathComponent: USB_FOLDER]] || [cpath isEqualToString:[@"/" stringByAppendingPathComponent: CAMERA_FOLDER]]|| [cpath isEqualToString:[@"/" stringByAppendingPathComponent: PUBLIC_FOLDER]]){
+            
+            //将特殊文件夹添加到临时数组，不进行排序
+            [tmpArray addObject:file];
+        }else if ([file.fileSubtype isEqualToString:@"folder"]) {
+            [folderArray addObject:file];
+        }else {
+            [fileArray addObject:file];
+        }
+        
+    }
+    //根据文件名进行排序
+    NSSortDescriptor *Desc = [NSSortDescriptor sortDescriptorWithKey:@"fileName" ascending:YES];
+    NSArray *descriptorArray = [NSArray arrayWithObjects:Desc, nil];
+    
+    //分别对文件夹和文件进行排序
+    NSArray *sortedfolderArray = [folderArray sortedArrayUsingDescriptors: descriptorArray];
+    NSArray *sortedfileArray = [fileArray sortedArrayUsingDescriptors: descriptorArray];
+    
+    //将文件数组拼接在文件夹数组后面
+    NSMutableArray *array = [tmpArray arrayByAddingObjectsFromArray:sortedfolderArray];
+    NSMutableArray *array1 = [array arrayByAddingObjectsFromArray:sortedfileArray];
+    
+    //将排序后的文件存放到tableDataDic中
+    for (int i = index ; i < array1.count; i++) {
+        
+        FileInfo *file = (FileInfo *)array1[i];
+        [tableDataDic setObject:file forKey:[NSString stringWithFormat:@"%zi", i]];
+    }
+    
+}
 - (void)handleSwipes:(UISwipeGestureRecognizer *)sender
 {
     if (sender.direction == UISwipeGestureRecognizerDirectionLeft) {
@@ -841,7 +866,7 @@
         [sheet dismissSheet:self];
         
         if([ValidateTool isInKeywordFolder:self.cpath]){
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:[NSString stringWithFormat:@"目录“%@”下禁止复制！",self.cpath] delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] ;
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:[NSString stringWithFormat:@"路径“%@”下禁止复制！",self.cpath] delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] ;
             [alert show];
             return;
         }
@@ -860,7 +885,7 @@
             }
         }
         if(isSpecialName){
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:[NSString stringWithFormat:@"文件“%@”禁止复制操作，请重新选择！",fileName] delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] ;
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:[NSString stringWithFormat:@"“%@”禁止复制操作，请重新选择！",fileName] delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] ;
             [alert show];
             return;
         }
@@ -869,7 +894,7 @@
         opType=2;
         fileDialog= [[FileDialogViewController alloc] initWithNibName:@"FileDialogViewController" bundle:nil];
         fileDialog.isShowFile =YES;
-        fileDialog.isServerFile = self.isServerFile;
+        fileDialog.isServerFile = YES;
         fileDialog.cpath =@"/";
         fileDialog.fileDialogDelegate = self;
         [self.navigationController pushViewController:fileDialog animated:YES];
@@ -897,7 +922,7 @@
             }
         }
         if(isSpecialName){
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:[NSString stringWithFormat:@"文件“%@”禁止移动操作，请重新选择！",errorFileName] delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] ;
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:[NSString stringWithFormat:@"“%@”禁止移动操作，请重新选择！",errorFileName] delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] ;
             [alert show];
             return;
         }
@@ -918,17 +943,15 @@
             }
         }
         if(errorFileName && isSharedFolder){
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:[NSString stringWithFormat:@"文件“%@”已被共享，禁止移动操作，请重新选择！",errorFileName] delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] ;
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:[NSString stringWithFormat:@"“%@”已被共享，禁止移动操作，请重新选择！",errorFileName] delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] ;
             [alert show];
             return;
         }
-
-        
         
         opType=1;
         fileDialog= [[FileDialogViewController alloc] initWithNibName:@"FileDialogViewController" bundle:nil];
         fileDialog.isShowFile =YES;
-        fileDialog.isServerFile = self.isServerFile;
+        fileDialog.isServerFile = YES;
         fileDialog.cpath =@"/";
         fileDialog.fileDialogDelegate = self;
         [self.navigationController pushViewController:fileDialog animated:YES];
@@ -950,7 +973,7 @@
             }
         }
         if([ValidateTool isEqualToKeyword:fileName]){
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:[NSString stringWithFormat:@"文件“%@”禁止重命名操作，请重新选择！",fileName] delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] ;
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:[NSString stringWithFormat:@"“%@”禁止重命名操作，请重新选择！",fileName] delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] ;
             [alert show];
             return;
         }
@@ -959,7 +982,7 @@
             if (key) {
                 FileInfo *fileInfo = (FileInfo *)[tableDataDic objectForKey:key];
                 if([fileInfo.isShare isEqualToString:@"1"] && [fileInfo.fileName isEqualToString:fileName]){
-                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:[NSString stringWithFormat:@"共享文件“%@”禁止重命名操作，请重新选择！",fileName] delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] ;
+                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:[NSString stringWithFormat:@"“%@”已被共享，禁止重命名操作，请重新选择！",fileName] delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] ;
                     [alert show];
                     return;
                 }
@@ -971,11 +994,53 @@
         fileHandler.cpath = self.cpath;
         fileHandler.opType =5;
         fileHandler.selectedFileName =fileName;
+        fileHandler.tableDataDic = tableDataDic;
         [fileHandler renameFile :fileName alertViewDelegate:fileHandler];
         
     }else if(buttonIndex==4){//删除
         if([ValidateTool isInKeywordFolder:self.cpath]){
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:[NSString stringWithFormat:@"路径“%@”下禁止删除！",self.cpath] delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] ;
+            [alert show];
+            return;
+        }
+        
+        NSString *errorFileName;
+        BOOL isSpecialName =NO;
+        BOOL isSharedFolder = NO;
+        if(selectedItemsDic.count>0){
+            for (NSString *fileNameTmp in [selectedItemsDic allKeys]){
+                if (fileNameTmp) {
+                    if([ValidateTool isEqualToKeyword:fileNameTmp]){
+                        errorFileName = fileNameTmp;
+                        isSpecialName = YES;
+                        break;
+                    }
+                }
+            }
+        }
+        if(isSpecialName){
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:[NSString stringWithFormat:@"“%@”禁止删除操作，请重新选择！",errorFileName] delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] ;
+            [alert show];
+            return;
+        }
+        for (NSString *key in [tableDataDic allKeys]){
+            if (key) {
+                FileInfo *fileInfo = (FileInfo *)[tableDataDic objectForKey:key];
+                if([fileInfo.isShare isEqualToString:@"1"]){
+                    for (NSString *fileNameTmp in [selectedItemsDic allKeys]){
+                        if (fileNameTmp) {
+                            if([fileNameTmp isEqualToString: fileInfo.fileName]){
+                                isSharedFolder =YES;
+                                errorFileName = fileNameTmp;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        if(errorFileName && isSharedFolder){
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:[NSString stringWithFormat:@"文件“%@”已被共享，禁止删除操作，请重新选择！",errorFileName] delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] ;
             [alert show];
             return;
         }
@@ -1102,6 +1167,7 @@
             fileDialog.cpath = documentsPath;
             fileDialog.rootUrl = documentsPath;
 
+            fileDialog.title = @"本地文件";
             [self.navigationController pushViewController:fileDialog animated:YES];
     
         }else if(item == self.item3) {//刷新
@@ -1189,7 +1255,7 @@
                 return;
             }
             if([ValidateTool isInKeywordFolder:self.cpath]){
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:[NSString stringWithFormat:@"目录“%@”下文件夹禁止共享！",self.cpath] delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] ;
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:[NSString stringWithFormat:@"路径“%@”下文件夹禁止共享！",self.cpath] delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] ;
                 [alert show];
                 return;
             }

@@ -125,7 +125,10 @@
     [pics removeAllObjects];
     [audiosUrl removeAllObjects];
     [audioPlayerThumbsArray removeAllObjects];
-    [selectedTableDataDic removeAllObjects];
+    
+    if(![self.opType isEqualToString:@"3"] && ![self.opType isEqualToString:@"4"]){//复制 移动
+        [selectedTableDataDic removeAllObjects];
+    }
     [self loadFileData];
 }
 
@@ -385,12 +388,50 @@
         cell = [[FDTableViewCell alloc] initWithFile:fileinfo];
     }
     if ([cell.fileinfo.fileType isEqualToString:@"folder"]) {
+        
         UIButton *accessoryButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        accessoryButton.frame = CGRectMake(100,5,50,50);
-        [accessoryButton setImage:[UIImage imageNamed:@"arrow"] forState:UIControlStateNormal];
+        
+        CGFloat btnW = 10.5;
+        CGFloat btnH = 20;
+        CGFloat btnX = [UIScreen mainScreen].bounds.size.width - 10 - btnW;
+        CGFloat btnY = AU_Cell_Height * 0.5 - btnH * 0.5;
+        
+        
+        accessoryButton.frame = CGRectMake(btnX,btnY,btnW,btnH);
+        accessoryButton.contentMode = UIViewContentModeCenter;
+        
+        [accessoryButton setImage:[UIImage imageNamed:@"arrow-right"] forState:UIControlStateNormal];
         [accessoryButton addTarget:self action:@selector(accessoryButtonIsTapped:event:)forControlEvents:UIControlEventTouchUpInside];
+        [cell addSubview:accessoryButton];
+        
         cell.accessoryView = accessoryButton;
     }else{
+        
+        //从时间信息中截取出年、月、日
+        NSString *timeStr = cell.fileinfo.fileChangeTime;
+        NSMutableArray *timeArray = [NSMutableArray array];
+        timeArray = (NSMutableArray *)[timeStr componentsSeparatedByString:@"-"];
+        NSString *yearStr = (NSString *)timeArray[0];
+        
+        //创建label，设置相关参数，使label作为accessoryView
+        UILabel *accessoryLabel = [[UILabel alloc] initWithFrame:CGRectMake(50, 0, 100, 20)];
+        accessoryLabel.adjustsFontSizeToFitWidth = YES;
+        accessoryLabel.textAlignment = NSTextAlignmentRight;
+        //截取截取出日期里面的year信息
+        NSString *yearStr2 = [yearStr substringFromIndex:2];
+        
+        //截取截取出日期里面的month信息
+        NSString *monthStr = (NSString *)timeArray[1];
+        
+        //截取出日期里面的day信息
+        NSString *dayStr = (NSString *)timeArray[2];
+        NSMutableArray *dayArray = (NSMutableArray *)[dayStr componentsSeparatedByString:@" "];
+        
+        
+        accessoryLabel.text = [NSString stringWithFormat:@"%@/%@/%@",yearStr2,monthStr,dayArray[0]];
+        accessoryLabel.textColor = [UIColor lightGrayColor];
+        accessoryLabel.font = [UIFont systemFontOfSize:14];
+        cell.accessoryView = accessoryLabel;
         
         BOOL isAudio = [audioArray containsObject:[[cell.fileinfo.fileUrl pathExtension] lowercaseString]];
         BOOL isVideo = [videoArray containsObject:[[cell.fileinfo.fileUrl pathExtension] lowercaseString]];
@@ -419,6 +460,7 @@
     }
     cell.fileinfo = fileinfo;
     [cell setDetailText];
+    
     return cell;
 }
 #pragma mark -
@@ -981,53 +1023,90 @@
                 
             case 3:{//复制
                 if(!isLegal){
-                    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"错误" message:@"操作非法:不能操作至对象子目录" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+                    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"错误" message:@"操作非法:不能操作至对象子目录或当前目录" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
                     [alertView show];
                     return;
                 }
-                for (NSString *fileUrl in [selectedTableDataDic allKeys]){
-                    NSString* cpath = fileDialog.cpath;
-                    cpath=[cpath stringByAppendingString :@"/"];
-                    cpath=[cpath stringByAppendingString :[fileUrl lastPathComponent]];
-                    //[FileTools copyFileByUrl:fileUrl   toPath:cpath];
-                    BOOL  opreationIsExist= false;
-                    opreationIsExist= false;
-                    for (FileCopyTools *operation in [copyAndMoveQueue operations]) {
-                        if ([operation.fileUrl isEqualToString:fileUrl]) {
-                            opreationIsExist = true;
-                        }
-                    }
-                    if (!opreationIsExist) {
-                        FileCopyTools *opreation = [[FileCopyTools alloc] initWithFileInfo];
-                        opreation.fileUrl = fileUrl;
-                        opreation.destinationUrl = cpath;
-                        opreation.opType = @"copy";
-                        [copyAndMoveQueue addOperation:opreation];
+                
+                //判断目标路径下是否包含同名的文件
+                [duplicateFileNamesArray removeAllObjects];
+                for (NSString *fileNamePath in [selectedTableDataDic allKeys]) {
+                    NSString *fileName = [fileNamePath lastPathComponent];
+                    NSMutableDictionary *desFilesDic=[FileTools getAllFiles:fileDialog.cpath skipDescendents:YES isShowAlbum:NO];
+                    
+                    for (NSString *keys in [desFilesDic allKeys]){
+                        FileInfo *fileinfo = (FileInfo *)[desFilesDic valueForKey:keys];
+                            if( [fileinfo.fileName isEqualToString:fileName] ){
+                                [duplicateFileNamesArray addObject:fileName ];
+                            }
                     }
                 }
-                [self loadFileData];
-                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"" message:@"文件已复制" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
-                [alertView show];
-                [self requestSuccessCallback];
+                if(duplicateFileNamesArray.count>0){//如果目标路径下包含重名的文件，提示用户是否需要覆盖
+                    [self launchDialog:duplicateFileNamesArray];
+                }else{
+                    for (NSString *fileUrl in [selectedTableDataDic allKeys]){
+                        NSString* cpath = fileDialog.cpath;
+                        cpath=[cpath stringByAppendingString :@"/"];
+                        cpath=[cpath stringByAppendingString :[fileUrl lastPathComponent]];
+                        //[FileTools copyFileByUrl:fileUrl   toPath:cpath];
+                        BOOL  opreationIsExist= false;
+                        opreationIsExist= false;
+                        for (FileCopyTools *operation in [copyAndMoveQueue operations]) {
+                            if ([operation.fileUrl isEqualToString:fileUrl]) {
+                                opreationIsExist = true;
+                            }
+                        }
+                        if (!opreationIsExist) {
+                            FileCopyTools *opreation = [[FileCopyTools alloc] initWithFileInfo];
+                            opreation.fileUrl = fileUrl;
+                            opreation.destinationUrl = cpath;
+                            opreation.opType = @"copy";
+                            [copyAndMoveQueue addOperation:opreation];
+                        }
+                    }
+                    [self loadFileData];
+                    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"" message:@"文件已复制" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+                    [alertView show];
+                    [self requestSuccessCallback];
+                }
+                
                 break;
             }
             case 4:{//移动
                 if(!isLegal){
-                    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"错误" message:@"操作非法:不能操作至对象子目录" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+                    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"错误" message:@"操作非法:不能操作至对象子目录或当前目录" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
                     [alertView show];
                     return;
                 }
-                for (NSString *fileUrl in [selectedTableDataDic allKeys]){
-                    NSString* cpath = fileDialog.cpath;
-                    cpath=[cpath stringByAppendingString :@"/"];
-                    cpath=[cpath stringByAppendingString :[fileUrl lastPathComponent]];
-
-                    [FileTools moveFileByUrl:fileUrl toPath:cpath];
+                
+                //判断目标路径下是否包含同名的文件
+                [duplicateFileNamesArray removeAllObjects];
+                for (NSString *fileNamePath in [selectedTableDataDic allKeys]) {
+                    NSString *fileName = [fileNamePath lastPathComponent];
+                    NSMutableDictionary *desFilesDic=[FileTools getAllFiles:fileDialog.cpath skipDescendents:YES isShowAlbum:NO];
+                    
+                    for (NSString *keys in [desFilesDic allKeys]){
+                        FileInfo *fileinfo = (FileInfo *)[desFilesDic valueForKey:keys];
+                        if( [fileinfo.fileName isEqualToString:fileName] ){
+                            [duplicateFileNamesArray addObject:fileName ];
+                        }
+                    }
                 }
-                [self loadFileData];
-                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"" message:@"文件已移动" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
-                [alertView show];
-                [self requestSuccessCallback];
+                if(duplicateFileNamesArray.count>0){//如果目标路径下包含重名的文件，提示用户是否需要覆盖
+                    [self launchDialog:duplicateFileNamesArray];
+                }else{
+                    for (NSString *fileUrl in [selectedTableDataDic allKeys]){
+                        NSString* cpath = fileDialog.cpath;
+                        cpath=[cpath stringByAppendingString :@"/"];
+                        cpath=[cpath stringByAppendingString :[fileUrl lastPathComponent]];
+
+                        [FileTools moveFileByUrl:fileUrl toPath:cpath];
+                    }
+                    [self loadFileData];
+                    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"" message:@"文件已移动" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+                    [alertView show];
+                    [self requestSuccessCallback];
+                }
                 break;
             }
             case 8:{//备份
@@ -1211,6 +1290,8 @@
         localFileHandler.cpath = self.cpath;
         localFileHandler.opType=5;
         localFileHandler.queue =copyAndMoveQueue;
+        localFileHandler.tableDataDic = self.tableDataDic;
+        localFileHandler.selectedFileName =self.curCel.fileinfo.fileName;
         [localFileHandler renameFile:(FileInfo *)self.curCel.fileinfo ];
         
     }else if(buttonIndex==4){//删除
@@ -1307,8 +1388,65 @@
             }
             [selectedTableDataDic removeAllObjects];
             [self.navigationController pushViewController:[ProgressBarViewController sharedInstance] animated:YES];
-        }
-        else if([self.opType isEqualToString:@"8"]){
+        }else if([self.opType isEqualToString:@"3"]){//复制
+            for (int i=0; i<duplicateFileNamesArray.count; i++) {
+                if ([tableViewDelegate.selectedFileNamesDic objectForKey:duplicateFileNamesArray[i]]==nil) {
+                    NSString *fileNamePath = [self.cpath stringByAppendingPathComponent:duplicateFileNamesArray[i]];
+                    [selectedTableDataDic removeObjectForKey:fileNamePath];
+                }
+            }
+            for (NSString *fileUrl in [selectedTableDataDic allKeys]){
+                NSString* destinationUrl = fileDialog.cpath;
+                destinationUrl=[destinationUrl stringByAppendingString :@"/"];
+                destinationUrl=[destinationUrl stringByAppendingString :[fileUrl lastPathComponent]];
+                //[FileTools copyFileByUrl:fileUrl   toPath:cpath];
+                BOOL  opreationIsExist= false;
+                opreationIsExist= false;
+                for (FileCopyTools *operation in [copyAndMoveQueue operations]) {
+                    if ([operation.fileUrl isEqualToString:fileUrl]) {
+                        opreationIsExist = true;
+                    }
+                }
+                if (!opreationIsExist) {
+                    FileCopyTools *opreation = [[FileCopyTools alloc] initWithFileInfo];
+                    opreation.fileUrl = fileUrl;
+                    opreation.destinationUrl = destinationUrl;
+                    opreation.opType = @"copy";
+//                    NSFileManager *fileMgr = [NSFileManager defaultManager];
+//                    BOOL bRet = [fileMgr fileExistsAtPath:destinationUrl];
+//                    if(bRet){
+//                        [FileTools deleteFileByUrl:destinationUrl];
+//                    }
+                    [copyAndMoveQueue addOperation:opreation];
+                }
+            }
+            [self loadFileData];
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"" message:@"文件已复制" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+            [alertView show];
+        }else if([self.opType isEqualToString:@"4"]){
+            for (int i=0; i<duplicateFileNamesArray.count; i++) {
+                if ([tableViewDelegate.selectedFileNamesDic objectForKey:duplicateFileNamesArray[i]]==nil) {
+                    NSString *fileNamePath = [self.cpath stringByAppendingPathComponent:duplicateFileNamesArray[i]];
+                    [selectedTableDataDic removeObjectForKey:fileNamePath];
+                }
+            }
+            for (NSString *fileUrl in [selectedTableDataDic allKeys]){
+                NSString* destinationUrl = fileDialog.cpath;
+                destinationUrl=[destinationUrl stringByAppendingString :@"/"];
+                destinationUrl=[destinationUrl stringByAppendingString :[fileUrl lastPathComponent]];
+//                NSFileManager *fileMgr = [NSFileManager defaultManager];
+//                BOOL bRet = [fileMgr fileExistsAtPath:destinationUrl];
+//                if(bRet){
+//                    [FileTools deleteFileByUrl:destinationUrl];
+//                }
+
+                [FileTools moveFileByUrl:fileUrl toPath:destinationUrl];
+            }
+            [self loadFileData];
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"" message:@"文件已移动" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+            [alertView show];
+            [self requestSuccessCallback];
+        }else if([self.opType isEqualToString:@"8"]){
             for (int i=0; i<duplicateFileNamesArray.count; i++) {
                 if ([tableViewDelegate.selectedFileNamesDic objectForKey:duplicateFileNamesArray[i]]==nil) {
                     NSString *fileNamePath = [self.cpath stringByAppendingPathComponent:duplicateFileNamesArray[i]];

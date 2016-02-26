@@ -43,4 +43,8 @@ extern NSString * const KxMovieParameterDisableDeinterlacing;   // BOOL
 //2016 01 28
 - (void) awakeFromLocking;
 
+//2016 02 26
+@property Boolean isRTSPMovie;
+
+
 @end

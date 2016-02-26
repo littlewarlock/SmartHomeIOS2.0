@@ -91,6 +91,9 @@
                     [[alertView textFieldAtIndex:0] setKeyboardType:UIKeyboardTypeDefault];
                     [[alertView textFieldAtIndex:0] setPlaceholder:@"请输入文件名称"];
                     [alertView show];
+                    UITextField *textField=[alertView textFieldAtIndex:0];
+                    textField.text = self.selectedFileName;
+                    textField.delegate = self;
                     return;
                 }
                 NSString * fullFileName = self.fileInfo.fileName;
@@ -99,17 +102,20 @@
                 NSString *extName = [fullFileName pathExtension];
                 BOOL isExist =  NO;
                 for(NSString *dicKey in self.tableDataDic) {
-                    FileInfo  *fileInfo = [self.self.tableDataDic objectForKey:dicKey];
+                    FileInfo  *fileInfo = [self.tableDataDic objectForKey:dicKey];
                     if([fileInfo.fileName isEqualToString: fileName] && (self.fileInfo!=fileInfo)){
                         isExist = YES;
                         break;
                     }
                 }
                 if(isExist){
-                    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"目录已存在,请重新输入！" message:@"" delegate:self cancelButtonTitle:@"新建" otherButtonTitles:@"取消",nil];
+                    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"文件名已存在,请重新输入！" message:@"" delegate:self cancelButtonTitle:@"新建" otherButtonTitles:@"取消",nil];
                     [alertView setAlertViewStyle:UIAlertViewStylePlainTextInput];
                     [[alertView textFieldAtIndex:0] setKeyboardType:UIKeyboardTypeDefault];
                     [[alertView textFieldAtIndex:0] setPlaceholder:@"请输入目录名称"];
+                    UITextField *textField=[alertView textFieldAtIndex:0];
+                    textField.text = self.selectedFileName;
+                    textField.delegate = self;
                     [alertView show];
                     return;
                 }

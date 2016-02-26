@@ -22,7 +22,6 @@
 //hgc 2016 01 21
 @property(strong,nonatomic)NSString *isFromAlarmDetail;
 
-- (IBAction)getRealTimeStream:(id)sender;
 - (IBAction)reloadData:(id)sender;
 
 @end

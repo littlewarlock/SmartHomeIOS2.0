@@ -90,6 +90,7 @@
 		2095E2261BFD6B80008507E8 /* NSData+Base64Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 2095E2231BFD6B80008507E8 /* NSData+Base64Additions.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		2095E2271BFD6B80008507E8 /* NSStream+SKPSMTPExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 2095E2251BFD6B80008507E8 /* NSStream+SKPSMTPExtensions.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		2095E22A1BFD6B93008507E8 /* SKPSMTPMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 2095E2291BFD6B93008507E8 /* SKPSMTPMessage.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		20AB0C1D1C7D4B5300E16C41 /* UIViewController+UserLogout.m in Sources */ = {isa = PBXBuildFile; fileRef = 20AB0C1C1C7D4B5300E16C41 /* UIViewController+UserLogout.m */; };
 		20ACD5611BCB86CA00EE983A /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 20ACD5601BCB86CA00EE983A /* AudioToolbox.framework */; };
 		20ACD5631BCB86E000EE983A /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 20ACD5621BCB86E000EE983A /* Accelerate.framework */; };
 		20ACD5651BCB86F200EE983A /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 20ACD5641BCB86F200EE983A /* QuartzCore.framework */; };
@@ -704,6 +705,8 @@
 		2095E2251BFD6B80008507E8 /* NSStream+SKPSMTPExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSStream+SKPSMTPExtensions.m"; sourceTree = "<group>"; };
 		2095E2281BFD6B93008507E8 /* SKPSMTPMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKPSMTPMessage.h; sourceTree = "<group>"; };
 		2095E2291BFD6B93008507E8 /* SKPSMTPMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SKPSMTPMessage.m; sourceTree = "<group>"; };
+		20AB0C1B1C7D4B5300E16C41 /* UIViewController+UserLogout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+UserLogout.h"; sourceTree = "<group>"; };
+		20AB0C1C1C7D4B5300E16C41 /* UIViewController+UserLogout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+UserLogout.m"; sourceTree = "<group>"; };
 		20ACD5601BCB86CA00EE983A /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		20ACD5621BCB86E000EE983A /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		20ACD5641BCB86F200EE983A /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -1897,6 +1900,15 @@
 			name = SKPSMTPMessage;
 			sourceTree = "<group>";
 		};
+		20AB0C191C7D4B2100E16C41 /* Category */ = {
+			isa = PBXGroup;
+			children = (
+				20AB0C1B1C7D4B5300E16C41 /* UIViewController+UserLogout.h */,
+				20AB0C1C1C7D4B5300E16C41 /* UIViewController+UserLogout.m */,
+			);
+			name = Category;
+			sourceTree = "<group>";
+		};
 		20AE97891BCE6DDE0041AB50 /* APPData */ = {
 			isa = PBXGroup;
 			children = (
@@ -2169,6 +2181,7 @@
 		480AE34C1BB4FA8E006C1ACD /* Device */ = {
 			isa = PBXGroup;
 			children = (
+				20AB0C191C7D4B2100E16C41 /* Category */,
 				20112B781C72FAEE00F27331 /* MyToolBar */,
 				20D4970F1C47402200D2C6C9 /* ProgressCircle */,
 				20EC76681C17C2570026C91B /* H264Decoder */,
@@ -3601,6 +3614,7 @@
 				20548E131C08012700E19F66 /* MJRefreshHeader.m in Sources */,
 				20CA72A31C6345D1005D65A6 /* BackupHandler.m in Sources */,
 				22C352921BE21CD000C48F86 /* AlbumHeaderCell.m in Sources */,
+				20AB0C1D1C7D4B5300E16C41 /* UIViewController+UserLogout.m in Sources */,
 				48F4A2DB1BACF4EA007F13D9 /* NSData+ImageContentType.m in Sources */,
 				204CB0A51C0D9B1800191E1D /* CloudRegisterViewController.m in Sources */,
 				48F4A3061BACF536007F13D9 /* MWZoomingScrollView.m in Sources */,

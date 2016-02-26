@@ -41,6 +41,11 @@ static NSString *NumOfAlarmList = @"10";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    //2016 02 24 category
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(checkServerSessionOutOfTime) name:@"letuserlogout" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(SMTnetWorkError) name:@"SMTnetworkerror" object:nil];
+    
     NSLog(@"AlarmMessageListViewControllerAlarmMessageListViewController");
     // Do any additional setup after loading the view from its nib.
     

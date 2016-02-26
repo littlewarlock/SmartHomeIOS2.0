@@ -18,11 +18,26 @@
 @synthesize hasUpdate;
 @synthesize isSync;
 
+//重新布局子控件，使label对齐
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    [self.imageView setFrame:CGRectMake(0, 0, 60, self.bounds.size.height)];
+    [self.textLabel setFrame:CGRectMake(60, 0, 100, self.bounds.size.height)];
+
+    self.imageView.contentMode = UIViewContentModeCenter;
+
+}
+
+
 - (id)initWithFile:(FileInfo *)file{
     self.fileinfo = file;
     UIButton *button= [self getCellButton];
     //  根据ftype不同分别初始化cell
     //CGSize scaleToSize = {34.0,24.0};
+    
+    
+    
     if ([file.fileType isEqualToString:@"folder"]) {
         self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:file.fileName];
         
@@ -50,7 +65,7 @@
         [self.textLabel setTextColor:[UIColor colorWithRed:82.0/255 green:82.0/255 blue:82.0/255 alpha:1] ];
         [self setDetailText];
     }else{
-        self = [super initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:file.fileName];
+        self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:file.fileName];
         [self.contentView addSubview:button];
         self.imageView.image = [UIImage imageNamed:@"text-icon"];
         BOOL bRet = [[NSFileManager defaultManager] fileExistsAtPath:file.fileUrl];
@@ -189,7 +204,7 @@
                                 self.imageView.image =  imageSync;
                             }
                             self.detailTextLabel.text = @"";
-                            self.detailTextLabel.text = [NSString stringWithFormat: @"%@ %@", fileinfo.fileChangeTime,fileinfo.fileSize];
+//                            self.detailTextLabel.text = [NSString stringWithFormat: @"%@ %@", fileinfo.fileChangeTime,fileinfo.fileSize];
                         });
                     }
                 });
@@ -262,7 +277,7 @@
     
     iconImage = [[UIImageView alloc] init];
     [self.contentView addSubview:iconImage];
-    
+
     return self;
 }
 
@@ -326,7 +341,7 @@
         
     }else{
         [self.detailTextLabel setTextColor:[UIColor colorWithRed:199.0/255 green:199.0/255 blue:199.0/255 alpha:1] ];
-        self.detailTextLabel.text = [NSString stringWithFormat: @"%@ %@", fileinfo.fileChangeTime,fileinfo.fileSize];
+//        self.detailTextLabel.text = [NSString stringWithFormat: @"%@ %@", fileinfo.fileChangeTime,fileinfo.fileSize];
     }
 }
 

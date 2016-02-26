@@ -9,16 +9,20 @@
 #import <Foundation/Foundation.h>
 #import "DeviceCurrentVariable.h"
 #import "DeviceInfo.h"
+//logout 2016 0224
+#import "UIViewController+UserLogout.h"
 
 @interface DeviceNetworkInterface : NSObject
+{
+    //
+}
 
-+ (void)login:(id)sender;
 + (void)getDeviceList:(id)sender;
 + (void)getDeviceList:(id)sender withBlock:(void (^)(NSArray *deviceList,NSError *error))block;
 + (void)cameraDiscovery:(id)sender withBlock:(void (^)(NSArray *deviceList,NSError *error))block;
 + (void)realTimeCameraStreamWithDeviceId:(NSString *)deviceId withBlock:(void (^)(NSString *result, NSString *message, NSString *stream, NSString *ptz, NSString *monitoring, NSString *recording, NSString *mode, NSString *onlining, NSError *error))block;
 + (void)realTimeCameraSnapshotWithDeviceId:(NSString *)deviceId withBlock:(void (^)(NSString *result, NSString *message, NSString *image,NSError *error))block;
-+(void)cameraControlWithDirection:(NSString *)direction withDeviceId:(NSString *)deviceId withBlock:(void (^)(NSString *result, NSString *message,NSError *error))block;
++ (void)cameraControlWithDirection:(NSString *)direction withDeviceId:(NSString *)deviceId withBlock:(void (^)(NSString *result, NSString *message,NSError *error))block;
 + (void)cameraControlStopwithDeviceId:(NSString *)deviceId withBlock:(void (^)(NSString *result, NSString *message, NSError *error))block;
 + (void)cameraRecordwithDeviceId:(NSString *)deviceId withSwitchParam:(NSString *)switchParam withBlock:(void (^)(NSString *, NSString *, NSError *))block;
 + (void)cameraAlarmingwithDeviceId:(NSString *)deviceId withAlarmParam:(NSString *)alarmParam withBlock:(void (^)(NSString *, NSString *, NSError *))block;
@@ -65,11 +69,21 @@
 //check by server
 + (void)checkAlarmTransferServerwithBlock:(void (^)(NSString *result, NSString *message, NSDictionary *cidinfo, NSError *error))block;
 
+//删除历史录像记录和历史截图
++ (void)delHistoryRecordSnapshotWithPaths:(NSArray *)paths withBlock:(void (^)(NSString *result, NSString *message, NSError *error))block;
+//
++ (void)serverSessionRefresh;
+
 //
 + (Boolean)isObjectNULLwith:(NSObject *)obj;
 + (Boolean)isNSStringSpacewith:(NSString *)string;
 
 @property (strong,nonatomic) NSMutableDictionary *dic;
-@property(strong,nonatomic) NSArray *deviceList;
+@property (strong,nonatomic) NSArray *deviceList;
+
+//2016 02 23
+
++(Boolean)isServerSessionOutOfTime;
+
 
 @end

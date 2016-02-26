@@ -14,9 +14,12 @@
 #import "CameraListSetSingleViewController.h"
 #import "DeviceNetworkInterface.h"
 #import <AVOSCloud/AVOSCloud.h>
+#import "LoginViewController.h"
+#import "DataManager.h"
 
 static NSString *CellTableIdentifier = @"CellTableIdentifier";
 
+//类扩展
 @interface CameraListViewController ()
 
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
@@ -43,6 +46,10 @@ static NSString *CellTableIdentifier = @"CellTableIdentifier";
     [super viewDidLoad];
     
     self.isLoadData = NO;
+    
+    //2016 02 24 category
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(checkServerSessionOutOfTime) name:@"letuserlogout" object:nil];
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(SMTnetWorkError) name:@"SMTnetworkerror" object:nil];
     
     //2016 01 05 hgc channels
 //    AVInstallation *currentInstallation = [AVInstallation currentInstallation];
@@ -136,7 +143,7 @@ static NSString *CellTableIdentifier = @"CellTableIdentifier";
     //1.添加刷新控件
     self.control=[[UIRefreshControl alloc]init];
     self.control.tintColor = [UIColor grayColor];
-    self.control.attributedTitle = [[NSAttributedString alloc]initWithString:@"下拉刷新"];
+    self.control.attributedTitle = [[NSAttributedString alloc]initWithString:@"数据刷新中"];
     [self.control addTarget:self action:@selector(loadData:) forControlEvents:UIControlEventValueChanged];
     
     //2.马上进入刷新状态，并不会触发UIControlEventValueChanged事件
@@ -152,6 +159,10 @@ static NSString *CellTableIdentifier = @"CellTableIdentifier";
     self.isLoadData = YES;
     
     [DeviceNetworkInterface getDeviceList:self withBlock:^(NSArray *deviceList, NSError *error) {
+        //2016 02 23
+        if ([DeviceNetworkInterface isServerSessionOutOfTime]) {
+            NSLog(@"outOftime");
+        }
         //
         if (self.isCurrentViewControllerVisible) {
             [self.navigationController setToolbarHidden:NO animated:YES];
@@ -180,6 +191,16 @@ static NSString *CellTableIdentifier = @"CellTableIdentifier";
             [sender endRefreshing];
         }
         else{
+            //
+            if ([self isCurrentViewControllerVisible]) {
+                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"网络错误" message:@"请您检查网络设置" delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
+                [alert show];
+            }
+            //
+            //
+            self.devices = [NSMutableArray new];
+            [self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
+            //
             NSLog(@"**************NetWork Request errrr************************");
             [sender endRefreshing];
         }
@@ -900,6 +921,20 @@ static NSString *CellTableIdentifier = @"CellTableIdentifier";
     return UIStatusBarStyleLightContent;
 }
 
-
+//2016 02 23
+//- (void)checkServerSessionOutOfTime{
+//    if ([DeviceNetworkInterface isServerSessionOutOfTime]) {
+//        [g_sDataManager setUserName:@""];
+//        [g_sDataManager setPassword:@""];
+//        AVInstallation *currentInstallation = [AVInstallation currentInstallation];
+//        [currentInstallation removeObject:[g_sDataManager cId] forKey:@"channels"];
+//        [currentInstallation saveInBackground];
+//        LoginViewController *loginView= [[LoginViewController alloc] initWithNibName:@"LoginViewController" bundle:nil];
+//        loginView.isPushHomeView =YES;
+//        loginView.isShowLocalFileBtn =YES;
+//        [self presentViewController:loginView animated:YES completion:nil];
+////        [self.viewDeckController presentViewController:loginView animated:YES completion:nil];
+//    }
+//}
 
 @end

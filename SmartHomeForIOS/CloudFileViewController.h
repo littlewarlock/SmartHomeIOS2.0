@@ -15,7 +15,7 @@
 #import "CustomIOSAlertView.h"
 @interface CloudFileViewController : UIViewController<UITableViewDataSource, UITableViewDelegate,FileDialogDelegate,MWPhotoBrowserDelegate,UIGestureRecognizerDelegate,CustomIOSAlertViewDelegate>
 
-@property(assign,nonatomic) BOOL isServerFile; //表示是否读的是服务器端的文件YES：读的是服务器端的 NO：读的是本地目录下的文件
+//@property(assign,nonatomic) BOOL isServerFile; //表示是否读的是服务器端的文件YES：读的是服务器端的 NO：读的是本地目录下的文件
 @property (copy, nonatomic) NSString *cpath; //当前路径
 @property (assign, nonatomic) BOOL isShowFile; //是否显示文件 YES：显示 NO：不显示文件 显示目录
 @property (assign, nonatomic) BOOL isMultiple;//是否允许多选，YES：允许多选 NO：不允许多选

@@ -17,7 +17,7 @@
 @interface FileDialogViewController ()
 {
     NSMutableDictionary * tableDataDic;
-    UIBarButtonItem *leftBtn;
+    UIButton *leftBtn;
     UIButton* rightBtn;
     UIView* loadingView;
 }
@@ -27,20 +27,26 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    leftBtn = [[UIBarButtonItem alloc] initWithTitle:@"确认返回"                                              style:UIBarButtonItemStyleBordered target:self action:@selector(confirmReturnAction:)];
-    [leftBtn setTintColor:[UIColor whiteColor]];
-    self.navigationItem.leftBarButtonItem = leftBtn;
-    rightBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    rightBtn.frame =CGRectMake(200, 0, 50, 50);
-    [rightBtn setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
 
+    //返回
+    UIImage *img = [UIImage imageNamed:@"back"];
+    leftBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    leftBtn.frame = CGRectMake(200, 0, 32, 32);
+    [leftBtn setBackgroundImage:img forState:UIControlStateNormal];
+    [leftBtn addTarget:self action:@selector(returnAction:) forControlEvents: UIControlEventTouchUpInside];
+    UIBarButtonItem *leftItem = [[UIBarButtonItem alloc]initWithCustomView:leftBtn];
+    self.navigationItem.leftBarButtonItem = leftItem;
+
+    //取消
+    rightBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    rightBtn.frame = CGRectMake(200, 0, 50, 50);
+    [rightBtn setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
     [rightBtn setTitle:@"取消" forState:UIControlStateNormal];
     [rightBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [rightBtn addTarget: self action: @selector(returnAction:) forControlEvents: UIControlEventTouchUpInside];
-    UIBarButtonItem* item=[[UIBarButtonItem alloc]initWithCustomView:rightBtn];
-    self.navigationItem.rightBarButtonItem=item;
-    [self.returnLastDirBtn addTarget: self action: @selector(returnParentDirectoryAction:) forControlEvents: UIControlEventTouchUpInside];
-    [self.returnRootDirBtn addTarget: self action: @selector(returnRootDirectoryAction:) forControlEvents: UIControlEventTouchUpInside];
+    UIBarButtonItem* item = [[UIBarButtonItem alloc]initWithCustomView:rightBtn];
+    self.navigationItem.rightBarButtonItem = item;
+    
     [self.fileListTableView setTableFooterView:[[UIView alloc] initWithFrame:CGRectZero]];//设置表尾不显示，就不显示多余的横线
     self.filesDic = [[NSMutableDictionary alloc]init];
     self.dirsDic = [[NSMutableDictionary alloc]init];
@@ -82,6 +88,9 @@
         [self requestFileData];
     }
 }
+
+#pragma mark -
+#pragma mark UITableView协议中的方法
 //UITableViewDataSource协议中的方法
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -149,6 +158,62 @@
 
 #pragma mark -
 #pragma mark returnParentDirectoryAction 返回上一级目录
+- (IBAction)returnLast:(id)sender {
+    
+    if ([self.cpath isEqualToString:self.rootUrl]) {
+        return;
+    }
+    if (!self.isServerFile) {
+        if(self.cpath && ![self.cpath isEqualToString:self.rootUrl])
+        {
+            NSMutableArray* pathArray = (NSMutableArray*)[self.cpath pathComponents];
+            if (pathArray && [pathArray count]>0) {
+                [pathArray removeLastObject];
+            }
+            if (pathArray && [pathArray count]>=2) {
+                self.cpath =  [NSString stringWithFormat:@"%@%@",pathArray[0],pathArray[1]];
+                for (int i=2; i<[pathArray count]; i++) {
+                    self.cpath = [NSString stringWithFormat:@"%@/%@", self.cpath,pathArray[i]];
+                }
+            }
+            else if(pathArray && [pathArray count]==1){
+                self.cpath =  pathArray[0];
+            }else{
+                self.cpath =  self.rootUrl;
+            }
+            
+            if (tableDataDic != nil) {
+                [tableDataDic removeAllObjects];
+            }
+            tableDataDic=[FileTools getAllFiles:self.cpath skipDescendents:YES isShowAlbum:NO];
+            self.selectedFile=@"";
+            [self.fileListTableView reloadData];
+        }
+    }else{
+        if(self.cpath && ![self.cpath isEqualToString:self.rootUrl])
+        {
+            NSMutableArray* pathArray = (NSMutableArray*)[self.cpath pathComponents];
+            if (pathArray && [pathArray count]>0) {
+                [pathArray removeLastObject];
+            }
+            if (pathArray && [pathArray count]>=2) {
+                self.cpath =  [NSString stringWithFormat:@"%@%@",pathArray[0],pathArray[1]];
+                for (int i=2; i<[pathArray count]; i++) {
+                    self.cpath = [NSString stringWithFormat:@"%@/%@", self.cpath,pathArray[i]];
+                }
+                [self requestFileData];
+            }else if(pathArray && [pathArray count]==1){
+                self.cpath =  pathArray[0];
+                [self requestFileData];
+            }else{
+                self.cpath =  @"/";
+                [self requestFileData];
+            }
+        }
+    }
+}
+
+
 -(void)returnParentDirectoryAction:(id)sender {
     if ([self.cpath isEqualToString:self.rootUrl]) {
         return;
@@ -225,6 +290,36 @@
 }
 #pragma mark -
 #pragma mark confirmReturnAciton 确认返回按钮的事件
+
+- (IBAction)cancle:(id)sender {
+    
+    [self.navigationController popViewControllerAnimated:YES];
+
+}
+
+- (IBAction)upload:(id)sender {
+    if(self.isSelectFileMode)
+    {
+        if([self.selectedFile isEqualToString:@""])
+        {
+            UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"请先选择文件！" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil];
+            [alert show];
+            return;
+        }
+        if ([self.fileDialogDelegate respondsToSelector:@selector(chooseFileAction:)]) {
+//            [self.navigationController popViewControllerAnimated:YES];
+            [self.fileDialogDelegate chooseFileAction:nil];//调用委托方法
+            // [self dismissViewControllerAnimated:YES completion:nil];
+        }
+        
+    }else{
+        if ([self.fileDialogDelegate respondsToSelector:@selector(chooseFileDirAction:)]) {
+//            [self.navigationController popViewControllerAnimated:YES];
+            [self.fileDialogDelegate chooseFileDirAction:nil];//调用委托方法
+        }
+    }
+}
+
 - (void)confirmReturnAction:(UIBarButtonItem *)sender
 {
     if(self.isSelectFileMode)

@@ -19,49 +19,95 @@
 NSString* urtTest = @"123.57.223.91";
 
 
+
 @interface DeviceNetworkInterface ()
 {
     AppDelegate *appDelegate;
 }
+
 @end
 
+Boolean isServerSessionOutOfTime = NO;
+
 @implementation DeviceNetworkInterface
+
+//
++(void)checkServerNetworkError{
+    isServerSessionOutOfTime = YES;
+}
+//
+
+
+//
++(void)checkServerSessionOutOfTimeWithOpertion:(MKNetworkOperation *)operation{
+    NSString *result = operation.responseJSON[@"result"];
+    NSString *message = operation.responseJSON[@"message"];
+    if ([result isEqualToString:@"timeout"]) {
+        if ([message isEqualToString:@""]) {
+            isServerSessionOutOfTime = YES;
+            NSLog(@"isServerSessionOutOfTime== %hhu",isServerSessionOutOfTime);
+            //发送通知lagout
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"letuserlogout" object:nil];
+            //
+            return;
+        }
+    }
+    NSLog(@"isServerSessionOutOfTime== %hhu",isServerSessionOutOfTime);
+    isServerSessionOutOfTime = NO;
+}
++ (Boolean)isServerSessionOutOfTime{
+    return isServerSessionOutOfTime;
+}
++ (void)checkNetWorkError{
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"SMTnetworkerror" object:nil];
+}
+//2016 02 26
++ (void)serverSessionRefresh{
+    NSString* url = [DeviceNetworkInterface getRequestUrl];
+    
+    NSDictionary *requestParam = @{@"session_id":@"session_id",@"opt":@"refresh"};
+    
+    //请求php
+    MKNetworkEngine *engine = [[MKNetworkEngine alloc] initWithHostName:url customHeaderFields:nil];
+    [engine useCache];
+    
+    MKNetworkOperation *op = [engine operationWithPath:@"refresh.php" params:requestParam httpMethod:@"POST"];
+    //操作返回数据
+    [op addCompletionHandler:^(MKNetworkOperation *operation) {
+        
+        if([operation isCachedResponse]) {
+            NSLog(@"Data from cache %@", [operation responseString]);
+        }
+        else {
+            NSLog(@"Data from server %@", [operation responseString]);
+        }
+        
+        //2016 02 23 hgc
+        [self checkServerSessionOutOfTimeWithOpertion:operation];
+        // hgc
+        
+        //get data
+//        NSString *result = operation.responseJSON[@"result"];
+//        NSString *message = operation.responseJSON[@"message"];
+        
+    } errorHandler:^(MKNetworkOperation *errorOp,NSError *error) {
+        // 2016 02 24
+        [self checkNetWorkError];
+        //
+        NSLog(@"MKNetwork request error : %@", [error localizedDescription]);
+    }];
+    
+    [engine enqueueOperation:op];
+
+}
+
+
+//
 
 +(NSString*) getRequestUrl{
     NSString * requestUrl =@"/smarthome/app";
     NSString *url = [NSString stringWithFormat:@"%@%@",[g_sDataManager requestHost],requestUrl];
     return url;
-}
-
-+(void)login:(id)sender
-{
-    NSMutableDictionary *requestParam = [[NSMutableDictionary alloc] init];
-    
-    __block NSError *error = nil;
-    NSString* url = [DeviceNetworkInterface getRequestUrl];
-    [requestParam setValue:@"admin" forKey:@"userid"];
-    [requestParam setValue:@"111111" forKey:@"passwd"];
-    NSLog(@"requestParam==%@",requestParam);
-    //请求php
-    MKNetworkEngine *engine = [[MKNetworkEngine alloc] initWithHostName:url customHeaderFields:nil];
-    MKNetworkOperation *op = [engine operationWithPath:@"login.php" params:requestParam httpMethod:@"POST" ssl:NO];
-    //操作返回数据
-    [op addCompletionHandler:^(MKNetworkOperation *operation) {
-        NSLog(@"[operation responseData]-->>%@", [operation responseString]);
-        NSDictionary *responseJSON=[NSJSONSerialization JSONObjectWithData:[operation responseData] options:kNilOptions error:&error];
-        NSLog(@"[operation responseJSON]-->>%@",responseJSON);
-        
-        //get session id
-        [DeviceCurrentVariable sharedInstance].currentSessionId = [responseJSON objectForKey:@"session_id"];
-        //get data
-        [DeviceCurrentVariable sharedInstance].role = [responseJSON objectForKey:@"role"];
-        
-    }errorHandler:^(MKNetworkOperation *errorOp, NSError* err) {
-        NSLog(@"MKNetwork request error : %@", [err localizedDescription]);
-    }];
-    
-    [engine enqueueOperation:op forceReload:YES];
-    
 }
 
 // for study
@@ -113,6 +159,9 @@ NSString* urtTest = @"123.57.223.91";
         else {
             NSLog(@"Data from server %@", [operation responseString]);
         }
+        //2016 02 23 hgc
+        [self checkServerSessionOutOfTimeWithOpertion:operation];
+        // hgc
         
         //get data
         NSArray *deviceList = [[NSArray alloc]init];
@@ -126,10 +175,16 @@ NSString* urtTest = @"123.57.223.91";
                     deviceList = @[];
                 }
                 //for test hgc 2015 10 19
+            }else{
+//                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"登录状态" message:[operation.responseJSON objectForKey:@"message"] delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
+//                [alert show];
             }
             block(deviceList,nil);
         }
     } onError:^(NSError *error) {
+        // 2016 02 24
+        [self checkNetWorkError];
+        //
         NSLog(@"MKNetwork request error : %@", [error localizedDescription]);
         if (block) {
             block(nil,error);
@@ -163,6 +218,9 @@ NSString* urtTest = @"123.57.223.91";
         else {
             NSLog(@"Data from server %@", [operation responseString]);
         }
+        //2016 02 23 hgc
+        [self checkServerSessionOutOfTimeWithOpertion:operation];
+        // hgc
         
         //get data
         NSMutableArray *deviceList = [[NSMutableArray alloc]init];
@@ -179,10 +237,16 @@ NSString* urtTest = @"123.57.223.91";
 //                }
                 //for test
                 
+            }else{
+//                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"登录状态" message:[operation.responseJSON objectForKey:@"message"] delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
+//                [alert show];
             }
             block(deviceList,nil);
         }
     } onError:^(NSError *error) {
+        // 2016 02 24
+        [self checkNetWorkError];
+        //
         NSLog(@"MKNetwork request error : %@", [error localizedDescription]);
         if (block) {
             block(nil,error);
@@ -250,6 +314,10 @@ NSString* urtTest = @"123.57.223.91";
             NSLog(@"Data from server %@", [operation responseString]);
         }
         
+        //2016 02 23 hgc
+        [self checkServerSessionOutOfTimeWithOpertion:operation];
+        // hgc
+        
         //get data
         NSString *result = operation.responseJSON[@"result"];
         NSString *message = operation.responseJSON[@"message"];
@@ -267,6 +335,10 @@ NSString* urtTest = @"123.57.223.91";
         }
     } onError:^(NSError *error) {
         NSLog(@"MKNetwork request error : %@", [error localizedDescription]);
+        // 2016 02 24
+        [self checkNetWorkError];
+        //
+        
         if (block) {
             block(nil,@"网络异常",nil,nil,nil,nil,nil,nil,error);
         }
@@ -297,6 +369,10 @@ NSString* urtTest = @"123.57.223.91";
             NSLog(@"Data from server %@", [operation responseString]);
         }
         
+        //2016 02 23 hgc
+        [self checkServerSessionOutOfTimeWithOpertion:operation];
+        // hgc
+        
         //get data
         NSString *result = operation.responseJSON[@"result"];
         NSString *message = operation.responseJSON[@"message"];
@@ -307,6 +383,10 @@ NSString* urtTest = @"123.57.223.91";
             }
         }
     } onError:^(NSError *error) {
+        // 2016 02 24
+        [self checkNetWorkError];
+        //
+        
         NSLog(@"MKNetwork request error : %@", [error localizedDescription]);
         if (block) {
             block(nil,@"网络异常",error);
@@ -336,6 +416,11 @@ NSString* urtTest = @"123.57.223.91";
         else {
             NSLog(@"Data from server %@", [operation responseString]);
         }
+        
+        //2016 02 23 hgc
+        [self checkServerSessionOutOfTimeWithOpertion:operation];
+        // hgc
+        
         //get data
         NSString *result = operation.responseJSON[@"result"];
         NSString *message = operation.responseJSON[@"message"];
@@ -344,6 +429,9 @@ NSString* urtTest = @"123.57.223.91";
             block(result,message,nil);
         }
     } errorHandler:^(MKNetworkOperation *errorOp,NSError *error) {
+        // 2016 02 24
+        [self checkNetWorkError];
+        //
         NSLog(@"MKNetwork request error : %@", [error localizedDescription]);
         if (block) {
             block(nil,@"网络异常",error);
@@ -372,6 +460,10 @@ NSString* urtTest = @"123.57.223.91";
             NSLog(@"Data from server %@", [operation responseString]);
         }
         
+        //2016 02 23 hgc
+        [self checkServerSessionOutOfTimeWithOpertion:operation];
+        // hgc
+        
         //get data
         NSString *result = operation.responseJSON[@"result"];
         NSString *message = operation.responseJSON[@"message"];
@@ -380,6 +472,9 @@ NSString* urtTest = @"123.57.223.91";
             block(result,message,nil);
         }
     } onError:^(NSError *error) {
+        // 2016 02 24
+        [self checkNetWorkError];
+        //
         NSLog(@"MKNetwork request error : %@", [error localizedDescription]);
         if (block) {
             block(nil,@"网络异常",error);
@@ -409,6 +504,10 @@ NSString* urtTest = @"123.57.223.91";
             NSLog(@"Data from server %@", [operation responseString]);
         }
         
+        //2016 02 23 hgc
+        [self checkServerSessionOutOfTimeWithOpertion:operation];
+        // hgc
+        
         //get data
         NSString *result = operation.responseJSON[@"result"];
         NSString *message = operation.responseJSON[@"message"];
@@ -418,6 +517,9 @@ NSString* urtTest = @"123.57.223.91";
             block(result,message,image,nil);
         }
     } onError:^(NSError *error) {
+        // 2016 02 24
+        [self checkNetWorkError];
+        //
         NSLog(@"MKNetwork request error : %@", [error localizedDescription]);
         if (block) {
             block(nil,@"网络异常",nil,error);
@@ -449,6 +551,10 @@ NSString* urtTest = @"123.57.223.91";
             NSLog(@"Data from server %@", [operation responseString]);
         }
         
+        //2016 02 23 hgc
+        [self checkServerSessionOutOfTimeWithOpertion:operation];
+        // hgc
+        
         //get data
         NSString *result = operation.responseJSON[@"result"];
         NSString *message = operation.responseJSON[@"message"];
@@ -457,6 +563,9 @@ NSString* urtTest = @"123.57.223.91";
             block(result,message,nil);
         }
     } onError:^(NSError *error) {
+        // 2016 02 24
+        [self checkNetWorkError];
+        //
         NSLog(@"MKNetwork request error : %@", [error localizedDescription]);
         if (block) {
             block(nil,@"网络异常",error);
@@ -485,6 +594,11 @@ NSString* urtTest = @"123.57.223.91";
         else {
             NSLog(@"Data from server %@", [operation responseString]);
         }
+        
+        //2016 02 23 hgc
+        [self checkServerSessionOutOfTimeWithOpertion:operation];
+        // hgc
+        
         //get data
         NSString *result = operation.responseJSON[@"result"];
         NSString *message = operation.responseJSON[@"message"];
@@ -492,10 +606,15 @@ NSString* urtTest = @"123.57.223.91";
         NSString *recLoop = operation.responseJSON[@"globals"][0][@"recLoop"];
         NSString *alarmVolume = operation.responseJSON[@"globals"][0][@"alarmVolume"];
         NSString *alarmLoop = operation.responseJSON[@"globals"][0][@"alarmLoop"];
+        //
+        //
         if (block) {
             block(result,message,recVolume,recLoop,alarmVolume,alarmLoop,nil);
         }
     } errorHandler:^(MKNetworkOperation *errorOp,NSError *error) {
+        // 2016 02 24
+        [self checkNetWorkError];
+        //
         NSLog(@"MKNetwork request error : %@", [error localizedDescription]);
         if (block) {
             block(nil,@"网络异常",nil,nil,nil,nil,error);
@@ -528,6 +647,11 @@ NSString* urtTest = @"123.57.223.91";
         else {
             NSLog(@"Data from server %@", [operation responseString]);
         }
+        
+        //2016 02 23 hgc
+        [self checkServerSessionOutOfTimeWithOpertion:operation];
+        // hgc
+        
         //get data
         NSString *result = operation.responseJSON[@"result"];
         NSString *message = operation.responseJSON[@"message"];
@@ -535,6 +659,9 @@ NSString* urtTest = @"123.57.223.91";
             block(result,message,nil);
         }
     } errorHandler:^(MKNetworkOperation *errorOp,NSError *error) {
+        // 2016 02 24
+        [self checkNetWorkError];
+        //
         NSLog(@"MKNetwork request error : %@", [error localizedDescription]);
         if (block) {
             block(nil,@"网络异常",error);
@@ -569,6 +696,11 @@ NSString* urtTest = @"123.57.223.91";
         else {
             NSLog(@"Data from server %@", [operation responseString]);
         }
+        
+        //2016 02 23 hgc
+        [self checkServerSessionOutOfTimeWithOpertion:operation];
+        // hgc
+        
         //get data
         NSString *result = operation.responseJSON[@"result"];
         NSString *message = operation.responseJSON[@"message"];
@@ -577,6 +709,9 @@ NSString* urtTest = @"123.57.223.91";
             block(result,message,brands,nil);
         }
     } errorHandler:^(MKNetworkOperation *errorOp,NSError *error) {
+        // 2016 02 24
+        [self checkNetWorkError];
+        //
         NSLog(@"MKNetwork request error : %@", [error localizedDescription]);
         if (block) {
             block(nil,@"网络异常",nil,error);
@@ -606,6 +741,11 @@ NSString* urtTest = @"123.57.223.91";
         else {
             NSLog(@"Data from server %@", [operation responseString]);
         }
+        
+        //2016 02 23 hgc
+        [self checkServerSessionOutOfTimeWithOpertion:operation];
+        // hgc
+        
         //get data
         NSString *result = operation.responseJSON[@"result"];
         NSString *message = operation.responseJSON[@"message"];
@@ -614,6 +754,9 @@ NSString* urtTest = @"123.57.223.91";
             block(result,message,brands,nil);
         }
     } errorHandler:^(MKNetworkOperation *errorOp,NSError *error) {
+        // 2016 02 24
+        [self checkNetWorkError];
+        //
         NSLog(@"MKNetwork request error : %@", [error localizedDescription]);
         if (block) {
             block(nil,@"网络异常",nil,error);
@@ -659,6 +802,11 @@ NSString* urtTest = @"123.57.223.91";
         else {
             NSLog(@"Data from server %@", [operation responseString]);
         }
+        
+        //2016 02 23 hgc
+        [self checkServerSessionOutOfTimeWithOpertion:operation];
+        // hgc
+        
         //get data
         NSString *result = operation.responseJSON[@"result"];
         NSString *message = operation.responseJSON[@"message"];
@@ -666,6 +814,9 @@ NSString* urtTest = @"123.57.223.91";
             block(result,message,nil);
         }
     } errorHandler:^(MKNetworkOperation *errorOp,NSError *error) {
+        // 2016 02 24
+        [self checkNetWorkError];
+        //
         NSLog(@"MKNetwork request error : %@", [error localizedDescription]);
         if (block) {
             block(nil,@"网络异常",error);
@@ -696,6 +847,11 @@ NSString* urtTest = @"123.57.223.91";
         else {
             NSLog(@"Data from server %@", [operation responseString]);
         }
+        
+        //2016 02 23 hgc
+        [self checkServerSessionOutOfTimeWithOpertion:operation];
+        // hgc
+        
         //get data
         NSString *result = operation.responseJSON[@"result"];
         NSString *message = operation.responseJSON[@"message"];
@@ -703,6 +859,9 @@ NSString* urtTest = @"123.57.223.91";
             block(result,message,nil);
         }
     } errorHandler:^(MKNetworkOperation *errorOp,NSError *error) {
+        // 2016 02 24
+        [self checkNetWorkError];
+        //
         NSLog(@"MKNetwork request error : %@", [error localizedDescription]);
         if (block) {
             block(nil,@"网络异常",error);
@@ -734,6 +893,11 @@ NSString* urtTest = @"123.57.223.91";
         else {
             NSLog(@"Data from server %@", [operation responseString]);
         }
+        
+        //2016 02 23 hgc
+        [self checkServerSessionOutOfTimeWithOpertion:operation];
+        // hgc
+        
         //get data
         NSString *result = operation.responseJSON[@"result"];
         NSString *message = operation.responseJSON[@"message"];
@@ -741,6 +905,9 @@ NSString* urtTest = @"123.57.223.91";
             block(result,message,nil);
         }
     } errorHandler:^(MKNetworkOperation *errorOp,NSError *error) {
+        // 2016 02 24
+        [self checkNetWorkError];
+        //
         NSLog(@"MKNetwork request error : %@", [error localizedDescription]);
         if (block) {
             block(nil,@"网络异常",error);
@@ -770,6 +937,11 @@ NSString* urtTest = @"123.57.223.91";
         else {
             NSLog(@"Data from server %@", [operation responseString]);
         }
+        
+        //2016 02 23 hgc
+        [self checkServerSessionOutOfTimeWithOpertion:operation];
+        // hgc
+        
         //get data
         NSString *result = operation.responseJSON[@"result"];
         NSString *message = operation.responseJSON[@"message"];
@@ -778,6 +950,9 @@ NSString* urtTest = @"123.57.223.91";
             block(result,message,devices,nil);
         }
     } errorHandler:^(MKNetworkOperation *errorOp,NSError *error) {
+        // 2016 02 24
+        [self checkNetWorkError];
+        //
         NSLog(@"MKNetwork request error : %@", [error localizedDescription]);
         if (block) {
             block(nil,@"网络异常",nil,error);
@@ -817,6 +992,10 @@ NSString* urtTest = @"123.57.223.91";
         else {
             NSLog(@"Data from server %@", [operation responseString]);
         }
+        //2016 02 23 hgc
+        [self checkServerSessionOutOfTimeWithOpertion:operation];
+        // hgc
+        
         //get data
         NSString *result = operation.responseJSON[@"result"];
         NSString *message = operation.responseJSON[@"message"];
@@ -824,6 +1003,9 @@ NSString* urtTest = @"123.57.223.91";
             block(result,message,nil);
         }
     } errorHandler:^(MKNetworkOperation *errorOp,NSError *error) {
+        // 2016 02 24
+        [self checkNetWorkError];
+        //
         NSLog(@"MKNetwork request error : %@", [error localizedDescription]);
         if (block) {
             block(nil,@"网络异常",error);
@@ -831,7 +1013,6 @@ NSString* urtTest = @"123.57.223.91";
     }];
     
     [engine enqueueOperation:op];
-
 }
 
 + (void)getCameraRecordHistoryWithDeviceId:(NSString *)deviceId andDay:(NSString *)day withBlock:(void (^)(NSString *, NSString *, NSArray *, NSArray *, NSError *))block
@@ -857,6 +1038,11 @@ NSString* urtTest = @"123.57.223.91";
         else {
             NSLog(@"Data from server %@", [operation responseString]);
         }
+        
+        //2016 02 23 hgc
+        [self checkServerSessionOutOfTimeWithOpertion:operation];
+        // hgc
+        
         //get data
         NSString *result = operation.responseJSON[@"result"];
         NSString *message = operation.responseJSON[@"message"];
@@ -866,6 +1052,9 @@ NSString* urtTest = @"123.57.223.91";
             block(result,message,times,videos,nil);
         }
     } errorHandler:^(MKNetworkOperation *errorOp,NSError *error) {
+        // 2016 02 24
+        [self checkNetWorkError];
+        //
         NSLog(@"MKNetwork request error : %@", [error localizedDescription]);
         if (block) {
             block(nil,@"网络异常",nil,nil,error);
@@ -896,6 +1085,11 @@ NSString* urtTest = @"123.57.223.91";
         else {
             NSLog(@"Data from server %@", [operation responseString]);
         }
+        
+        //2016 02 23 hgc
+        [self checkServerSessionOutOfTimeWithOpertion:operation];
+        // hgc
+        
         //get data
         NSString *result = operation.responseJSON[@"result"];
         NSString *message = operation.responseJSON[@"message"];
@@ -904,6 +1098,9 @@ NSString* urtTest = @"123.57.223.91";
             block(result,message,calendar,nil);
         }
     } errorHandler:^(MKNetworkOperation *errorOp,NSError *error) {
+        // 2016 02 24
+        [self checkNetWorkError];
+        //
         NSLog(@"MKNetwork request error : %@", [error localizedDescription]);
         if (block) {
             block(nil,@"网络异常",nil,error);
@@ -938,6 +1135,10 @@ NSString* urtTest = @"123.57.223.91";
             NSLog(@"Data from server %@", [operation responseString]);
         }
 
+        //2016 02 23 hgc
+        [self checkServerSessionOutOfTimeWithOpertion:operation];
+        // hgc
+        
         //
         //get data
         NSLog(@"join===%@",operation.responseJSON[@"join"]);
@@ -964,6 +1165,9 @@ NSString* urtTest = @"123.57.223.91";
             }
         }
     } errorHandler:^(MKNetworkOperation *errorOp,NSError *error) {
+        // 2016 02 24
+        [self checkNetWorkError];
+        //
         NSLog(@"MKNetwork request error : %@", [error localizedDescription]);
         if (block) {
             block(nil,@"网络异常",nil,nil,nil,nil,error);
@@ -996,6 +1200,10 @@ NSString* urtTest = @"123.57.223.91";
             NSLog(@"Data from server %@", [operation responseString]);
         }
         
+        //2016 02 23 hgc
+        [self checkServerSessionOutOfTimeWithOpertion:operation];
+        // hgc
+        
         //
         //get data
         NSLog(@"join===%@",operation.responseJSON[@"join"]);
@@ -1022,6 +1230,9 @@ NSString* urtTest = @"123.57.223.91";
             }
         }
     } errorHandler:^(MKNetworkOperation *errorOp,NSError *error) {
+        // 2016 02 24
+        [self checkNetWorkError];
+        //
         NSLog(@"MKNetwork request error : %@", [error localizedDescription]);
         if (block) {
             block(nil,@"网络异常",nil,nil,nil,nil,nil,nil,error);
@@ -1052,6 +1263,11 @@ NSString* urtTest = @"123.57.223.91";
         else {
             NSLog(@"Data from server %@", [operation responseString]);
         }
+        
+        //2016 02 23 hgc
+        [self checkServerSessionOutOfTimeWithOpertion:operation];
+        // hgc
+        
         //get data
         NSString *result = operation.responseJSON[@"result"];
         NSString *message = operation.responseJSON[@"message"];
@@ -1059,6 +1275,9 @@ NSString* urtTest = @"123.57.223.91";
             block(result,message,nil);
         }
     } errorHandler:^(MKNetworkOperation *errorOp,NSError *error) {
+        // 2016 02 24
+        [self checkNetWorkError];
+        //
         NSLog(@"MKNetwork request error : %@", [error localizedDescription]);
         if (block) {
             block(nil,@"网络异常",error);
@@ -1088,6 +1307,11 @@ NSString* urtTest = @"123.57.223.91";
         else {
             NSLog(@"Data from server %@", [operation responseString]);
         }
+        
+        //2016 02 23 hgc
+        [self checkServerSessionOutOfTimeWithOpertion:operation];
+        // hgc
+        
         //get data
         NSString *result = operation.responseJSON[@"result"];
         NSString *message = operation.responseJSON[@"message"];
@@ -1095,6 +1319,9 @@ NSString* urtTest = @"123.57.223.91";
             block(result,message,nil);
         }
     } errorHandler:^(MKNetworkOperation *errorOp,NSError *error) {
+        // 2016 02 24
+        [self checkNetWorkError];
+        //
         NSLog(@"MKNetwork request error : %@", [error localizedDescription]);
         if (block) {
             block(nil,@"网络异常",error);
@@ -1178,6 +1405,11 @@ NSString* urtTest = @"123.57.223.91";
                 else {
                     NSLog(@"Data from server %@", [operation responseString]);
                 }
+                
+                //2016 02 23 hgc
+                [self checkServerSessionOutOfTimeWithOpertion:operation];
+                // hgc
+                
                 //get data
                 NSString *result = operation.responseJSON[@"result"];
                 NSString *message = operation.responseJSON[@"message"];
@@ -1186,6 +1418,9 @@ NSString* urtTest = @"123.57.223.91";
                     block(result,message,alarms,nil);
                 }
             } errorHandler:^(MKNetworkOperation *errorOp,NSError *error) {
+                // 2016 02 24
+                [self checkNetWorkError];
+                //
                 NSLog(@"MKNetwork request error : %@", [error localizedDescription]);
                 if (block) {
                     block(nil,@"网络异常",nil,error);
@@ -1271,6 +1506,11 @@ NSString* urtTest = @"123.57.223.91";
                 else {
                     NSLog(@"Data from server %@", [operation responseString]);
                 }
+                
+                //2016 02 23 hgc
+                [self checkServerSessionOutOfTimeWithOpertion:operation];
+                // hgc
+                
                 //get data
                 NSString *result = operation.responseJSON[@"result"];
                 NSString *message = operation.responseJSON[@"message"];
@@ -1278,6 +1518,9 @@ NSString* urtTest = @"123.57.223.91";
                     block(result,message,nil);
                 }
             } errorHandler:^(MKNetworkOperation *errorOp,NSError *error) {
+                // 2016 02 24
+                [self checkNetWorkError];
+                //
                 NSLog(@"MKNetwork request error : %@", [error localizedDescription]);
                 if (block) {
                     block(nil,@"网络异常",error);
@@ -1288,9 +1531,6 @@ NSString* urtTest = @"123.57.223.91";
 //original off
         }
     }];
-    
-    
-    
 }
 
 + (void)setAlarmMsgReadedWithMsgIds:(NSArray *)msgIds withBlock:(void (^)(NSString *, NSString *, NSError *))block
@@ -1362,6 +1602,11 @@ NSString* urtTest = @"123.57.223.91";
                 else {
                     NSLog(@"Data from server %@", [operation responseString]);
                 }
+                
+                //2016 02 23 hgc
+                [self checkServerSessionOutOfTimeWithOpertion:operation];
+                // hgc
+                
                 //get data
                 NSString *result = operation.responseJSON[@"result"];
                 NSString *message = operation.responseJSON[@"message"];
@@ -1369,6 +1614,9 @@ NSString* urtTest = @"123.57.223.91";
                     block(result,message,nil);
                 }
             } errorHandler:^(MKNetworkOperation *errorOp,NSError *error) {
+                // 2016 02 24
+                [self checkNetWorkError];
+                //
                 NSLog(@"MKNetwork request error : %@", [error localizedDescription]);
                 if (block) {
                     block(nil,@"网络异常",error);
@@ -1405,6 +1653,11 @@ NSString* urtTest = @"123.57.223.91";
         else {
             NSLog(@"Data from server %@", [operation responseString]);
         }
+        
+        //2016 02 23 hgc
+        [self checkServerSessionOutOfTimeWithOpertion:operation];
+        // hgc
+        
         //get data
         NSString *result = operation.responseJSON[@"result"];
         NSString *message = operation.responseJSON[@"message"];
@@ -1414,6 +1667,9 @@ NSString* urtTest = @"123.57.223.91";
             block(result,message,times,videos,nil);
         }
     } errorHandler:^(MKNetworkOperation *errorOp,NSError *error) {
+        // 2016 02 24
+        [self checkNetWorkError];
+        //
         NSLog(@"MKNetwork request error : %@", [error localizedDescription]);
         if (block) {
             block(nil,@"网络异常",nil,nil,error);
@@ -1446,6 +1702,11 @@ NSString* urtTest = @"123.57.223.91";
         else {
             NSLog(@"Data from server %@", [operation responseString]);
         }
+        
+        //2016 02 23 hgc
+        [self checkServerSessionOutOfTimeWithOpertion:operation];
+        // hgc
+        
         //get data
         NSString *result = operation.responseJSON[@"result"];
         NSString *message = operation.responseJSON[@"message"];
@@ -1455,6 +1716,9 @@ NSString* urtTest = @"123.57.223.91";
             block(result,message,times,videos,nil);
         }
     } errorHandler:^(MKNetworkOperation *errorOp,NSError *error) {
+        // 2016 02 24
+        [self checkNetWorkError];
+        //
         NSLog(@"MKNetwork request error : %@", [error localizedDescription]);
         if (block) {
             block(nil,@"网络异常",nil,nil,error);
@@ -1485,6 +1749,10 @@ NSString* urtTest = @"123.57.223.91";
             NSLog(@"Data from server %@", [operation responseData]);
         }
         
+        //2016 02 23 hgc
+        [self checkServerSessionOutOfTimeWithOpertion:operation];
+        // hgc
+        
         //get data
         NSLog(@"checkAlarmTransferServerwithBlock==%@",[operation responseJSON]);
         NSString *result = operation.responseJSON[@"result"];
@@ -1508,6 +1776,9 @@ NSString* urtTest = @"123.57.223.91";
             }
         }
     } errorHandler:^(MKNetworkOperation *errorOp,NSError *error) {
+        // 2016 02 24
+        [self checkNetWorkError];
+        //
         NSLog(@"MKNetwork request error : %@", [error localizedDescription]);
         if (block) {
             block(nil,@"网络异常",nil,error);
@@ -1518,7 +1789,61 @@ NSString* urtTest = @"123.57.223.91";
     
 }
 
-
++ (void)delHistoryRecordSnapshotWithPaths:(NSArray *)paths withBlock:(void (^)(NSString *, NSString *, NSError *))block
+{
+    
+    NSString *ns = [paths componentsJoinedByString:@","];
+    NSDictionary *requestParam = @{@"session_id":@"session_id",@"opt":@"delfiles",@"files":ns};
+    
+    NSLog(@"ns==%@",ns);
+    
+    //请求php
+    NSString* url = [DeviceNetworkInterface getRequestUrl];
+    MKNetworkEngine *engine = [[MKNetworkEngine alloc] initWithHostName:url customHeaderFields:nil];
+    [engine useCache];
+    MKNetworkOperation *op = [engine operationWithPath:@"camera.php" params:requestParam httpMethod:@"POST"];
+    //操作返回数据
+    [op addCompletionHandler:^(MKNetworkOperation *operation) {
+        
+        if([operation isCachedResponse]) {
+            NSLog(@"Data from cache %@", [operation responseData]);
+        }
+        else {
+            NSLog(@"Data from server %@", [operation responseData]);
+        }
+        
+        //2016 02 23 hgc
+        [self checkServerSessionOutOfTimeWithOpertion:operation];
+        // hgc
+        
+        //get data
+        NSLog(@"checkAlarmTransferServerwithBlock==%@",[operation responseJSON]);
+        NSString *result = operation.responseJSON[@"result"];
+        NSString *message = operation.responseJSON[@"message"];
+        
+        if (block) {
+            if (
+                ([DeviceNetworkInterface isObjectNULLwith:result])
+                ||([DeviceNetworkInterface isObjectNULLwith:message])
+                )
+            {
+                block(nil,@"接口异常",nil);
+            }else{
+                block(result,message,nil);
+            }
+        }
+    } errorHandler:^(MKNetworkOperation *errorOp,NSError *error) {
+        // 2016 02 24
+        [self checkNetWorkError];
+        //
+        NSLog(@"MKNetwork request error : %@", [error localizedDescription]);
+        if (block) {
+            block(nil,@"网络异常",error);
+        }
+    }];
+    
+    [engine enqueueOperation:op];
+}
 
 
 @end

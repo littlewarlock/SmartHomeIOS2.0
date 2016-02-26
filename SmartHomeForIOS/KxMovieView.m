@@ -83,6 +83,7 @@ static NSMutableDictionary * gHistory;
     UIView              *barView;
     UIView              *_topBar;
     UIView              *_bottomView;
+    UIImageView         *hornView;
     
     KxMovieDecoderVer2      *_decoder;
     dispatch_queue_t    _dispatchQueue;
@@ -228,6 +229,7 @@ static NSMutableDictionary * gHistory;
     [_topHUD setHidden:YES];
     [m_volumeView setHidden:YES];
     [rectView setHidden:YES];
+    [hornView setHidden:YES];
 }
 
 - (void)toolBarHiddens
@@ -556,11 +558,13 @@ static NSMutableDictionary * gHistory;
 */
     m_volumeView.transform = CGAffineTransformMakeRotation(-90* M_PI/180);
     
-    
+    hornView = [[UIImageView alloc] initWithFrame:CGRectMake(0, height*3/4, 20,20)];
+    [hornView setImage:[UIImage imageNamed:@"volume-icon"]];
     [self.view addSubview:_topBar];
     //[self.view addSubview:_topHUD];
     [self.view addSubview:_bottomView];
     [self.view addSubview:rectView];
+    [self.view addSubview:hornView];
     [self.view addSubview:m_volumeView];
     [self.view addSubview:_titleLable];
     [self.view addSubview:barView];
@@ -1679,32 +1683,35 @@ static NSMutableDictionary * gHistory;
                         LoggerAudio(2, @"Audio frame position: %f", frame.position);
 #endif
                         if (_decoder.validVideo) {
-                            //delete by lcw 20151230
-//                            const CGFloat delta = _moviePosition - frame.position;
+                            const CGFloat delta = _moviePosition - frame.position;
                            
-//                            if (delta < -0.1) {
-//                                
-//                                memset(outData, 0, numFrames * numChannels * sizeof(float));
-//#ifdef DEBUG
-//                                LoggerStream(0, @"desync audio (outrun) wait %.4f %.4f", _moviePosition, frame.position);
-//                                _debugAudioStatus = 1;
-//                                _debugAudioStatusTS = [NSDate date];
-//#endif
-//                                
-//                                break; // silence and exit
-//                            }
+                            if (delta < -0.1) {
+                                
+                                memset(outData, 0, numFrames * numChannels * sizeof(float));
+#ifdef DEBUG
+                                LoggerStream(0, @"desync audio (outrun) wait %.4f %.4f", _moviePosition, frame.position);
+                                _debugAudioStatus = 1;
+                                _debugAudioStatusTS = [NSDate date];
+#endif
+                                //2016 02 18 lcw start
+                                _moviePosition = frame.position;
+                                //2016 02 18 lcw end
+                                break; // silence and exit
+                            }
                             
                             [_audioFrames removeObjectAtIndex:0];
-                             //delete by lcw 20151230
-//                            if (delta > 0.1 && count > 1) {
-//                                
-//#ifdef DEBUG
-//                                LoggerStream(0, @"desync audio (lags) skip %.4f %.4f", _moviePosition, frame.position);
-//                                _debugAudioStatus = 2;
-//                                _debugAudioStatusTS = [NSDate date];
-//#endif
-//                                continue;
-//                            }
+                            if (delta > 0.1 && count > 1) {
+                                
+#ifdef DEBUG
+                                LoggerStream(0, @"desync audio (lags) skip %.4f %.4f", _moviePosition, frame.position);
+                                _debugAudioStatus = 2;
+                                _debugAudioStatusTS = [NSDate date];
+#endif
+                                //2016 02 18 lcw start
+                                _moviePosition = frame.position;
+                                //2016 02 18 lcw end
+                                continue;
+                            }
                             
                         } else {
                             
@@ -1932,6 +1939,7 @@ static NSMutableDictionary * gHistory;
                 [self updateHUD];
                 //add by lcw 20160128 set progressSlider to end
                 _progressSlider.value = 1;
+                _progressLabel.text = [NSString stringWithFormat:@"%@/%@",[self convertTime:_decoder.duration],[self convertTime:_decoder.duration]];
                 return;
             }
             
@@ -2164,26 +2172,20 @@ static NSMutableDictionary * gHistory;
     }
     const CGFloat position = _moviePosition -startPosition;
 
-    //hgc 2015 11 26
-        NSLog(@"duration==%f",duration);
-        NSLog(@"_moviePosition===%f",_moviePosition);
-        NSLog(@"_decoder.startTime===%f",_decoder.startTime);
-    if(_audioFrames.count!=0 && _videoFrames.count !=0){
-        KxAudioFrameVer2 *frame = _audioFrames[0];
-        NSLog(@"_audioFrames[0]===%f",frame.position);
-        KxVideoFrameVer2 *frame2 = _videoFrames[0];
-        NSLog(@"_videoFrames[0]===%f",frame2.position);
-        NSLog(@"图像声音偏差＝＝＝＝＝＝＝＝＝＝＝＝%f＝＝＝＝＝＝＝＝＝＝＝＝＝",frame.position-frame2.position);
-//        if(frame.position-frame2.position >0.3){
-//            [_audioFrames removeObjectAtIndex:0];
-//        }
+//    if(_audioFrames.count!=0 && _videoFrames.count !=0){
+//        KxAudioFrameVer2 *frame = _audioFrames[0];
+//        KxVideoFrameVer2 *frame2 = _videoFrames[0];
+//        NSLog(@"图像声音偏差＝＝＝＝＝＝＝＝＝＝＝＝%f＝＝＝＝＝＝＝＝＝＝＝＝＝",frame.position-frame2.position);
+////        if(frame.position-frame2.position >0.3){
+////            [_audioFrames removeObjectAtIndex:0];
+////        }
+////        
+////        if(frame.position-frame2.position <-0.3){
+////            [_videoFrames removeObjectAtIndex:0];
+////        }
 //        
-//        if(frame.position-frame2.position <-0.3){
-//            [_videoFrames removeObjectAtIndex:0];
-//        }
-        
-        
-    }
+//        
+//    }
     
     //hgc 2015 11 26
 
@@ -2250,6 +2252,7 @@ static NSMutableDictionary * gHistory;
                          m_volumeView.alpha = alpha;
                          _topHUD.alpha = alpha/2;
                          rectView.alpha = alpha/2;
+                         hornView.alpha = alpha;
                      }
                      completion:nil];
     
@@ -2274,7 +2277,8 @@ static NSMutableDictionary * gHistory;
         _pauseBtn.frame = CGRectMake(20, SCREEN_WIDTH-50+1, botH, topH);
         _progressLabel.frame = CGRectMake( SCREEN_HEIGHT -200, SCREEN_WIDTH-botH, 150, topH);
         rectView.frame = CGRectMake(0, SCREEN_WIDTH*1/4, 80,SCREEN_WIDTH*1/2);
-        m_volumeView.frame= CGRectMake(SCREEN_WIDTH*1/8, SCREEN_WIDTH*5/16, 20, SCREEN_WIDTH*3/8);
+        hornView.frame = CGRectMake(SCREEN_WIDTH*1/8, SCREEN_WIDTH*3/4 -30, 20,20);
+        m_volumeView.frame= CGRectMake(SCREEN_WIDTH*1/8, SCREEN_WIDTH*5/16 -10, 20, SCREEN_WIDTH*3/8);
         
     }else{
         [[UIApplication sharedApplication] setStatusBarOrientation:UIInterfaceOrientationLandscapeLeft];
