@@ -29,5 +29,6 @@
 @property (strong,nonatomic)NSString *port;
 @property (strong,nonatomic)NSString *userid;
 @property (strong,nonatomic)NSString *passwd;
+@property (strong,nullable,nonatomic)NSString *alarmflg;
 
 @end

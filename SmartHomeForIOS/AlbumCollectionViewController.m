@@ -148,6 +148,7 @@ static NSString* _cellId = @"album";
         fileDialog.cpath =@"/";
         fileDialog.isSelectFileMode =NO;
         fileDialog.fileDialogDelegate = self;
+        fileDialog.onType = 2;
         [self.navigationController pushViewController:fileDialog animated:YES];
         
     }else{

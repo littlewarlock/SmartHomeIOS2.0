@@ -56,7 +56,7 @@
     NSArray *picArray;
     
     NSMutableDictionary *selectedItemsDic;//文件下载选择的文件名
-    UITableView *tableView;
+    UITableView *_tableView;
     TableViewDelegate *tableViewDelegate;
     NSMutableArray *duplicateFileNamesArray;
     FileHandler *fileHandler;
@@ -344,6 +344,7 @@
         fileDialog.isSelectFileMode =NO;
         fileDialog.cpath =@"/";
         fileDialog.fileDialogDelegate = self;
+        fileDialog.onType = 2;
         [self.navigationController pushViewController:fileDialog  animated:YES];
         
     }else{
@@ -367,6 +368,7 @@
         fileDialog.isSelectFileMode = YES;
         fileDialog.fileDialogDelegate = self;
         fileDialog.cpath = @"/";
+        fileDialog.onType = 1;
         [self.navigationController pushViewController: fileDialog animated:YES ];
     }
 }
@@ -1262,6 +1264,7 @@
             fileDialog.rootUrl = kDocument_Folder;
             fileDialog.isSelectFileMode =NO;
             fileDialog.fileDialogDelegate = self;
+            fileDialog.onType = 3;
             [self.navigationController pushViewController: fileDialog animated:YES ];
         }else{
             UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"错误" message:@"请先选择文件" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
@@ -1279,6 +1282,7 @@
             fileDialog.rootUrl = kDocument_Folder;
             fileDialog.isSelectFileMode =NO;
             fileDialog.fileDialogDelegate = self;
+            fileDialog.onType = 4;
             [self.navigationController pushViewController: fileDialog animated:YES ];
         }else{
             UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"错误" message:@"请先选择文件" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
@@ -1485,15 +1489,15 @@
     label.numberOfLines = 0;
     label.text = [NSString stringWithFormat:@"目标路径下存在以下%d个同名的文件，确定覆盖吗",fileNamesArray.count];
     [alertView addSubview:label];
-    tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 70, 290, 200)];
-    [tableView setTableFooterView:[[UIView alloc] initWithFrame:CGRectZero]];
+    _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 70, 290, 200)];
+    [_tableView setTableFooterView:[[UIView alloc] initWithFrame:CGRectZero]];
     tableViewDelegate = [[TableViewDelegate alloc]init];
     tableViewDelegate.fileNamesArray = fileNamesArray;
-    tableView.delegate = tableViewDelegate;
-    tableView.dataSource = tableViewDelegate;
-    tableView.allowsMultipleSelectionDuringEditing = YES;
-    [tableView setEditing:YES animated:YES];
-    [alertView addSubview:tableView];
+    _tableView.delegate = tableViewDelegate;
+    _tableView.dataSource = tableViewDelegate;
+    _tableView.allowsMultipleSelectionDuringEditing = YES;
+    [_tableView setEditing:YES animated:YES];
+    [alertView addSubview:_tableView];
     
     return alertView;
 }

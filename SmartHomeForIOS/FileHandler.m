@@ -15,6 +15,7 @@
 #import "NSOperationUploadQueue.h"
 #import "FileInfo.h"
 #import "ValidateTool.h"
+#import "UIHelper.h"
 @interface FileHandler ()
 {
     NSString *fileName;
@@ -165,6 +166,11 @@
                 [self.fileHandlerDelegate requestSuccessCallback];//调用委托方法
             }
             
+        }else if([[NSString stringWithFormat:@"%@",[responseJSON objectForKey:@"result"]] isEqualToString: @"200"]){
+            if ([self.fileHandlerDelegate respondsToSelector:@selector(sessionTimeOutCallback)]) {
+                [self.fileHandlerDelegate sessionTimeOutCallback];//调用委托方法
+            }
+            
         }else if ([[NSString stringWithFormat:@"%@",[responseJSON objectForKey:@"result"]] isEqualToString: @"0"]){
             UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:@"删除失败" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] ;
             [alertView show];
@@ -210,13 +216,22 @@
         {
             UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:@"共享/取消共享成功" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] ;
             [alertView show];
+            if ([self.fileHandlerDelegate respondsToSelector:@selector(requestSuccessCallback)]) {
+                [self.fileHandlerDelegate requestSuccessCallback];//调用委托方法
+            }
         }else if ([[NSString stringWithFormat:@"%@",[responseJSON objectForKey:@"result"]] isEqualToString: @"0"]){
             UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:@"共享/取消共享失败" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] ;
             [alertView show];
+            if ([self.fileHandlerDelegate respondsToSelector:@selector(requestSuccessCallback)]) {
+                [self.fileHandlerDelegate requestSuccessCallback];//调用委托方法
+            }
+        }else if([[NSString stringWithFormat:@"%@",[responseJSON objectForKey:@"result"]] isEqualToString: @"200"]){
+            if ([self.fileHandlerDelegate respondsToSelector:@selector(sessionTimeOutCallback)]) {
+                [self.fileHandlerDelegate sessionTimeOutCallback];//调用委托方法
+            }
+            
         }
-        if ([self.fileHandlerDelegate respondsToSelector:@selector(requestSuccessCallback)]) {
-            [self.fileHandlerDelegate requestSuccessCallback];//调用委托方法
-        }
+
         
     }errorHandler:^(MKNetworkOperation *errorOp, NSError* err) {
         NSLog(@"MKNetwork request error : %@", [err localizedDescription]);
@@ -372,12 +387,18 @@
                 MKNetworkOperation *op = [engine operationWithPath:REQUEST_NEWFOLDER_URL params:dic httpMethod:@"POST" ssl:NO];
                 [op addCompletionHandler:^(MKNetworkOperation *operation) {
                     NSDictionary *responseJSON=[NSJSONSerialization JSONObjectWithData:[operation responseData] options:kNilOptions error:&error];
+                    
                     if([[NSString stringWithFormat:@"%@",[responseJSON objectForKey:@"result"]] isEqualToString: @"1"])//操作成功
                     {
                         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:@"新建文件夹成功" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] ;
                         [alert show];
                         if ([self.fileHandlerDelegate respondsToSelector:@selector(requestSuccessCallback)]) {
                             [self.fileHandlerDelegate requestSuccessCallback];//调用委托方法
+                        }
+                        
+                    }else if([[NSString stringWithFormat:@"%@",[responseJSON objectForKey:@"result"]] isEqualToString: @"200"]){
+                        if ([self.fileHandlerDelegate respondsToSelector:@selector(sessionTimeOutCallback)]) {
+                            [self.fileHandlerDelegate sessionTimeOutCallback];//调用委托方法
                         }
                         
                     }else if ([[NSString stringWithFormat:@"%@",[responseJSON objectForKey:@"result"]] isEqualToString: @"0"]){
@@ -495,6 +516,11 @@
                     }else if ([[NSString stringWithFormat:@"%@",[responseJSON objectForKey:@"result"]] isEqualToString: @"0"]){
                         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:@"该文件已存在，请重新命名" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] ;
                         [alert show];
+                    }else if([[NSString stringWithFormat:@"%@",[responseJSON objectForKey:@"result"]] isEqualToString: @"200"]){
+                        if ([self.fileHandlerDelegate respondsToSelector:@selector(sessionTimeOutCallback)]) {
+                            [self.fileHandlerDelegate sessionTimeOutCallback];//调用委托方法
+                        }
+                        
                     }else {
                         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:@"重命名失败" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] ;
                         [alert show];
@@ -555,6 +581,11 @@
                     }else if ([[NSString stringWithFormat:@"%@",[responseJSON objectForKey:@"result"]] isEqualToString: @"0"]){
                         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:@"该文件已存在，请重新命名" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] ;
                         [alert show];
+                    }else if([[NSString stringWithFormat:@"%@",[responseJSON objectForKey:@"result"]] isEqualToString: @"200"]){
+                        if ([self.fileHandlerDelegate respondsToSelector:@selector(sessionTimeOutCallback)]) {
+                            [self.fileHandlerDelegate sessionTimeOutCallback];//调用委托方法
+                        }
+                        
                     }else {
                         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:@"重命名失败" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] ;
                         [alert show];
@@ -687,12 +718,23 @@
                 NSError * jsonError=nil;
                 NSDictionary *responseJSON=[NSJSONSerialization JSONObjectWithData:received options:kNilOptions error:&jsonError];
                 NSLog(@"responseJSON。。。。。=======%@",responseJSON);
+                if([[NSString stringWithFormat:@"%@",[responseJSON objectForKey:@"result"]] isEqualToString: @"1"])//操作成功
+                {
+                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:@"复制成功" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil] ;
+                    [alert show];
+                }else if([[NSString stringWithFormat:@"%@",[responseJSON objectForKey:@"result"]] isEqualToString: @"200"])//session time out
+                {
+                    if ([self.fileHandlerDelegate respondsToSelector:@selector(sessionTimeOutCallback)]) {
+                        [self.fileHandlerDelegate sessionTimeOutCallback];//调用委托方法
+                    }
+                }else{
+                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:@"复制失败" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil] ;
+                    [alert show];
+                }
             }
         }
-        dispatch_async(dispatch_get_main_queue(), ^{
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:@"复制成功" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil] ;
-            [alert show];
-        });
+
+
     }
     [self.condition unlock];
 }
@@ -755,19 +797,25 @@
                 NSError * jsonError=nil;
                 NSDictionary *responseJSON=[NSJSONSerialization JSONObjectWithData:received options:kNilOptions error:&jsonError];
                 NSLog(@"responseJSON。。。。。=======%@",responseJSON);
-                if([[NSString stringWithFormat:@"%@",[responseJSON objectForKey:@"result"]] isEqualToString: @"1"])//获取目录成功
+                if([[NSString stringWithFormat:@"%@",[responseJSON objectForKey:@"result"]] isEqualToString: @"1"])//移动成功
                 {
-                    
+                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:@"移动成功" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil] ;
+                    [alert show];
+                    if ([self.fileHandlerDelegate respondsToSelector:@selector(requestSuccessCallback)]) {
+                        [self.fileHandlerDelegate requestSuccessCallback];//调用委托方法
+                    }
+                }else if([[NSString stringWithFormat:@"%@",[responseJSON objectForKey:@"result"]] isEqualToString: @"200"])//session time out
+                {
+                    if ([self.fileHandlerDelegate respondsToSelector:@selector(sessionTimeOutCallback)]) {
+                        [self.fileHandlerDelegate sessionTimeOutCallback];//调用委托方法
+                    }
+                }else{
+                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:@"移动失败" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil] ;
+                    [alert show];
                 }
             }
         }
-        dispatch_async(dispatch_get_main_queue(), ^{
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:@"移动成功" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil] ;
-            [alert show];
-            if ([self.fileHandlerDelegate respondsToSelector:@selector(requestSuccessCallback)]) {
-                [self.fileHandlerDelegate requestSuccessCallback];//调用委托方法
-            }
-        });
+
     }
     [self.condition unlock];
 }
@@ -811,6 +859,10 @@
                     *stop = YES;
                 }
             }];
+        }else if([[NSString stringWithFormat:@"%@",[responseJSON objectForKey:@"value"]] isEqualToString: @"200"]){
+            if ([self.fileHandlerDelegate respondsToSelector:@selector(sessionTimeOutCallback)]) {
+                [self.fileHandlerDelegate sessionTimeOutCallback];//调用委托方法
+            }
         }
     }
     return filesDic;

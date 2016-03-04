@@ -10,6 +10,10 @@
 #import "FileDialogDelegate.h"
 
 @interface FileDialogViewController : UIViewController<UITableViewDataSource, UITableViewDelegate>
+@property (weak, nonatomic) IBOutlet UIButton *downBtn;
+@property(assign,nonatomic) int onType;
+
+
 
 @property(assign,nonatomic) BOOL isServerFile; //表示是否读的是服务器端的文件YES：读的是服务器端的 NO：读的是本地目录下的文件
 @property(assign,nonatomic) BOOL isSelectFileMode; //表示选择文件模式，用户只能选择文件

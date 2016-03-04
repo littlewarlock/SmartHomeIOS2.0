@@ -15,6 +15,9 @@
 @property (strong, nonatomic) IBOutlet UITextField *cocloudid;
 @property (strong, nonatomic) IBOutlet UIButton *registerButton;
 @property (strong, nonatomic) NSString* mac;
+@property (weak, nonatomic) IBOutlet UIView *sendPasswordView;
+@property (weak, nonatomic) IBOutlet UIView *backgroundView;
+@property (weak, nonatomic) IBOutlet UILabel *emailLabel;
 
 - (IBAction)finish:(id)sender;
 - (IBAction)registers:(id)sender;

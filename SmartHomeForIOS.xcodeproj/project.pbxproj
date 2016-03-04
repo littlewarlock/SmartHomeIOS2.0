@@ -141,6 +141,8 @@
 		20EB87B11C4381AE00FE69D0 /* video_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 20EB87B01C4381AE00FE69D0 /* video_icon.png */; };
 		20EC766C1C17C28C0026C91B /* H264ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 20EC766A1C17C28C0026C91B /* H264ViewController.m */; };
 		20EC766D1C17C28C0026C91B /* H264ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 20EC766B1C17C28C0026C91B /* H264ViewController.xib */; };
+		20ED30471C8687C600338C72 /* KxMovieAlarmRecordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 20ED30461C8687C600338C72 /* KxMovieAlarmRecordViewController.m */; };
+		20ED30491C868C0F00338C72 /* CloudLoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 20ED30481C868C0F00338C72 /* CloudLoginViewController.xib */; };
 		221AC7771BE07091005643CC /* iconfont-luzhiguanli.png in Resources */ = {isa = PBXBuildFile; fileRef = 221AC76D1BE07091005643CC /* iconfont-luzhiguanli.png */; };
 		221AC7781BE07091005643CC /* iconfont-setting-3.png in Resources */ = {isa = PBXBuildFile; fileRef = 221AC76E1BE07091005643CC /* iconfont-setting-3.png */; };
 		221AC7791BE07091005643CC /* snapshot.cgi.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 221AC76F1BE07091005643CC /* snapshot.cgi.jpg */; };
@@ -790,6 +792,9 @@
 		20EC76691C17C28C0026C91B /* H264ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = H264ViewController.h; sourceTree = "<group>"; };
 		20EC766A1C17C28C0026C91B /* H264ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = H264ViewController.m; sourceTree = "<group>"; };
 		20EC766B1C17C28C0026C91B /* H264ViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = H264ViewController.xib; sourceTree = "<group>"; };
+		20ED30451C8687C600338C72 /* KxMovieAlarmRecordViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KxMovieAlarmRecordViewController.h; sourceTree = "<group>"; };
+		20ED30461C8687C600338C72 /* KxMovieAlarmRecordViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KxMovieAlarmRecordViewController.m; sourceTree = "<group>"; };
+		20ED30481C868C0F00338C72 /* CloudLoginViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CloudLoginViewController.xib; sourceTree = "<group>"; };
 		221AC76D1BE07091005643CC /* iconfont-luzhiguanli.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iconfont-luzhiguanli.png"; sourceTree = "<group>"; };
 		221AC76E1BE07091005643CC /* iconfont-setting-3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iconfont-setting-3.png"; sourceTree = "<group>"; };
 		221AC76F1BE07091005643CC /* snapshot.cgi.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = snapshot.cgi.jpg; sourceTree = "<group>"; };
@@ -1865,6 +1870,7 @@
 		2095E20B1BFD66A4008507E8 /* COCloud */ = {
 			isa = PBXGroup;
 			children = (
+				20ED30481C868C0F00338C72 /* CloudLoginViewController.xib */,
 				204CB0AB1C0D9B5900191E1D /* RegisterSuccessViewController.h */,
 				204CB0AC1C0D9B5900191E1D /* RegisterSuccessViewController.m */,
 				204CB0AD1C0D9B5900191E1D /* RegisterSuccessViewController.xib */,
@@ -2058,6 +2064,15 @@
 			name = H264Decoder;
 			sourceTree = "<group>";
 		};
+		20ED30431C86851800338C72 /* kxmovieViewForHistory */ = {
+			isa = PBXGroup;
+			children = (
+				20ED30451C8687C600338C72 /* KxMovieAlarmRecordViewController.h */,
+				20ED30461C8687C600338C72 /* KxMovieAlarmRecordViewController.m */,
+			);
+			name = kxmovieViewForHistory;
+			sourceTree = "<group>";
+		};
 		22775E3A1BEA0ADD00470D28 /* ViewDeck */ = {
 			isa = PBXGroup;
 			children = (
@@ -2181,6 +2196,7 @@
 		480AE34C1BB4FA8E006C1ACD /* Device */ = {
 			isa = PBXGroup;
 			children = (
+				20ED30431C86851800338C72 /* kxmovieViewForHistory */,
 				20AB0C191C7D4B2100E16C41 /* Category */,
 				20112B781C72FAEE00F27331 /* MyToolBar */,
 				20D4970F1C47402200D2C6C9 /* ProgressCircle */,
@@ -3533,6 +3549,7 @@
 				22DFAD7D1BEA076600697900 /* share@2x.png in Resources */,
 				48D8A9DB1B9EBA8D00DC0D97 /* wmv_x.png in Resources */,
 				22DFAD731BEA073C00697900 /* music-icon@2x.png in Resources */,
+				20ED30491C868C0F00338C72 /* CloudLoginViewController.xib in Resources */,
 				20DEA02E1C1A656C0037F1C6 /* BigCollectionViewCell.xib in Resources */,
 				20548E1D1C08012700E19F66 /* MJRefresh.bundle in Resources */,
 				48D8A9561B9EBA8D00DC0D97 /* bmp_x.png in Resources */,
@@ -3749,6 +3766,7 @@
 				2095E22A1BFD6B93008507E8 /* SKPSMTPMessage.m in Sources */,
 				48F4A2E41BACF4EA007F13D9 /* UIImage+GIF.m in Sources */,
 				48F4A31B1BACF9A9007F13D9 /* DALabeledCircularProgressView.m in Sources */,
+				20ED30471C8687C600338C72 /* KxMovieAlarmRecordViewController.m in Sources */,
 				22C352631BE21C8E00C48F86 /* LoginViewController.m in Sources */,
 				20DEA02D1C1A656C0037F1C6 /* BigCollectionViewCell.m in Sources */,
 				22C3522D1BE21BCC00C48F86 /* PhotoTools.m in Sources */,

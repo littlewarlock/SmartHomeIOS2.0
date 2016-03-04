@@ -5,7 +5,6 @@
 //  Created by riqiao on 15/9/8.
 //  Copyright (c) 2015年 riqiao. All rights reserved.
 //
-
 #import "FDTableViewCell.h"
 #import "FileTools.h"
 #import "DataManager.h"
@@ -87,7 +86,7 @@
             BOOL isPic = [picArray containsObject:[[file.fileUrl pathExtension] lowercaseString]];
             if(isPic){
                 self.imageView.image =  [UIImage imageNamed:@"personal_photo"];
-                UIImage *image=[UIImage imageNamed:file.fileUrl];
+                UIImage *image=[UIImage imageWithContentsOfFile:file.fileUrl];
                 image=[PhotoTools getScaleImage:image scaleToSize:[UIImage imageNamed:@"personal_photo"].size];
                 if(image){
                     self.imageView.image = image;

@@ -10,11 +10,13 @@
 #import <MessageUI/MessageUI.h>
 
 @interface CloudLoginViewController : UIViewController
+@property (weak, nonatomic) IBOutlet UIView *backgroundView;
+@property (weak, nonatomic) IBOutlet UIView *remindView;
+@property (weak, nonatomic) IBOutlet UIView *sendPasswordView;
 
 @property (strong, nonatomic) IBOutlet UILabel *emailText;
 @property (strong, nonatomic) IBOutlet UITextField *passwordText;
 @property (strong, nonatomic) IBOutlet UIButton *LoginButton;
-@property (strong, nonatomic) IBOutlet UITextView *prompt;
 @property (strong, nonatomic) IBOutlet UIButton *toRegister;
 @property (strong, nonatomic) NSString* email;
 @property (strong, nonatomic) IBOutlet UITextView *information;

@@ -13,4 +13,6 @@
 - (void)chooseFileDirAction:(UIButton *)sender;
 @optional
 - (void)chooseFileAction:(UIButton *)sender;
+- (void)sessionTimeOutCallback;
+
 @end

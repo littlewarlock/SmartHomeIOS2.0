@@ -366,7 +366,7 @@ static NSMutableDictionary * gHistory;
 //{
 //    if (error == noErr)
 //        return NO;
-//    
+//
 //    char str[20] = {0};
 //    // see if it appears to be a 4-char-code
 //    *(UInt32 *)(str + 1) = CFSwapInt32HostToBig(error);
@@ -376,9 +376,9 @@ static NSMutableDictionary * gHistory;
 //    } else
 //        // no, format it as an integer
 //        sprintf(str, "%d", (int)error);
-//    
+//
 //    LoggerStream(0, @"Error: %s (%s)\n", operation, str);
-//    
+//
 //    //exit(1);
 //    return YES;
 //}
@@ -388,19 +388,19 @@ static NSMutableDictionary * gHistory;
     
     //[self pause];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-//    if (_dispatchQueue) {
-//        // Not needed as of ARC.
-//        //        dispatch_release(_dispatchQueue);
-//        _dispatchQueue = NULL;
-//    }
-
+    //    if (_dispatchQueue) {
+    //        // Not needed as of ARC.
+    //        //        dispatch_release(_dispatchQueue);
+    //        _dispatchQueue = NULL;
+    //    }
+    
     self.navigationController.navigationBarHidden = NO;
     [self.view removeFromSuperview];
     [self removeFromParentViewController];
     
-//    
-//    _moviePosition = 0;
-//    [_decoder closeFile];
+    //
+    //    _moviePosition = 0;
+    //    [_decoder closeFile];
     //[_decoder closeFile];
     //_decoder = nil;
 }
@@ -455,15 +455,18 @@ static NSMutableDictionary * gHistory;
     
     // top hud
     
-    
+    //左侧的返回按钮
     _doneButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    _doneButton.frame = CGRectMake(0, 1, 100, topH);
+    _doneButton.frame = CGRectMake(0, 1, 47, topH);
     _doneButton.backgroundColor = [UIColor clearColor];
+    _doneButton.imageEdgeInsets = UIEdgeInsetsMake(0, 6.5, 0, 0);
     [_doneButton setImage:[UIImage imageNamed:@"left-icon"] forState:UIControlStateNormal];
     _doneButton.titleLabel.font = [UIFont systemFontOfSize:18];
     _doneButton.showsTouchWhenHighlighted = YES;
     [_doneButton addTarget:self action:@selector(returnBeforeWIndowAction:)
           forControlEvents:UIControlEventTouchUpInside];
+    
+    //播放时间进度
     _progressLabel = [[UILabel alloc] initWithFrame:CGRectMake(_bottomView.frame.origin.x+width-250, _bottomView.frame.origin.y+1, 150, topH)];
     _progressLabel.backgroundColor = [UIColor clearColor];
     _progressLabel.opaque = NO;
@@ -482,16 +485,16 @@ static NSMutableDictionary * gHistory;
     //    [_progressSlider setThumbImage:[UIImage imageNamed:@"kxmovie.bundle/sliderthumb"]
     //                          forState:UIControlStateNormal];
     
-    
+    //投屏按钮
     _infoButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    _infoButton.frame = CGRectMake(width-45, 17, 20, 16);
+    _infoButton.frame = CGRectMake(width-65,_topBar.frame.size.height * 0.5 - 16, 40, 32);
     _infoButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
-
+    
     [_infoButton setBackgroundImage:[UIImage imageNamed:@"for-screen"] forState:UIControlStateNormal];
     [_infoButton addTarget:self
-                 action:@selector(showTableView)
-       forControlEvents:UIControlEventTouchUpInside];
-
+                    action:@selector(showTableView)
+          forControlEvents:UIControlEventTouchUpInside];
+    
     
     
     
@@ -539,23 +542,31 @@ static NSMutableDictionary * gHistory;
     _playBtn.hidden  = NO;
     _pauseBtn.hidden = YES;
     
-    barView = [[UIView alloc] initWithFrame:CGRectMake(110, 5, 1,40)];
+    //返回按钮右边的分隔线
+    barView = [[UIView alloc] initWithFrame:CGRectMake(CGRectGetMaxX(_doneButton.frame), _topBar.frame.size.height * 0.5 - 10,1,20)];
     barView.backgroundColor = [UIColor whiteColor];
-    rectView.layer.cornerRadius = 5.0f;
     
-    _titleLable = [[UILabel alloc] initWithFrame:CGRectMake(120, 1, 200, 50)];
+    //视频名称
+    _titleLable = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(barView.frame) + 8, 1, 200, 50)];
     _titleLable.text = [[self.filePath lastPathComponent] stringByDeletingPathExtension];
+    _titleLabel.font = [UIFont systemFontOfSize:17];
+    _titleLabel.textAlignment = NSTextAlignmentLeft;
     [_titleLable setTextColor:[UIColor whiteColor]];
+    _titleLabel.backgroundColor = [UIColor yellowColor];
     
-    rectView = [[UIView alloc] initWithFrame:CGRectMake(0, height*1/4, 60,height*1/2)];
+    //音量控制的View
+    rectView = [[UIView alloc] initWithFrame:CGRectMake(0, height*1/4, 41,height*1/2)];
     rectView.backgroundColor = [UIColor colorWithWhite:0 alpha:0.5f];
     rectView.layer.cornerRadius = 5.0f;
     
-    m_volumeView = [[MPVolumeView alloc]initWithFrame:CGRectMake(-height*1/7, height*1/2, height*3/8, 20)];
+    //音量控制
+    m_volumeView = [[MPVolumeView alloc]initWithFrame:CGRectMake( -50, rectView.frame.size.height * 0.5 + rectView.bounds.origin.y, 140, 20)];
+    m_volumeView.tintColor = [UIColor colorWithRed:0/255.0 green:166/255.0 blue:237/255.0 alpha:1];
+    [m_volumeView setVolumeThumbImage:[UIImage imageNamed:@"time_icon"] forState:UIControlStateNormal];
     /*
-    [m_volumeView setMinimumVolumeSliderImage:[[UIImage imageNamed:@"LeftTrackImage"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 4, 0, 0)]forState:UIControlStateNormal];
-    [m_volumeView setMaximumVolumeSliderImage:[[UIImage imageNamed:@"RightTrackImage"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 0, 0, 4)]forState:UIControlStateNormal];
-*/
+     [m_volumeView setMinimumVolumeSliderImage:[[UIImage imageNamed:@"LeftTrackImage"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 4, 0, 0)]forState:UIControlStateNormal];
+     [m_volumeView setMaximumVolumeSliderImage:[[UIImage imageNamed:@"RightTrackImage"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 0, 0, 4)]forState:UIControlStateNormal];
+     */
     m_volumeView.transform = CGAffineTransformMakeRotation(-90* M_PI/180);
     
     hornView = [[UIImageView alloc] initWithFrame:CGRectMake(0, height*3/4, 20,20)];
@@ -629,7 +640,7 @@ static NSMutableDictionary * gHistory;
 
 - (void) viewDidAppear:(BOOL)animated
 {
-//     LoggerStream(1, @"viewDidAppear");
+    //     LoggerStream(1, @"viewDidAppear");
     
     [super viewDidAppear:animated];
     _fullscreen = YES;
@@ -842,14 +853,14 @@ static NSMutableDictionary * gHistory;
     self.relTime = relTime;
     self.totalTime = trackDuration;
     self.playOrPause.selected = NO;
- 
-
+    
+    
     //设置总时长label
     NSInteger totalHour = trackDuration / 3600;
     NSInteger totalMinute = (trackDuration < 3600) ? (NSInteger)trackDuration / 60 : (NSInteger)trackDuration % 3600 / 60;
     NSInteger totalSecond = (trackDuration < 60) ? (NSInteger)trackDuration % 60 : (NSInteger)trackDuration % 60 % 60;
     self.totaltime.text = [NSString stringWithFormat:@"%02d:%02d:%02d",totalHour,totalMinute,totalSecond];
-
+    
     //获得播放器播放的视频的时间
     CGFloat Videotime = _moviePosition - _decoder.startTime;
     _Videotime = Videotime;
@@ -870,7 +881,7 @@ static NSMutableDictionary * gHistory;
         [self.renderer play];
         self.isPlay = [self.renderer isPlayingDlna];
     }
-
+    
     //跳到播放器播放的视频的时间
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self.renderer seek:Videotime];
@@ -914,14 +925,14 @@ static NSMutableDictionary * gHistory;
     if (self.isPlay) {
         [self.renderer pause];
         self.playOrPause.selected = YES;
- 
+        
         // 移除定时器
         [self removeProgressTimer];
         
     }else {
         [self.renderer play];
         self.playOrPause.selected = NO;
-
+        
         // 添加定时器
         [self addProgressTimer];
     }
@@ -1015,7 +1026,7 @@ static NSMutableDictionary * gHistory;
     
     //最大音量
     CGFloat maxVol = 100;
-
+    
     //改变音量
     CGFloat vol = self.volumnSlider.value * maxVol ;
     [self.renderer setVolume:vol];
@@ -1041,7 +1052,7 @@ static NSMutableDictionary * gHistory;
     NSInteger relMinute = (value < 3600) ? (NSInteger)value / 60 : (NSInteger)value % 3600 / 60;
     NSInteger relSecond = (value < 60) ? (NSInteger)value % 60 : (NSInteger)value % 60 % 60;
     self.reltime.text = [NSString stringWithFormat:@"%02d:%02d:%02d",relHour,relMinute,relSecond];
-
+    
     
 }
 
@@ -1080,7 +1091,7 @@ static NSMutableDictionary * gHistory;
 //返回私有云
 - (IBAction)backCloub:(id)sender
 {
-
+    
     self.relTime = 0.0;
     self.totalTime = 0.0;
     [self.dlnaProgress setValue:0.0 animated:NO];
@@ -1108,7 +1119,7 @@ static NSMutableDictionary * gHistory;
 //更新进度
 - (void)updateProgressInfo
 {
-
+    
     //获得视频播放的时间信息
     CGUpnpAVPositionInfo *position = [self.renderer positionInfo];
     CGFloat relTime = [position relTime];//视频的当前播放时间
@@ -1125,7 +1136,7 @@ static NSMutableDictionary * gHistory;
     NSInteger totalHour = trackDuration / 3600;
     NSInteger totalMinute = (trackDuration < 3600) ? (NSInteger)trackDuration / 60 : (NSInteger)trackDuration % 3600 / 60;
     NSInteger totalSecond = (trackDuration < 60) ? (NSInteger)trackDuration % 60 : (NSInteger)trackDuration % 60 % 60;
-        
+    
     NSInteger relHour = relTime / 3600;
     NSInteger relMinute = (relTime < 3600) ? (NSInteger)relTime / 60 : (NSInteger)relTime % 3600 / 60;
     NSInteger relSecond = (relTime < 60) ? (NSInteger)relTime % 60 : (NSInteger)relTime % 60 % 60;
@@ -1190,7 +1201,7 @@ static NSMutableDictionary * gHistory;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-
+    
     return [self.dataSource count];
 }
 
@@ -1238,7 +1249,7 @@ static NSMutableDictionary * gHistory;
 
 - (void) viewWillDisappear:(BOOL)animated
 {
-
+    
     
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     
@@ -1360,13 +1371,13 @@ static NSMutableDictionary * gHistory;
         [self enableAudio:YES];
     // merged by hgc 2015 12 17 start
     NSLog(@"duration==%f",_decoder.duration);
-//    if((_decoder.duration -_moviePosition)<1.8){
-//        self.playing = NO;
-//        _moviePosition = 0;
-//        [_decoder setPosition:0];
-//        [self enableAudio:NO];
-//        [self updatePlayButton];
-//    }
+    //    if((_decoder.duration -_moviePosition)<1.8){
+    //        self.playing = NO;
+    //        _moviePosition = 0;
+    //        [_decoder setPosition:0];
+    //        [self enableAudio:NO];
+    //        [self updatePlayButton];
+    //    }
     // merged by hgc 2015 12 17 end
     //hgc added 2015 11 05 start
     if (_decoder.isEOF) {
@@ -1684,7 +1695,7 @@ static NSMutableDictionary * gHistory;
 #endif
                         if (_decoder.validVideo) {
                             const CGFloat delta = _moviePosition - frame.position;
-                           
+                            
                             if (delta < -0.1) {
                                 
                                 memset(outData, 0, numFrames * numChannels * sizeof(float));
@@ -1859,12 +1870,12 @@ static NSMutableDictionary * gHistory;
     const CGFloat duration = _decoder.isNetwork ? .0f : 0.1f;
     
     self.decoding = YES;
-//    if((_decoder.duration -_moviePosition)<0.18){
-//
-//        _playBtn.hidden =NO;
-//        _pauseBtn.hidden = YES;
-//        
-//    }
+    //    if((_decoder.duration -_moviePosition)<0.18){
+    //
+    //        _playBtn.hidden =NO;
+    //        _pauseBtn.hidden = YES;
+    //
+    //    }
     
     dispatch_async(_dispatchQueue, ^{
         
@@ -1892,7 +1903,7 @@ static NSMutableDictionary * gHistory;
                         if (strongSelf)
                             good = [strongSelf addFrames:frames];
                     }
-
+                    
                 }
             }
         }
@@ -1932,10 +1943,10 @@ static NSMutableDictionary * gHistory;
             if (_decoder.isEOF) {
                 
                 [self pause];
-//                // hgc start
-//                NSLog(@"leftFrames==%lu",(unsigned long)leftFrames);
-//                _moviePosition = 0;
-//                // hgc end
+                //                // hgc start
+                //                NSLog(@"leftFrames==%lu",(unsigned long)leftFrames);
+                //                _moviePosition = 0;
+                //                // hgc end
                 [self updateHUD];
                 //add by lcw 20160128 set progressSlider to end
                 _progressSlider.value = 1;
@@ -1953,7 +1964,7 @@ static NSMutableDictionary * gHistory;
         
         if (!leftFrames ||
             !(_bufferedDuration > _minBufferedDuration)) {
-                [self asyncDecodeFrames];
+            [self asyncDecodeFrames];
         }
         
         const NSTimeInterval correction = [self tickCorrection];
@@ -2171,24 +2182,24 @@ static NSMutableDictionary * gHistory;
         startPosition = 0;
     }
     const CGFloat position = _moviePosition -startPosition;
-
-//    if(_audioFrames.count!=0 && _videoFrames.count !=0){
-//        KxAudioFrameVer2 *frame = _audioFrames[0];
-//        KxVideoFrameVer2 *frame2 = _videoFrames[0];
-//        NSLog(@"图像声音偏差＝＝＝＝＝＝＝＝＝＝＝＝%f＝＝＝＝＝＝＝＝＝＝＝＝＝",frame.position-frame2.position);
-////        if(frame.position-frame2.position >0.3){
-////            [_audioFrames removeObjectAtIndex:0];
-////        }
-////        
-////        if(frame.position-frame2.position <-0.3){
-////            [_videoFrames removeObjectAtIndex:0];
-////        }
-//        
-//        
-//    }
+    
+    //    if(_audioFrames.count!=0 && _videoFrames.count !=0){
+    //        KxAudioFrameVer2 *frame = _audioFrames[0];
+    //        KxVideoFrameVer2 *frame2 = _videoFrames[0];
+    //        NSLog(@"图像声音偏差＝＝＝＝＝＝＝＝＝＝＝＝%f＝＝＝＝＝＝＝＝＝＝＝＝＝",frame.position-frame2.position);
+    ////        if(frame.position-frame2.position >0.3){
+    ////            [_audioFrames removeObjectAtIndex:0];
+    ////        }
+    ////
+    ////        if(frame.position-frame2.position <-0.3){
+    ////            [_videoFrames removeObjectAtIndex:0];
+    ////        }
+    //
+    //
+    //    }
     
     //hgc 2015 11 26
-
+    
     
     if (_progressSlider.state == UIControlStateNormal)
         _progressSlider.value = position / duration;
@@ -2271,27 +2282,32 @@ static NSMutableDictionary * gHistory;
         [[UIApplication sharedApplication] setStatusBarOrientation:UIInterfaceOrientationLandscapeRight];
         self.view.transform = CGAffineTransformMakeRotation(M_PI/2);
         self.view.frame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-        _titleLable.frame = CGRectMake(120, 1, SCREEN_HEIGHT-150, topH);
+        _titleLable.frame = CGRectMake(CGRectGetMaxX(barView.frame) + 8, 1, SCREEN_WIDTH-150, 50);
         _progressSlider.frame = CGRectMake(0, SCREEN_WIDTH-botH-topH/4, SCREEN_HEIGHT, topH/2);
         _playBtn.frame = CGRectMake(20, SCREEN_WIDTH-50+1, botH, topH);
         _pauseBtn.frame = CGRectMake(20, SCREEN_WIDTH-50+1, botH, topH);
         _progressLabel.frame = CGRectMake( SCREEN_HEIGHT -200, SCREEN_WIDTH-botH, 150, topH);
-        rectView.frame = CGRectMake(0, SCREEN_WIDTH*1/4, 80,SCREEN_WIDTH*1/2);
-        hornView.frame = CGRectMake(SCREEN_WIDTH*1/8, SCREEN_WIDTH*3/4 -30, 20,20);
-        m_volumeView.frame= CGRectMake(SCREEN_WIDTH*1/8, SCREEN_WIDTH*5/16 -10, 20, SCREEN_WIDTH*3/8);
+        rectView.frame = CGRectMake(0, SCREEN_WIDTH*1/4, 41,SCREEN_WIDTH*1/2);
+        hornView.frame = CGRectMake(rectView.frame.size.width * 0.5 - 10, SCREEN_WIDTH*3/4 -30, 20,20);
+        //        m_volumeView.frame= CGRectMake(SCREEN_WIDTH*1/8, SCREEN_WIDTH*5/16 -10, 20, SCREEN_WIDTH*3/8);
+        
+        //        m_volumeView = [[MPVolumeView alloc]initWithFrame:CGRectMake(rectView.frame.size.width * 0.5, hornView.frame.origin.y, 20, SCREEN_WIDTH*1/3)];
+        
         
     }else{
         [[UIApplication sharedApplication] setStatusBarOrientation:UIInterfaceOrientationLandscapeLeft];
         self.view.transform = CGAffineTransformMakeRotation(M_PI*2);
         self.view.frame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
         _bottomView.frame= CGRectMake(0, SCREEN_HEIGHT-botH, SCREEN_WIDTH, botH);
-        _titleLable.frame = CGRectMake(120, 1, SCREEN_WIDTH-150, topH);
+        _titleLable.frame = CGRectMake(CGRectGetMaxX(barView.frame) + 8, 1, SCREEN_WIDTH-150, 50);
         _progressSlider.frame =CGRectMake(0, SCREEN_HEIGHT-50-topH/4, SCREEN_WIDTH, topH/2);
         _playBtn.frame =CGRectMake( 20, SCREEN_HEIGHT-botH+1, botH, topH);
         _pauseBtn.frame =CGRectMake(20, SCREEN_HEIGHT-botH+1, botH, topH);
         _progressLabel.frame = CGRectMake(0+SCREEN_WIDTH-200, SCREEN_HEIGHT-botH+1, 150, topH);
-        rectView.frame =CGRectMake(0, SCREEN_HEIGHT*1/4, 60,SCREEN_HEIGHT*1/2);
-        m_volumeView.frame= CGRectMake(SCREEN_WIDTH*1/8, SCREEN_WIDTH*5/16, 20, SCREEN_WIDTH*3/8);
+        rectView.frame =CGRectMake(0, SCREEN_HEIGHT*1/4, 41,SCREEN_HEIGHT*1/2);
+        //        m_volumeView.frame= CGRectMake(SCREEN_WIDTH*1/8, SCREEN_WIDTH*5/16, 20, SCREEN_WIDTH*3/8);
+        //        m_volumeView = [[MPVolumeView alloc]initWithFrame:CGRectMake(rectView.frame.size.width * 0.5, hornView.frame.origin.y, 20, SCREEN_WIDTH*1/3)];
+        hornView.frame = CGRectMake(rectView.frame.size.width * 0.5 - 10, SCREEN_WIDTH*3/4 -30, 20,20);
         
     }
     _fullscreen = !_fullscreen;
@@ -2320,16 +2336,16 @@ static NSMutableDictionary * gHistory;
     
     position = MIN(_decoder.duration - 1, MAX(0, position));
     // merged by hgc 2015 12 17 start
-//    if((_decoder.duration - position)<1.8 || position <1.8){
-//        self.playing = NO;
-//        _moviePosition = 0;
-//        _progressSlider.value= 0;
-//        [_decoder setPosition:0];
-//        [self enableAudio:NO];
-//        [self updatePlayButton];
-//        [self playDidTouch:nil];
-//        return;
-//    }
+    //    if((_decoder.duration - position)<1.8 || position <1.8){
+    //        self.playing = NO;
+    //        _moviePosition = 0;
+    //        _progressSlider.value= 0;
+    //        [_decoder setPosition:0];
+    //        [self enableAudio:NO];
+    //        [self updatePlayButton];
+    //        [self playDidTouch:nil];
+    //        return;
+    //    }
     
     // merged by hgc 2015 12 17 end
     __weak KxMovieView *weakSelf = self;
@@ -2531,27 +2547,27 @@ static NSMutableDictionary * gHistory;
 //    switch (section) {
 //        case KxMovieInfoSectionGeneral:
 //            return KxMovieInfoGeneralCount;
-//            
+//
 //        case KxMovieInfoSectionMetadata: {
 //            NSDictionary *d = [_decoder.info valueForKey:@"metadata"];
 //            return d.count;
 //        }
-//            
+//
 //        case KxMovieInfoSectionVideo: {
 //            NSArray *a = _decoder.info[@"video"];
 //            return a.count;
 //        }
-//            
+//
 //        case KxMovieInfoSectionAudio: {
 //            NSArray *a = _decoder.info[@"audio"];
 //            return a.count;
 //        }
-//            
+//
 //        case KxMovieInfoSectionSubtitles: {
 //            NSArray *a = _decoder.info[@"subtitles"];
 //            return a.count ? a.count + 1 : 0;
 //        }
-//            
+//
 //        default:
 //            return 0;
 //    }
@@ -2570,42 +2586,42 @@ static NSMutableDictionary * gHistory;
 //- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 //{
 //    UITableViewCell *cell;
-//    
+//
 //    if (indexPath.section == KxMovieInfoSectionGeneral) {
-//        
+//
 //        if (indexPath.row == KxMovieInfoGeneralBitrate) {
-//            
+//
 //            int bitrate = [_decoder.info[@"bitrate"] intValue];
 //            cell = [self mkCell:@"ValueCell" withStyle:UITableViewCellStyleValue1];
 //            cell.textLabel.text = NSLocalizedString(@"Bitrate", nil);
 //            cell.detailTextLabel.text = [NSString stringWithFormat:@"%d kb/s",bitrate / 1000];
-//            
+//
 //        } else if (indexPath.row == KxMovieInfoGeneralFormat) {
-//            
+//
 //            NSString *format = _decoder.info[@"format"];
 //            cell = [self mkCell:@"ValueCell" withStyle:UITableViewCellStyleValue1];
 //            cell.textLabel.text = NSLocalizedString(@"Format", nil);
 //            cell.detailTextLabel.text = format ? format : @"-";
 //        }
-//        
+//
 //    } else if (indexPath.section == KxMovieInfoSectionMetadata) {
-//        
+//
 //        NSDictionary *d = _decoder.info[@"metadata"];
 //        NSString *key = d.allKeys[indexPath.row];
 //        cell = [self mkCell:@"ValueCell" withStyle:UITableViewCellStyleValue1];
 //        cell.textLabel.text = key.capitalizedString;
 //        cell.detailTextLabel.text = [d valueForKey:key];
-//        
+//
 //    } else if (indexPath.section == KxMovieInfoSectionVideo) {
-//        
+//
 //        NSArray *a = _decoder.info[@"video"];
 //        cell = [self mkCell:@"VideoCell" withStyle:UITableViewCellStyleValue1];
 //        cell.textLabel.text = a[indexPath.row];
 //        cell.textLabel.font = [UIFont systemFontOfSize:14];
 //        cell.textLabel.numberOfLines = 2;
-//        
+//
 //    } else if (indexPath.section == KxMovieInfoSectionAudio) {
-//        
+//
 //        NSArray *a = _decoder.info[@"audio"];
 //        cell = [self mkCell:@"AudioCell" withStyle:UITableViewCellStyleValue1];
 //        cell.textLabel.text = a[indexPath.row];
@@ -2613,25 +2629,25 @@ static NSMutableDictionary * gHistory;
 //        cell.textLabel.numberOfLines = 2;
 //        BOOL selected = _decoder.selectedAudioStream == indexPath.row;
 //        cell.accessoryType = selected ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
-//        
+//
 //    } else if (indexPath.section == KxMovieInfoSectionSubtitles) {
-//        
+//
 //        NSArray *a = _decoder.info[@"subtitles"];
-//        
+//
 //        cell = [self mkCell:@"SubtitleCell" withStyle:UITableViewCellStyleValue1];
 //        cell.textLabel.font = [UIFont systemFontOfSize:14];
 //        cell.textLabel.numberOfLines = 1;
-//        
+//
 //        if (indexPath.row) {
 //            cell.textLabel.text = a[indexPath.row - 1];
 //        } else {
 //            cell.textLabel.text = NSLocalizedString(@"Disable", nil);
 //        }
-//        
+//
 //        const BOOL selected = _decoder.selectedSubtitleStream == (indexPath.row - 1);
 //        cell.accessoryType = selected ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
 //    }
-//    
+//
 //    cell.selectionStyle = UITableViewCellSelectionStyleNone;
 //    return cell;
 //}
@@ -2641,48 +2657,48 @@ static NSMutableDictionary * gHistory;
 //- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 //{
 //    if (indexPath.section == KxMovieInfoSectionAudio) {
-//        
+//
 //        NSInteger selected = _decoder.selectedAudioStream;
-//        
+//
 //        if (selected != indexPath.row) {
-//            
+//
 //            _decoder.selectedAudioStream = indexPath.row;
 //            NSInteger now = _decoder.selectedAudioStream;
-//            
+//
 //            if (now == indexPath.row) {
-//                
+//
 //                UITableViewCell *cell;
-//                
+//
 //                cell = [_tableView cellForRowAtIndexPath:indexPath];
 //                cell.accessoryType = UITableViewCellAccessoryCheckmark;
-//                
+//
 //                indexPath = [NSIndexPath indexPathForRow:selected inSection:KxMovieInfoSectionAudio];
 //                cell = [_tableView cellForRowAtIndexPath:indexPath];
 //                cell.accessoryType = UITableViewCellAccessoryNone;
 //            }
 //        }
-//        
+//
 //    } else if (indexPath.section == KxMovieInfoSectionSubtitles) {
-//        
+//
 //        NSInteger selected = _decoder.selectedSubtitleStream;
-//        
+//
 //        if (selected != (indexPath.row - 1)) {
-//            
+//
 //            _decoder.selectedSubtitleStream = indexPath.row - 1;
 //            NSInteger now = _decoder.selectedSubtitleStream;
-//            
+//
 //            if (now == (indexPath.row - 1)) {
-//                
+//
 //                UITableViewCell *cell;
-//                
+//
 //                cell = [_tableView cellForRowAtIndexPath:indexPath];
 //                cell.accessoryType = UITableViewCellAccessoryCheckmark;
-//                
+//
 //                indexPath = [NSIndexPath indexPathForRow:selected + 1 inSection:KxMovieInfoSectionSubtitles];
 //                cell = [_tableView cellForRowAtIndexPath:indexPath];
 //                cell.accessoryType = UITableViewCellAccessoryNone;
 //            }
-//            
+//
 //            // clear subtitles
 //            _subtitlesLabel.text = nil;
 //            _subtitlesLabel.hidden = YES;
@@ -2712,25 +2728,25 @@ static NSMutableDictionary * gHistory;
     
     KxVideoFrameRGBVer2 *rgbFrame = (KxVideoFrameRGBVer2 *)frame;
     UIImage *imageKX = [rgbFrame asImage];
-//    float videoDuartion = _decoder.duration;
-//    [_decoder closeFile];
-//    
-//    
-//    NSData *imageData = UIImageJPEGRepresentation(imageKX, 0.2f);
-//    NSString *dic = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask, YES) objectAtIndex:0];
-//    
-//    //创建视频文件夹
-//    NSString *str = [dic stringByAppendingPathComponent:@"thumbs"];
-//    str = [str stringByAppendingString:[NSString stringWithFormat:@"/%@.jpg",[[videoURL lastPathComponent] stringByDeletingPathExtension]]];
-//    NSFileManager *fileManager = [NSFileManager defaultManager];
-//    BOOL existed = [fileManager fileExistsAtPath:str];
-//    if (!existed)
-//    {
-//        [imageData writeToFile:str atomically:NO];
-//    }
-//    
-//    NSDictionary *dict = [[NSDictionary alloc] initWithObjectsAndKeys:str,@"image",[NSNumber numberWithFloat:videoDuartion],@"duration",nil];
-//    [dictArray addObject:dict];
+    //    float videoDuartion = _decoder.duration;
+    //    [_decoder closeFile];
+    //
+    //
+    //    NSData *imageData = UIImageJPEGRepresentation(imageKX, 0.2f);
+    //    NSString *dic = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask, YES) objectAtIndex:0];
+    //
+    //    //创建视频文件夹
+    //    NSString *str = [dic stringByAppendingPathComponent:@"thumbs"];
+    //    str = [str stringByAppendingString:[NSString stringWithFormat:@"/%@.jpg",[[videoURL lastPathComponent] stringByDeletingPathExtension]]];
+    //    NSFileManager *fileManager = [NSFileManager defaultManager];
+    //    BOOL existed = [fileManager fileExistsAtPath:str];
+    //    if (!existed)
+    //    {
+    //        [imageData writeToFile:str atomically:NO];
+    //    }
+    //    
+    //    NSDictionary *dict = [[NSDictionary alloc] initWithObjectsAndKeys:str,@"image",[NSNumber numberWithFloat:videoDuartion],@"duration",nil];
+    //    [dictArray addObject:dict];
     
     return imageKX;
 }

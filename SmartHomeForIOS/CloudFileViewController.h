@@ -21,6 +21,7 @@
 @property (assign, nonatomic) BOOL isMultiple;//是否允许多选，YES：允许多选 NO：不允许多选
 @property (copy, nonatomic) NSString *rootUrl; //存储当前用户的根目录
 @property (assign, nonatomic) BOOL isInSharedFolder; //是否在共享文件夹下
+@property (assign, nonatomic) BOOL isServerSessionTimeOut; //是否连接超时
 @property (strong, nonatomic) IBOutlet UITableView *fileListTableView;
 @property (weak, nonatomic) IBOutlet UITabBar *tabbar;
 

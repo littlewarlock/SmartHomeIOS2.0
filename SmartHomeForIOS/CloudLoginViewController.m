@@ -41,30 +41,46 @@
     self.navigationItem.leftBarButtonItem=itemLeft;
     
     self.emailText.text = self.email;
-    [self.prompt setHidden:YES];
-    self.information.text = [NSString stringWithFormat:@"%@。",self.email];
+    [self.sendPasswordView setHidden:YES];
+    self.information.text = [NSString stringWithFormat:@"密码已经发送到邮箱%@。",self.email];
     promotView.layer.borderColor = [UIColor lightGrayColor].CGColor;
     promotView.layer.borderWidth = 1;
     [promotView setHidden:YES];
     
-    if([@"0" isEqualToString:self.emailflg]){
-        [self.information setHidden:NO];
-        [self.toRegister setHidden:NO];
-        [information2 setHidden:NO];
-        [information3 setHidden:NO];
-    }else{
-        [self.information setHidden:YES];
-        [self.toRegister setHidden:YES];
-        [information2 setHidden:YES];
-        [information3 setHidden:YES];
-    }
+    self.backgroundView.hidden = YES;
+    self.remindView.hidden = YES;
     
     [self.passwordText becomeFirstResponder];
+    
+    if (!self.backgroundView.hidden) {
+        [self.passwordText resignFirstResponder];
+    }
+    
+    
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
 }
+
+- (IBAction)confirm:(id)sender {
+    
+    self.backgroundView.hidden = YES;
+    self.remindView.hidden = YES;
+    [self.LoginButton setEnabled:NO];
+    promotText.text = @"登录中...";
+    [promotView setHidden:NO];
+    [move startAnimating];
+    [self loginCheck];
+}
+- (IBAction)confirmSendPassword:(id)sender {
+    
+    self.backgroundView.hidden = YES;
+    self.sendPasswordView.hidden = YES;
+    [self.passwordText becomeFirstResponder];
+    
+}
+
 //按下登录按钮进行格式判断
 - (IBAction)Login:(id)sender {
     [self.passwordText resignFirstResponder];
@@ -74,11 +90,17 @@
         [self.passwordText becomeFirstResponder];
         return ;
     }else{
-        [self.LoginButton setEnabled:NO];
-        promotText.text = @"登录中...";
-        [promotView setHidden:NO];
-        [move startAnimating];
-        [self loginCheck];
+        
+        if([@"0" isEqualToString:self.emailflg]){
+            self.backgroundView.hidden = NO;
+            self.remindView.hidden = NO;
+            [self.passwordText resignFirstResponder];
+        }else{
+            self.backgroundView.hidden = YES;
+            self.remindView.hidden = YES;
+            
+        }
+        
     }
 }
 //登录功能
@@ -168,6 +190,7 @@
 - (void)resetPassword{
     //    promotText.text = @"重设密码中...";
     //    [promotView setHidden:NO];
+    [self.passwordText resignFirstResponder];
     NSDictionary *requestParam = @{@"email":self.emailText.text,@"cid":self.cid,@"mac":self.mac};
     //请求php
     NSString* url = Server_URL;
@@ -183,10 +206,14 @@
         NSString *results = [NSString stringWithFormat:@"%@",result];
         NSLog(@"%@",completedOperation.responseJSON);
         //        [promotView setHidden:YES];
+//        [self.sendPasswordView setHidden:NO];
+//        [self.backgroundView setHidden:NO];
         if([@"0" isEqualToString:results]){
             //            [move stopAnimating];
-            [self.prompt setHidden:NO];
-            [self.passwordText becomeFirstResponder];
+            
+            [self.backgroundView setHidden:NO];
+            [self.sendPasswordView setHidden:NO];
+            [self.passwordText resignFirstResponder];
         }else if([@"102" isEqualToString:results]){
             UIAlertView* alert=[[UIAlertView alloc]initWithTitle:@"系统提示" message:@"中转服务器该数据已存在。" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
             [alert show];
@@ -235,7 +262,7 @@
 
 -(void)tickDown{
     [reset setEnabled:YES];
-    [self.prompt setHidden:YES];
+    [self.sendPasswordView setHidden:YES];
     [timer invalidate];
 }
 
@@ -253,8 +280,9 @@
 }
 //重置密码按钮按下
 - (IBAction)check:(id)sender {
+    
     //    [move startAnimating];
-    [self.prompt setHidden:YES];
+    [self.sendPasswordView setHidden:YES];
     [reset setEnabled:NO];
     [self resetPassword];
     [self.LoginButton setEnabled:NO];

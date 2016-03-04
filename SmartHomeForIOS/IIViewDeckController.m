@@ -1001,6 +1001,7 @@ static NSTimeInterval durationToAnimate(CGFloat pointsToAnimate, CGFloat velocit
     
     if ([self safe_shouldManageAppearanceMethods]) {
         [self _forwardViewWillAppear:animated onViewController:self.centerController];
+        [self _forwardViewWillAppear:animated onViewController:self.leftController];
     }
     [self transitionAppearanceFrom:0 to:1 animated:animated];
 

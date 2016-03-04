@@ -11,7 +11,7 @@
 #import "PasswordViewController.h"
 #import "DataManager.h"
 #import "RequestConstant.h"
-
+#import "UIHelper.h"
 @interface UserEditViewController () <SwipeableCellDelegate> {
     NSMutableArray *_userList;
 }
@@ -253,6 +253,10 @@ static NSString * UserCell = @"UserCell";
             self.addUserBtn.enabled = YES;
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:@"用户已存在" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] ;
             [alert show];
+        }else if([[NSString stringWithFormat:@"%@",[responseJSON objectForKey:@"result"]] isEqualToString: @"200"]){
+            self.addUserBtn.enabled = YES;
+            [UIHelper showLoginViewWithServerSessionTimeOut:self ];
+            
         }
         
 //        else if ([[NSString stringWithFormat:@"%@",[responseJSON objectForKey:@"result"]] isEqualToString: @"2"]){
@@ -358,6 +362,9 @@ static NSString * UserCell = @"UserCell";
         }else if ([[NSString stringWithFormat:@"%@",[responseJSON objectForKey:@"value"]] isEqualToString: @"0"]){
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:@"用户名密码错误" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] ;
             [alert show];
+        }else if([[NSString stringWithFormat:@"%@",[responseJSON objectForKey:@"value"]] isEqualToString: @"200"]){
+            [UIHelper showLoginViewWithServerSessionTimeOut:self ];
+            
         }
     }errorHandler:^(MKNetworkOperation *errorOp, NSError* err) {
         NSLog(@"MKNetwork request error : %@", [err localizedDescription]);

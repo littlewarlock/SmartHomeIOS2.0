@@ -179,6 +179,20 @@ CLLocationManager * locationManager;
     [currentInstallation setDeviceTokenFromData:deviceToken];
     [currentInstallation saveInBackground];
     
+    //test
+//    app.applicationIconBadgeNumber = 202;
+//    currentInstallation badge
+    
+    //2016 03 01
+    NSArray *subscribedChannels = [AVInstallation currentInstallation].channels;
+    NSLog(@"subscribedChannels===%@",subscribedChannels);
+    //
+    for (int i = 0; i<subscribedChannels.count; nil) {
+        NSString *one = subscribedChannels[i];
+        [currentInstallation removeObject:one forKey:@"channels"];
+        NSLog(@"i == %d",i);
+    }
+    
     //20160106 start
 //    [currentInstallation setChannels:[NSArray arrayWithObjects:@"123",nil]];
     //20160106 end
@@ -193,6 +207,11 @@ CLLocationManager * locationManager;
 }
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
+    //
+    //2016 03 01 start hgc
+    NSLog(@"unreadnum == %@",[userInfo objectForKey:@"unreadnum"]);
+    //2016 03 01 end hgc
+    
     if (application.applicationState == UIApplicationStateActive) {
         //
         NSLog(@"active");
@@ -205,6 +224,8 @@ CLLocationManager * locationManager;
         }
         
         AVInstallation *currentInstallation = [AVInstallation currentInstallation];
+//        NSString *badgeNum = [userInfo objectForKey:@"unreadnum"];
+//        [currentInstallation setBadge:badgeNum.intValue];
         [currentInstallation setBadge:0];
         [currentInstallation saveEventually];
         application.applicationIconBadgeNumber = 0;

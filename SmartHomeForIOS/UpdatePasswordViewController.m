@@ -28,7 +28,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self.navigationItem setTitle:@"co-cloud账户"];
+    [self.navigationItem setTitle:@"修改密码"];
     UIButton *left = [UIButton buttonWithType:UIButtonTypeCustom];
     left.frame =CGRectMake(0, 0, 32, 32);
     [left setBackgroundImage:[UIImage imageNamed:@"back"] forState:UIControlStateNormal];

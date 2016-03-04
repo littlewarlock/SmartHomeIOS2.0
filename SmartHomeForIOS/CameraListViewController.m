@@ -666,13 +666,26 @@ static NSString *CellTableIdentifier = @"CellTableIdentifier";
 //                    [alertView show];
                 }else{
                     NSLog(@"cameraAlarmingwithDeviceId error");
-                    UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"报警设置" message:[NSString stringWithFormat:@"%@设置失败",alarmMessage]  delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-                    [alertView show];
+                    if ([message isEqualToString:@""]) {
+                        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"报警设置" message:[NSString stringWithFormat:@"%@设置失败",alarmMessage]  delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+                        [alertView show];
+                    }else{
+                        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"报警设置" message:message delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil];
+                        [alertView show];
+                    }
                 }
             }
             else{
                 NSLog(@"cameraAlarmingwithDeviceId error");
-                UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"报警设置" message:[NSString stringWithFormat:@"%@设置失败,网络错误",alarmMessage]  delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+                
+                UIAlertView *alertView;
+                if ([message isEqualToString:@""]) {
+                    alertView = [[UIAlertView alloc]initWithTitle:@"报警设置" message:[NSString stringWithFormat:@"%@设置失败,网络错误",alarmMessage]  delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil];
+                }else{
+                    alertView = [[UIAlertView alloc]initWithTitle:@"报警设置" message:message delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil];
+                }
+                
+                
                 [alertView show];
             }
             //重新请求数据

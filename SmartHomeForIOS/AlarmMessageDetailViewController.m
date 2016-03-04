@@ -8,7 +8,7 @@
 
 #import "AlarmMessageDetailViewController.h"
 #import "AlarmMessagePlayViewController.h"
-#import "KxMovieViewController.h"
+#import "KxMovieAlarmRecordViewController.h"
 #import "AlarmMessagePopUpViewController.h"
 #import "CameraDetailViewController.h"
 #import "UIViewController+UserLogout.h"
@@ -30,7 +30,8 @@ static NSString *AlarmMessageDetailCellIdentifier = @"AlarmMessageDetailCellIden
 
 
 // 2015 11 25
-@property (strong, nonatomic) KxMovieViewController *kxvc;
+//2016 03 02 KxMovieViewController更新为KxMovieAlarmRecordViewController
+@property (strong, nonatomic) KxMovieAlarmRecordViewController *kxvc;
 @property (strong, nonatomic) UIButton *buttonFullScreen;
 @property (strong, nonatomic) UIButton *buttonClose;
 @property (strong, nonatomic) UIButton *buttonBack;
@@ -195,13 +196,32 @@ static NSString *AlarmMessageDetailCellIdentifier = @"AlarmMessageDetailCellIden
     //right
     NSString *stream = self.rowData[@"videoUrl"];
     
+    /* 2016 03 01 for test
+    //2016 03 01 start hgc
+    MPMoviePlayerViewController *playerViewController = [[MPMoviePlayerViewController alloc]initWithContentURL:[NSURL URLWithString:stream]];
+    [playerViewController.view setFrame:CGRectMake(8, 72, self.view.bounds.size.width - 16, 202)];
+    [self addChildViewController:playerViewController];
+    [self.view addSubview:playerViewController.view];
+    
+    MPMoviePlayerController *player = [playerViewController moviePlayer];
+    
+    player.controlStyle = MPMovieControlStyleDefault;
+    player.shouldAutoplay = YES;
+    player.repeatMode = MPMovieRepeatModeOne;
+//    [player setFullscreen:YES animated:YES];
+    player.scalingMode = MPMovieScalingModeFill;
+    [player play];
+    
+    //2016 03 01 end hgc
+*/
+    
     NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
     parameters[KxMovieParameterDisableDeinterlacing] = @(YES);
     
     if (self.kxvc != NULL) {
         [self.kxvc.view removeFromSuperview ];
     }
-    self.kxvc = [KxMovieViewController movieViewControllerWithContentPath:stream parameters:parameters];
+    self.kxvc = [KxMovieAlarmRecordViewController movieViewControllerWithContentPath:stream parameters:parameters];
     //    kxvc set
     //    [self presentViewController:self.kxvc animated:YES completion:nil];
     [self addChildViewController:self.kxvc];
@@ -265,6 +285,9 @@ static NSString *AlarmMessageDetailCellIdentifier = @"AlarmMessageDetailCellIden
     if (self.isFullScreen) {
         //status bar
         self.isFullScreen = NO;
+        //2016 03 02
+        [self.kxvc setfullScreenOff];
+        
         [self setNeedsStatusBarAppearanceUpdate];
         //
 //        [self.navigationController setToolbarHidden:NO animated:YES];
@@ -275,12 +298,19 @@ static NSString *AlarmMessageDetailCellIdentifier = @"AlarmMessageDetailCellIden
         self.kxvc.view.frame = CGRectMake(8, 72, self.view.bounds.size.width - 16, 202);
         //
         self.buttonFullScreen.frame = CGRectMake(self.kxvc.view.frame.size.width - 40 , self.kxvc.view.frame.size.height - 40, 30, 30);
+        //2016 03 01 start hgc
+        [self.buttonFullScreen setImage:[UIImage imageNamed:@"full-screen"] forState:UIControlStateNormal];
+        //2016 03 01 end hgc
         self.buttonClose.frame =CGRectMake(self.kxvc.view.frame.size.width - 40, 10, 30, 30);
         //buttonBack
         self.buttonBack.hidden = YES;
     }else{
         //status bar
         self.isFullScreen = YES;
+        
+        //2016 03 02
+        [self.kxvc setfullScreenOn];
+        
         [self setNeedsStatusBarAppearanceUpdate];
         //
         self.navigationController.navigationBarHidden = YES;
@@ -291,6 +321,9 @@ static NSString *AlarmMessageDetailCellIdentifier = @"AlarmMessageDetailCellIden
         self.kxvc.view.frame = self.view.frame;
         //
         self.buttonFullScreen.frame = CGRectMake(self.kxvc.view.frame.size.height - 40 ,self.kxvc.view.frame.size.width - 40, 30, 30);
+        //2016 03 01 start hgc
+        [self.buttonFullScreen setImage:[UIImage imageNamed:@"expand-icon"] forState:UIControlStateNormal];
+        //2016 03 01 end hgc
         NSLog(@"self.kxvc.view.frame.size.width==%f",self.kxvc.view.frame.size.width);
         NSLog(@"self.kxvc.view.frame.size.height==%f",self.kxvc.view.frame.size.height);
         self.buttonClose.frame =CGRectMake(self.kxvc.view.frame.size.height - 40, 10, 30, 30);

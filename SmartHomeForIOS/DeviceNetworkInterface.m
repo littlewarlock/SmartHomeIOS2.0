@@ -223,8 +223,8 @@ Boolean isServerSessionOutOfTime = NO;
         // hgc
         
         //get data
-        NSMutableArray *deviceList = [[NSMutableArray alloc]init];
-        NSMutableDictionary *dic = [[NSMutableDictionary alloc]init];
+        NSMutableArray *deviceList;
+        NSMutableDictionary *dic;
         if (block) {
             if ([[op.responseJSON objectForKey:@"result"] isEqualToString:@"success"]) {
                 dic = op.responseJSON;
@@ -786,7 +786,8 @@ Boolean isServerSessionOutOfTime = NO;
                                    @"wifi":deviceInfo.wifi,
                                    @"version":deviceInfo.version,
                                    @"userid":deviceInfo.userid,
-                                   @"passwd":deviceInfo.passwd
+                                   @"passwd":deviceInfo.passwd,
+                                   @"alarmflg":deviceInfo.alarmflg
                                    };
     //请求php
     NSString* url = [DeviceNetworkInterface getRequestUrl];
@@ -1110,7 +1111,7 @@ Boolean isServerSessionOutOfTime = NO;
     [engine enqueueOperation:op];
 }
 
-+ (void)networkTestForDeviceAddWithAddition:(NSString *)addition andUserid:(NSString *)userid andPasswd:(NSString *)passwd andBrand:(NSString *)brand andModel:(NSString *)model withBlock:(void (^)(NSString *, NSString *, NSString *, NSString *, NSString *, NSString *, NSError *))block
++ (void)networkTestForDeviceAddWithAddition:(NSString *)addition andUserid:(NSString *)userid andPasswd:(NSString *)passwd andBrand:(NSString *)brand andModel:(NSString *)model withBlock:(void (^)(NSString *, NSString *, NSString *, NSString *, NSString *, NSString *, NSString *, NSString *, NSString *, NSError *))block
 {
     NSDictionary *requestParam = @{@"session_id":@"session_id",
                                    @"opt":@"join",
@@ -1150,18 +1151,20 @@ Boolean isServerSessionOutOfTime = NO;
         NSArray *join =operation.responseJSON[@"join"];
         if (join.count == 0) {
             if (block) {
-                block(result,message,nil,nil,nil,nil,nil);
+                block(result,message,nil,nil,nil,nil,nil,nil,nil,nil);
             }
         }else{
             NSString *code = operation.responseJSON[@"join"][0][@"code"];
 //            NSString *sensitivity = operation.responseJSON[@"join"][0][@"sensitivity"];
             NSString *sensitivity = @"10";
             NSString *wifi = operation.responseJSON[@"join"][0][@"wifi"];
-//            NSString *brand = operation.responseJSON[@"join"][0][@"brand"];
-//            NSString *model = operation.responseJSON[@"join"][0][@"model"];
+            NSString *brand = operation.responseJSON[@"join"][0][@"brand"];
+            NSString *model = operation.responseJSON[@"join"][0][@"model"];
             NSString *version = operation.responseJSON[@"join"][0][@"version"];
+            NSString *alarmflg = operation.responseJSON[@"join"][0][@"alarmflg"];
             if (block) {
-                block(result,message,code,sensitivity,wifi,version,nil);
+//                block(result,message,code,sensitivity,wifi,version,alarmflg,nil);
+                block(result,message,code,sensitivity,wifi,brand,model,version,alarmflg,nil);
             }
         }
     } errorHandler:^(MKNetworkOperation *errorOp,NSError *error) {
@@ -1170,14 +1173,14 @@ Boolean isServerSessionOutOfTime = NO;
         //
         NSLog(@"MKNetwork request error : %@", [error localizedDescription]);
         if (block) {
-            block(nil,@"网络异常",nil,nil,nil,nil,error);
+            block(nil,@"网络异常",nil,nil,nil,nil,nil,nil,nil,error);
         }
     }];
     
     [engine enqueueOperation:op];
-}
+}   
 
-+(void)newNetworkTestForDeviceAddWithAddition:(NSString *)addition andUserid:(NSString *)userid andPasswd:(NSString *)passwd withBlock:(void (^)(NSString *, NSString *, NSString *, NSString *, NSString *, NSString *, NSString *, NSString *, NSError *))block
++ (void)newNetworkTestForDeviceAddWithAddition:(NSString *)addition andUserid:(NSString *)userid andPasswd:(NSString *)passwd withBlock:(void (^)(NSString *, NSString *, NSString *, NSString *, NSString *, NSString *, NSString *, NSString *, NSString *, NSError *))block
 {
     NSDictionary *requestParam = @{@"session_id":@"session_id",
                                    @"opt":@"join",
@@ -1215,7 +1218,7 @@ Boolean isServerSessionOutOfTime = NO;
         NSArray *join =operation.responseJSON[@"join"];
         if (join.count == 0) {
             if (block) {
-                block(result,message,nil,nil,nil,nil,nil,nil,nil);
+                block(result,message,nil,nil,nil,nil,nil,nil,nil,nil);
             }
         }else{
             NSString *code = operation.responseJSON[@"join"][0][@"code"];
@@ -1225,8 +1228,9 @@ Boolean isServerSessionOutOfTime = NO;
             NSString *brand = operation.responseJSON[@"join"][0][@"brand"];
             NSString *model = operation.responseJSON[@"join"][0][@"model"];
             NSString *version = operation.responseJSON[@"join"][0][@"version"];
+            NSString *alarmflg = operation.responseJSON[@"join"][0][@"alarmflg"];
             if (block) {
-                block(result,message,code,sensitivity,wifi,brand,model,version,nil);
+                block(result,message,code,sensitivity,wifi,brand,model,version,alarmflg,nil);
             }
         }
     } errorHandler:^(MKNetworkOperation *errorOp,NSError *error) {
@@ -1235,7 +1239,7 @@ Boolean isServerSessionOutOfTime = NO;
         //
         NSLog(@"MKNetwork request error : %@", [error localizedDescription]);
         if (block) {
-            block(nil,@"网络异常",nil,nil,nil,nil,nil,nil,error);
+            block(nil,@"网络异常",nil,nil,nil,nil,nil,nil,nil,error);
         }
     }];
     

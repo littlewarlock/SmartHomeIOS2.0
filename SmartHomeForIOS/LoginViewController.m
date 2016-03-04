@@ -129,7 +129,12 @@
     [self.tvSearch reloadData];
     UIButton *left = [UIButton buttonWithType:UIButtonTypeCustom];
     left.frame =CGRectMake(0, 0, 100, 32);
-    [left setTitle:@"<<本地文档" forState:UIControlStateNormal];
+    if(self.isPushHomeView){
+        [left setTitle:@"<<返回" forState:UIControlStateNormal];
+        self.title = @"登录超时";
+    }else{
+        [left setTitle:@"<<本地文档" forState:UIControlStateNormal];
+    }
     [left setTitleColor:[UIColor whiteColor]forState:UIControlStateNormal];
     left.titleLabel.font = [UIFont systemFontOfSize: 16.0];
     [left addTarget: self action: @selector(returnBeforeWindowAction:) forControlEvents: UIControlEventTouchUpInside];
@@ -702,10 +707,20 @@
                             [g_sDataManager setCId: cId];
                             if(![cId isEqualToString:@""]){
                                 AVInstallation *currentInstallation = [AVInstallation currentInstallation];
-                                [currentInstallation addUniqueObject:[g_sDataManager cId] forKey:@"channels"];
-                                [currentInstallation saveInBackground];
+                                //2016 02 26
                                 NSArray *subscribedChannels = [AVInstallation currentInstallation].channels;
                                 NSLog(@"subscribedChannels===%@",subscribedChannels);
+                                //
+                                for (int i = 0; i<subscribedChannels.count; nil) {
+                                    NSString *one = subscribedChannels[i];
+                                    [currentInstallation removeObject:one forKey:@"channels"];
+                                    NSLog(@"i == %d",i);
+                                }
+                                [currentInstallation addUniqueObject:[g_sDataManager cId] forKey:@"channels"];
+                                [currentInstallation saveInBackground];
+                                //
+                                NSArray *subscribedChannelsAfter = [AVInstallation currentInstallation].channels;
+                                NSLog(@"subscribedChannelsAfter===%@",subscribedChannelsAfter);
                             }
                         }
                     } errorHandler:^(MKNetworkOperation *completedOperation, NSError *error) {
@@ -718,10 +733,20 @@
                     [g_sDataManager setCId: self.textFieldIp.text];
                     if(![self.textFieldIp.text isEqualToString:@""]){
                         AVInstallation *currentInstallation = [AVInstallation currentInstallation];
-                        [currentInstallation addUniqueObject:[g_sDataManager cId] forKey:@"channels"];
-                        [currentInstallation saveInBackground];
+                        //2016 02 26
                         NSArray *subscribedChannels = [AVInstallation currentInstallation].channels;
                         NSLog(@"subscribedChannels===%@",subscribedChannels);
+                        //
+                        for (int i = 0; i<subscribedChannels.count; nil) {
+                            NSString *one = subscribedChannels[i];
+                            [currentInstallation removeObject:one forKey:@"channels"];
+                            NSLog(@"i == %d",i);
+                        }
+                        [currentInstallation addUniqueObject:[g_sDataManager cId] forKey:@"channels"];
+                        [currentInstallation saveInBackground];
+                        //
+                        NSArray *subscribedChannelsAfter = [AVInstallation currentInstallation].channels;
+                        NSLog(@"subscribedChannelsAfter===%@",subscribedChannelsAfter);
                     }
                 }
                 

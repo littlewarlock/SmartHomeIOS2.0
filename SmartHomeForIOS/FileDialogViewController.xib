@@ -7,6 +7,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="FileDialogViewController">
             <connections>
+                <outlet property="downBtn" destination="XHt-1Y-BGQ" id="PyA-3J-VRT"/>
                 <outlet property="fileListTableView" destination="VQt-8T-vqe" id="v3U-Wz-wy0"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
@@ -32,7 +33,7 @@
                             <rect key="frame" x="160" y="0.0" width="160" height="50"/>
                             <animations/>
                             <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                            <state key="normal" title="上传">
+                            <state key="normal">
                                 <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
                             <connections>

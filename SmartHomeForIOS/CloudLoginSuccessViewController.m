@@ -43,7 +43,43 @@
     [promotView setHidden:YES];
     promotView.layer.borderColor = [UIColor lightGrayColor].CGColor;
     promotView.layer.borderWidth = 1;
+    
+    [self performSelector:@selector(topViewMiss) withObject:nil afterDelay:2.0f];
+    
+    self.backgroundView.hidden = YES;
+    self.logoffView.hidden = YES;
+    
+    }
+
+//顶部的view消失
+- (void)topViewMiss
+{
+
+    self.topView.transform = CGAffineTransformMakeScale(0.001, 0.001);
+    self.viewToTop.constant = 76;
+
+
 }
+
+//选择按钮“否”时取消注销功能
+- (IBAction)cancleLogoff:(id)sender {
+    
+    self.backgroundView.hidden = YES;
+    self.logoffView.hidden = YES;
+    
+}
+
+//选择按钮“是”时启动注销功能
+- (IBAction)confirmLogoff:(id)sender {
+    
+    self.backgroundView.hidden = YES;
+    self.logoffView.hidden = YES;
+    [self logoutCheck];
+    
+}
+
+
+
 //注销功能
 - (void)logoutCheck{
     [move startAnimating];
@@ -124,15 +160,12 @@
 }
 //按下注销按钮弹出提示框
 - (IBAction)cancel:(id)sender {
-    UIAlertView* alert = [[UIAlertView alloc]initWithTitle:@"系统提示" message:@"关闭远程访问将无法在外网访问设备。\n是否注销？" delegate:self cancelButtonTitle:nil otherButtonTitles:@"是",@"否",nil ];
-    [alert show];
+    
+    
+    self.backgroundView.hidden = NO;
+    self.logoffView.hidden = NO;
+    
 }
-//选择按钮“是”时启动注销功能
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
-    if(buttonIndex==0){
-        [cancelBtn setEnabled:NO];
-        [self logoutCheck];
-    }
-}
+
 
 @end

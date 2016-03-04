@@ -197,6 +197,13 @@ AppDelegate *appDelegate ;
                 CGRect frame = CGRectMake(kMainScreenWidth * 2 / 3, kMainScreenHeight - 4, kMainScreenWidth / 3, 4);
                 bottomView.frame = frame;
             }
+        }else if([[NSString stringWithFormat:@"%@",[responseJSON objectForKey:@"result"]] isEqualToString: @"timeout"] ||
+                 [[NSString stringWithFormat:@"%@",[responseJSON objectForKey:@"result"]] isEqualToString: @"200"]
+                 ){
+            [UIHelper showLoginViewWithServerSessionTimeOut: self];
+        } else{
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:@"网络错误" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] ;
+            [alert show];
         }
     }errorHandler:^(MKNetworkOperation *errorOp, NSError* err) {
         NSLog(@"MKNetwork request error : %@", [err localizedDescription]);
@@ -483,6 +490,11 @@ AppDelegate *appDelegate ;
         
         if([[NSString stringWithFormat:@"%@",[responseJSON objectForKey:@"result"]] isEqualToString: @"success"])//成功
         {
+            if (![[responseJSON objectForKey:@"message"]isEqualToString:@""]) {
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:[responseJSON objectForKey:@"message"] delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] ;
+                [alert show];
+            }
+            
             UIButton *homeButton = (UIButton *)[self.view viewWithTag:100];
             UIButton *egressButton = (UIButton *)[self.view viewWithTag:101];
             UIButton *sleepButton = (UIButton *)[self.view viewWithTag:102];
@@ -496,6 +508,10 @@ AppDelegate *appDelegate ;
             CGRect frame = CGRectMake(0, kMainScreenHeight - 4, kMainScreenWidth / 3, 4);
             bottomView.frame = frame;
 
+        }else if([[NSString stringWithFormat:@"%@",[responseJSON objectForKey:@"result"]] isEqualToString: @"timeout"] ||
+                 [[NSString stringWithFormat:@"%@",[responseJSON objectForKey:@"result"]] isEqualToString: @"200"]
+                 ){
+            [UIHelper showLoginViewWithServerSessionTimeOut: self];
         }else{
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:@"网络错误" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] ;
             [alert show];
@@ -541,6 +557,11 @@ AppDelegate *appDelegate ;
         
         if([[NSString stringWithFormat:@"%@",[responseJSON objectForKey:@"result"]] isEqualToString: @"success"])//成功
         {
+            if (![[responseJSON objectForKey:@"message"]isEqualToString:@""]) {
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:[responseJSON objectForKey:@"message"] delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] ;
+                [alert show];
+            }
+            
             UIButton *homeButton = (UIButton *)[self.view viewWithTag:100];
             UIButton *egressButton = (UIButton *)[self.view viewWithTag:101];
             UIButton *sleepButton = (UIButton *)[self.view viewWithTag:102];
@@ -554,6 +575,10 @@ AppDelegate *appDelegate ;
             CGRect frame = CGRectMake(kMainScreenWidth / 3, kMainScreenHeight - 4, kMainScreenWidth / 3, 4);
             bottomView.frame = frame;
 
+        }else if([[NSString stringWithFormat:@"%@",[responseJSON objectForKey:@"result"]] isEqualToString: @"timeout"] ||
+                 [[NSString stringWithFormat:@"%@",[responseJSON objectForKey:@"result"]] isEqualToString: @"200"]
+                 ){
+            [UIHelper showLoginViewWithServerSessionTimeOut: self];
         }else{
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:@"网络错误" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] ;
             [alert show];
@@ -600,6 +625,11 @@ AppDelegate *appDelegate ;
         
         if([[NSString stringWithFormat:@"%@",[responseJSON objectForKey:@"result"]] isEqualToString: @"success"])//成功
         {
+            if (![[responseJSON objectForKey:@"message"]isEqualToString:@""]) {
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:[responseJSON objectForKey:@"message"] delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] ;
+                [alert show];
+            }
+            
             UIButton *homeButton = (UIButton *)[self.view viewWithTag:100];
             UIButton *egressButton = (UIButton *)[self.view viewWithTag:101];
             UIButton *sleepButton = (UIButton *)[self.view viewWithTag:102];
@@ -614,7 +644,11 @@ AppDelegate *appDelegate ;
             bottomView.frame = frame;
 
 
-        }else{
+        }else if([[NSString stringWithFormat:@"%@",[responseJSON objectForKey:@"result"]] isEqualToString: @"timeout"] ||
+        [[NSString stringWithFormat:@"%@",[responseJSON objectForKey:@"result"]] isEqualToString: @"200"]
+                 ){
+            [UIHelper showLoginViewWithServerSessionTimeOut: self];
+        } else{
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:@"网络错误" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] ;
             [alert show];
         }

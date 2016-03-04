@@ -10,7 +10,7 @@
 #import "DataManager.h"
 #import "RequestConstant.h"
 #import "HomeViewController.h"
-
+#import "UIHelper.h"
 @implementation PasswordViewController
 
 
@@ -105,6 +105,12 @@
                 
             }else if ([[NSString stringWithFormat:@"%@",[responseJSON objectForKey:@"result"]] isEqualToString: @"2"]){
                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:@"旧密码不正确" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] ;
+                [alert show];
+            }else if([[NSString stringWithFormat:@"%@",[responseJSON objectForKey:@"result"]] isEqualToString: @"200"]){
+                [UIHelper showLoginViewWithServerSessionTimeOut:self ];
+                
+            }else{
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:@"密码修改失败" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] ;
                 [alert show];
             }
         }errorHandler:^(MKNetworkOperation *errorOp, NSError* err) {

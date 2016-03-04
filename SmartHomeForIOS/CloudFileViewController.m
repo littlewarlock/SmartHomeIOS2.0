@@ -84,6 +84,7 @@
     [self.fileListTableView setTableFooterView:[[UIView alloc] initWithFrame:CGRectZero]];//设置表尾不显示，就不显示多余的横线
     [self.fileListTableView setSeparatorInset:UIEdgeInsetsZero]  ;
     [self loadFileData];
+    self.isServerSessionTimeOut = NO;
     downloadQueue = [[NSOperationQueue alloc] init];
     [downloadQueue setMaxConcurrentOperationCount:1];
     //添加滑动手势
@@ -106,7 +107,6 @@
     fileHandler.fileHandlerDelegate = self;
     fileHandler.tableDataDic = tableDataDic;
     
-    
     UITabBar *tabbar = self.tabbar;
     tabbar.delegate = self;
     self.moreBar.hidden = YES;
@@ -123,7 +123,11 @@
 -(void) viewDidAppear:(BOOL)animated
 {
     [selectedItemsDic removeAllObjects];
-    [self requestFileData:NO refreshControl:nil];
+    //edit by lcw 20160229
+    //此判断用于防止重复提示session超时 若viewDidAppear去掉requestFileData 返回按钮后不在刷新表单
+    if(!self.isServerSessionTimeOut){
+        [self requestFileData:NO refreshControl:nil];
+    }
     [self setFooterButtonState];
 }
 
@@ -369,6 +373,7 @@
     MKNetworkOperation *op = [engine operationWithPath:REQUEST_FETCH_URL params:dic httpMethod:@"POST" ssl:NO];
     [op addCompletionHandler:^(MKNetworkOperation *operation) {
         NSDictionary *responseJSON=[NSJSONSerialization JSONObjectWithData:[operation responseData] options:kNilOptions error:&error];
+        
         if([[NSString stringWithFormat:@"%@",[responseJSON objectForKey:@"value"]] isEqualToString: @"1"])//获取目录成功
         {
             if (tableDataDic != nil) {
@@ -463,7 +468,13 @@
             [self sortWithIndex:0];
 
             [self.fileListTableView reloadData];
+        }else if([[NSString stringWithFormat:@"%@",[responseJSON objectForKey:@"value"]] isEqualToString: @"200"]){
+            self.isServerSessionTimeOut = YES;
+            [UIHelper showLoginViewWithServerSessionTimeOut:self ];
+            
         }
+        
+        
         if (isShowLoading) {
             if (loadingView)
             {
@@ -662,6 +673,7 @@
             [paramsDic setValue:selectedItemsDic forKey:@"selectedItemsDic"];
             FileHandler * fileHandler  = [[FileHandler alloc]init];
             fileHandler.opType = 2;
+            fileHandler.fileHandlerDelegate = self;
             if([sourcePath isEqualToString:targetPath]){ //如果目标目录和源目录相同 则不进行复制
                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:@"目标目录不能为当前目录！" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] ;
                 [alert show];
@@ -897,6 +909,7 @@
         fileDialog.isServerFile = YES;
         fileDialog.cpath =@"/";
         fileDialog.fileDialogDelegate = self;
+        fileDialog.onType = 3;
         [self.navigationController pushViewController:fileDialog animated:YES];
     }else if(buttonIndex==2){//移动
         [sheet dismissSheet:self];
@@ -954,6 +967,7 @@
         fileDialog.isServerFile = YES;
         fileDialog.cpath =@"/";
         fileDialog.fileDialogDelegate = self;
+        fileDialog.onType = 4;
         [self.navigationController pushViewController:fileDialog animated:YES];
         
     }else if(buttonIndex==3){//重命名        
@@ -1166,8 +1180,8 @@
             NSString* documentsPath = kDocument_Folder;
             fileDialog.cpath = documentsPath;
             fileDialog.rootUrl = documentsPath;
-
             fileDialog.title = @"本地文件";
+            fileDialog.onType = 2;
             [self.navigationController pushViewController:fileDialog animated:YES];
     
         }else if(item == self.item3) {//刷新
@@ -1205,6 +1219,7 @@
                 self.item1.selectedImage = [UIImage imageNamed:@"checkbox-down"];
             }
         }else if(item == self.item2){//下载
+            
             NSString *targetPath =[kDocument_Folder stringByAppendingPathComponent:[NSString stringWithFormat:@"/%@",[g_sDataManager userName]]];
             //1.先判断队列中是否已有该文件
             for(FileDownloadOperation *operation in [NSOperationDownloadQueue sharedInstance].operations) {
@@ -1214,6 +1229,7 @@
                     [selectedItemsDic removeObjectForKey:fileName];
                 }
             }
+            
             //2.再判断未完成已取消任务中是否有该文件
             for(NSString *taskId in [[ProgressBarViewController sharedInstance].downloadTaskDic allKeys] ){
                 TaskInfo *taskInfo = [[ProgressBarViewController sharedInstance].downloadTaskDic objectForKey:taskId];
@@ -1233,6 +1249,7 @@
                 [self.navigationController pushViewController:[ProgressBarViewController sharedInstance] animated:YES];
                 [selectedItemsDic removeAllObjects];
             }
+            
         }else if(item == self.item3){//共享
         
             BOOL isContainSpecialFolder = NO;
@@ -1313,6 +1330,9 @@
         }
         
     }
+    
+    [self setFooterButtonState];
+    
 }
 
 - (IBAction)moreBarMiss:(id)sender {
@@ -1390,6 +1410,7 @@
 
 #pragma mark -
 #pragma mark FileHandler 的代理方法
+
 - (void)requestSuccessCallback{
     [self loadFileData];
     [selectedItemsDic removeAllObjects];
@@ -1404,6 +1425,24 @@
     [self setFooterButtonState];
 }
 
+- (void)sessionTimeOutCallback{
+    
+    
+    //[self loadFileData];
+    self.isServerSessionTimeOut =YES;
+    [selectedItemsDic removeAllObjects];
+    if (self.moreBar.hidden == NO) {
+        self.moreBar.hidden = YES;
+    }
+    if (loadingView)
+    {
+        [loadingView removeFromSuperview];
+        loadingView = nil;
+    }
+    [self setFooterButtonState];
+    
+    [UIHelper showLoginViewWithServerSessionTimeOut:self ];
+}
 #pragma mark -
 #pragma mark handleTap 点击图片时触发的事件
 - (void)handleTap:(UITapGestureRecognizer *)sender
@@ -1598,6 +1637,7 @@
     [alertView setUseMotionEffects:true];
     // And launch the dialog
     [alertView show];
+    
 }
 
 - (void)customIOS7dialogButtonTouchUpInside: (CustomIOSAlertView *)alertView clickedButtonAtIndex: (NSInteger)buttonIndex
@@ -1642,6 +1682,7 @@
     tableView.allowsMultipleSelectionDuringEditing = YES;
     [tableView setEditing:YES animated:YES];
     [alertView addSubview:tableView];
+    
     
     return alertView;
 }

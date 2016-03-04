@@ -553,11 +553,13 @@ typedef NS_ENUM(NSUInteger, cameraControlDirection) {
         }
         //imageViewRecord
         //2016 02 24
-//        self.imageViewRecord.frame = CGRectMake(self.kxvc.view.frame.size.height - 50, 10, 40, 20);
-        self.imageViewRecord.frame = CGRectMake(self.kxvc.view.frame.size.height - 50, 10 + 40, 40, 20);
+        self.imageViewRecord.frame = CGRectMake(self.kxvc.view.frame.size.height - 50, 10, 40, 20);
+//        self.imageViewRecord.frame = CGRectMake(self.kxvc.view.frame.size.height - 50, 10 + 40, 40, 20);
         //
         //imageViewModeRecord
-        self.imageViewModeRecord.frame = CGRectMake(10, 10 + 40 , 37, 37);
+        //2016 03 01
+        self.imageViewModeRecord.frame = CGRectMake(10, 10 , 37, 37);
+//        self.imageViewModeRecord.frame = CGRectMake(10, 10 + 40 , 37, 37);
         //1112 GeestureRecognizerPan
         self.panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlerPanGesture:)];
         if (self.isControl) {
@@ -581,7 +583,7 @@ typedef NS_ENUM(NSUInteger, cameraControlDirection) {
             //test 2016 01 21
             [self.kxvc.view addSubview:self.topBarViewFullScreen];
         }
-
+        
         //control
         self.buttonUpControlFullScreen = [[UIButton alloc]initWithFrame:CGRectMake(self.kxvc.view.frame.size.height/2 - 18 , 23 + 50, 35, 30)];
         [self.buttonUpControlFullScreen setImage:[UIImage imageNamed:@"arrow-up-fullscreen"] forState:UIControlStateNormal];
@@ -611,6 +613,30 @@ typedef NS_ENUM(NSUInteger, cameraControlDirection) {
         NSLog(@"self.kxvc.view.frame.size.width==%f",self.kxvc.view.frame.size.width);
         NSLog(@"self.kxvc.view.frame.size.height==%f",self.kxvc.view.frame.size.height);
 
+        //2016 03 01
+//        if (self.isFullScreen) {
+//            //全屏状态
+//            [self.imageViewModeRecord removeFromSuperview];
+//            [self.topBarViewFullScreen addSubview:self.imageViewModeRecord];
+//            self.imageViewModeRecord.frame = CGRectMake(10, 10, 37, 37);
+//            
+//            if (self.isRecord) {
+//                [self.imageViewRecord removeFromSuperview];
+//                [self.topBarViewFullScreen addSubview:self.imageViewRecord];
+//            }
+//        }else{
+//            //非全屏状态
+//            [self.imageViewModeRecord removeFromSuperview];
+//            [self.kxvc.view addSubview:self.imageViewModeRecord];
+//            self.imageViewModeRecord.frame = CGRectMake(10, 10, 37, 37);
+//            if (self.isRecord) {
+//                [self.imageViewRecord removeFromSuperview];
+//                [self.kxvc.view addSubview:self.imageViewRecord];
+//            }
+//        }
+        
+        //
+        
     }
 
 }
@@ -827,6 +853,8 @@ typedef NS_ENUM(NSUInteger, cameraControlDirection) {
     //2016 02 04
     [self.buttonSnapshot setEnabled:YES];
     [self.buttonSnapshotFullScreen setEnabled:YES];
+    //2016 02 29
+    self.kxvc.isRTSPMovie = NO;
 }
 
 - (void)getNetWorkSpeed{
@@ -1014,7 +1042,7 @@ typedef NS_ENUM(NSUInteger, cameraControlDirection) {
                             [self.buttonRecordFullScreen setImage:[UIImage imageNamed:@"transcribe_start-fullscreen"] forState:UIControlStateNormal];
                             [self.buttonRecordFullScreen setImage:[UIImage imageNamed:@"transcribe_start-down-fullscreen"] forState:UIControlStateHighlighted];
                             //2016 02 24
-                            self.imageViewRecord.frame = CGRectMake(self.kxvc.view.frame.size.height - 50, 10 + 40 , 40, 20);
+                            self.imageViewRecord.frame = CGRectMake(self.kxvc.view.frame.size.height - 50, 10, 40, 20);
                         }else{
                             [self.buttonRecordFullScreen setImage:[UIImage imageNamed:@"transcribe-fullscreen"] forState:UIControlStateNormal];
                             [self.buttonRecordFullScreen setImage:[UIImage imageNamed:@"transcribe-down-fullscreen"] forState:UIControlStateHighlighted];

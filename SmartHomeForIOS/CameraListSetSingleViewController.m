@@ -99,7 +99,6 @@
                 [self.screenOverturnBTN setEnabled:NO];
             }
             
-            
             //
             NSLog(@"camera getCameraSettingWithDeviceId result===%@",result);
             NSLog(@"camera getCameraSettingWithDeviceId mseeage===%@",message);
@@ -115,6 +114,7 @@
             self.segmentHomeMode.selectedSegmentIndex = [devices[0][@"recSetInHome"] integerValue] ;
             self.segmentOutsideMode.selectedSegmentIndex = [devices[0][@"recSetOutHome"] integerValue];
             self.segmentSleepMode.selectedSegmentIndex = [devices[0][@"recSetInSleep"] integerValue];
+            
             //swtich value
             //switchHomeMode
             if ([devices[0][@"alarmSetInHome"] isEqualToString:@"0"]) {
@@ -136,6 +136,21 @@
             }
             //slider
             self.sliderSensitivity.value =[devices[0][@"sensitivity"] integerValue];
+            
+            //2016 03 03
+            if ([[devices[0] objectForKey:@"alarmflg"]isEqualToString:@"0"]) {
+                [self.switchHomeMode setOn:FALSE animated:YES];
+                [self.switchOutMode setOn:FALSE animated:YES];
+                [self.switchSleepMode setOn:FALSE animated:YES];
+                //
+                [self.switchHomeMode setUserInteractionEnabled:NO];
+                [self.switchOutMode setUserInteractionEnabled:NO];
+                [self.switchSleepMode setUserInteractionEnabled:NO];
+                //
+                [self.segmentHomeMode setEnabled:FALSE forSegmentAtIndex:2];
+                [self.segmentOutsideMode setEnabled:FALSE forSegmentAtIndex:2];
+                [self.segmentSleepMode setEnabled:FALSE forSegmentAtIndex:2];
+            }
         }
         else{
             NSLog(@"getDeviceAllSetting error");
@@ -232,9 +247,17 @@
                 NSLog(@"camera getDeviceSettingWithBrand mseeage===%@",message);
                 //alert提示
                 if ([result isEqualToString:@"success"]) {
-                    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"摄像头设置" message:@"设置保存成功" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-                    [self.view addSubview:alert];
-                    [alert show];
+                    if ([message isEqualToString:@""]) {
+                        //cocloud id ok
+                        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"摄像头设置" message:@"设置保存成功" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                        [self.view addSubview:alert];
+                        [alert show];
+                    }else{
+                        //cocloud id ng
+                        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"摄像头设置" message:message delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                        [self.view addSubview:alert];
+                        [alert show];
+                    }
                     [self.navigationController popViewControllerAnimated:YES];
                 }else{
                     UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"设置保存失败" message:message delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];

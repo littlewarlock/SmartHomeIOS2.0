@@ -7,7 +7,7 @@
 //
 
 #import "CameraRecordHistoryViewController.h"
-#import "KxMovieViewController.h"
+#import "KxMovieAlarmRecordViewController.h"
 #import "DeviceNetworkInterface.h"
 #import "CameraRecordHistoryViewCell.h"
 #import "CameraRecordHistoryViewHeader.h"
@@ -26,7 +26,7 @@
 @property NSMutableArray *testArray;
 @property NSArray *testSectionHeader;
 @property NSMutableArray *doubleArrayUrl;
-@property KxMovieViewController *kxvc;
+@property KxMovieAlarmRecordViewController *kxvc;
 
 @property (strong,nonatomic) UIButton *buttonFullScreen;
 @property (strong,nonatomic) UIButton *buttonClose;
@@ -652,7 +652,7 @@ static NSString *footerId = @"footerId";
     self.serverSessionTimer = [NSTimer scheduledTimerWithTimeInterval:600.0f target:self selector:@selector(serverSessionRefresh) userInfo:nil repeats:YES];
     [self.serverSessionTimer fire];
     //
-    self.kxvc = [KxMovieViewController movieViewControllerWithContentPath:_doubleArrayUrl[section][row] parameters:parameters];
+    self.kxvc = [KxMovieAlarmRecordViewController movieViewControllerWithContentPath:_doubleArrayUrl[section][row] parameters:parameters];
 //    self.kxvc = [KxMovieViewController movieViewControllerWithContentPath:stream parameters:parameters];
 //    kxvc set
 //    [self presentViewController:self.kxvc animated:YES completion:nil];
@@ -791,6 +791,9 @@ static NSString *footerId = @"footerId";
     if (self.isFullScreen) {
         //status bar
         self.isFullScreen = NO;
+        //2016 03 02
+        [self.kxvc setfullScreenOff];
+        
         [self setNeedsStatusBarAppearanceUpdate];
         //
         self.navigationController.navigationBarHidden = NO;
@@ -800,12 +803,19 @@ static NSString *footerId = @"footerId";
         self.kxvc.view.frame = CGRectMake(8, 68, self.view.bounds.size.width - 16, 202);
         //
         self.buttonFullScreen.frame = CGRectMake(self.kxvc.view.frame.size.width - 40 , self.kxvc.view.frame.size.height - 40, 30, 30);
+        //2016 03 01 start hgc
+        [self.buttonFullScreen setImage:[UIImage imageNamed:@"full-screen"] forState:UIControlStateNormal];
+        //2016 03 01 end hgc
         self.buttonClose.frame =CGRectMake(self.kxvc.view.frame.size.width - 40, 10, 30, 30);
         
         
     }else{
         //status bar
         self.isFullScreen = YES;
+        
+        //2016 03 02
+        [self.kxvc setfullScreenOn];
+        
         [self setNeedsStatusBarAppearanceUpdate];
         //
         self.navigationController.navigationBarHidden = YES;
@@ -815,6 +825,9 @@ static NSString *footerId = @"footerId";
         self.kxvc.view.frame = self.view.frame;
 //        self.toolBarView.frame = CGRectMake(0, self.kxvc.view.frame.size.height - 50, self.kxvc.view.frame.size.width, 50);
         self.buttonFullScreen.frame = CGRectMake(self.kxvc.view.frame.size.height - 40 ,self.kxvc.view.frame.size.width - 40, 30, 30);
+        //2016 03 01 start hgc
+        [self.buttonFullScreen setImage:[UIImage imageNamed:@"expand-icon"] forState:UIControlStateNormal];
+        //2016 03 01 end hgc
         NSLog(@"self.kxvc.view.frame.size.width==%f",self.kxvc.view.frame.size.width);
         NSLog(@"self.kxvc.view.frame.size.height==%f",self.kxvc.view.frame.size.height);
         self.buttonClose.frame =CGRectMake(self.kxvc.view.frame.size.height - 40, 10, 30, 30);

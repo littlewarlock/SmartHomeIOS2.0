@@ -51,6 +51,25 @@
     self.filesDic = [[NSMutableDictionary alloc]init];
     self.dirsDic = [[NSMutableDictionary alloc]init];
     [self loadFileData];
+    
+    //判断下面的按钮的title显示
+    self.isServerFile ? [self.downBtn setTitle:@"下载" forState:UIControlStateNormal] : [self.downBtn setTitle:@"上传" forState:UIControlStateNormal];
+    switch (self.onType) {
+        case 1:
+            [self.downBtn setTitle:@"下载" forState:UIControlStateNormal];
+            break;
+        case 2:
+            [self.downBtn setTitle:@"上传" forState:UIControlStateNormal];
+            break;
+        case 3:
+            [self.downBtn setTitle:@"复制" forState:UIControlStateNormal];
+            break;
+        case 4:
+            [self.downBtn setTitle:@"移动" forState:UIControlStateNormal];
+            break;
+    }
+    
+
 }
 
 - (void)didReceiveMemoryWarning {
@@ -440,6 +459,10 @@
                 
             }];
             [self.fileListTableView reloadData];
+        }else if([[NSString stringWithFormat:@"%@",[responseJSON objectForKey:@"value"]] isEqualToString: @"200"]){ //session time out
+            if ([self.fileDialogDelegate respondsToSelector:@selector(sessionTimeOutCallback)]) {
+                [self.fileDialogDelegate sessionTimeOutCallback];//调用委托方法
+            }
         }
         if (loadingView)
         {

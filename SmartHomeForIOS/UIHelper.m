@@ -99,4 +99,12 @@
     loginView.loginViewDelegate = loginViewDelegate;
     [viewController.navigationController pushViewController:loginView animated:NO];
 }
+
++ (void) showLoginViewWithServerSessionTimeOut:(UIViewController*)viewController{
+    LoginViewController *loginView = [[LoginViewController alloc] initWithNibName:@"LoginViewController" bundle:nil];
+    loginView.isShowLocalFileBtn =NO;
+    loginView.isPushHomeView = YES;
+    [viewController.navigationController pushViewController:loginView animated:NO];
+}
+
 @end

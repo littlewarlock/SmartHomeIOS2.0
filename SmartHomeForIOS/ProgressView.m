@@ -90,11 +90,11 @@
     self.pauseBtn.enabled = btnState;
     [self.pauseBtn setTitle:caption forState:UIControlStateNormal];
     if([caption isEqualToString:@"继续"]){
-        [self.pauseBtn setImage:[UIImage imageNamed:@"task-pause"] forState:UIControlStateNormal];
+        [self.pauseBtn setImage:[UIImage imageNamed:@"down_play"] forState:UIControlStateNormal];
         self.progressBar.progressTintColor=[UIColor colorWithRed:255.0/255 green:184.0/255 blue:28.0/255 alpha:1.0f];
     }
     else if([caption isEqualToString:@"暂停"]){
-        [self.pauseBtn setImage:[UIImage imageNamed:@"task-running"] forState:UIControlStateNormal];
+        [self.pauseBtn setImage:[UIImage imageNamed:@"down_pause_icon"] forState:UIControlStateNormal];
          self.progressBar.progressTintColor =[UIColor colorWithRed:48.0/255 green:131.0/255 blue:251.0/255 alpha:1.0f];
     }
    // self.taskDetailLabel.text = taskStatus;
@@ -102,9 +102,9 @@
 
 - (void)setTaskTypeImageViewByTaskType:(NSString *)taskType{
     if([taskType isEqualToString:@"上传"]){
-        [self.taskTypeImageView setImage:[UIImage imageNamed:@"upload-icon"]];
+        [self.taskTypeImageView setImage:[UIImage imageNamed:@"upload_icon"]];
     }else if([taskType isEqualToString:@"下载"]){
-        [self.taskTypeImageView setImage:[UIImage imageNamed:@"download-icon"]];
+        [self.taskTypeImageView setImage:[UIImage imageNamed:@"down_icon"]];
     }
 }
 @end

@@ -45,9 +45,9 @@
 //手动添加摄像头请求数据
 + (void)getDeviceSettingForManualAdd:(id)sender withBlock:(void (^)(NSString *result, NSString *message, NSArray *brands, NSError *error))block;
 //设备添加连接测试
-+ (void)networkTestForDeviceAddWithAddition:(NSString *)addition andUserid:(NSString *)userid andPasswd:(NSString *)passwd andBrand:(NSString *)brand andModel:(NSString *)model withBlock:(void (^)(NSString *result, NSString *message, NSString *code, NSString *sensitivity, NSString *wifi, NSString *version, NSError *error))block;
++ (void)networkTestForDeviceAddWithAddition:(NSString *)addition andUserid:(NSString *)userid andPasswd:(NSString *)passwd andBrand:(NSString *)brand andModel:(NSString *)model withBlock:(void (^)(NSString *result, NSString *message, NSString *code, NSString *sensitivity, NSString *wifi, NSString *brand, NSString *model, NSString *version, NSString *alarmflg, NSError *error))block;
 //new
-+ (void)newNetworkTestForDeviceAddWithAddition:(NSString *)addition andUserid:(NSString *)userid andPasswd:(NSString *)passwd withBlock:(void (^)(NSString *result, NSString *message, NSString *code, NSString *sensitivity, NSString *wifi, NSString *brand, NSString *model, NSString *version, NSError *error))block;
++ (void)newNetworkTestForDeviceAddWithAddition:(NSString *)addition andUserid:(NSString *)userid andPasswd:(NSString *)passwd withBlock:(void (^)(NSString *result, NSString *message, NSString *code, NSString *sensitivity, NSString *wifi, NSString *brand, NSString *model, NSString *version, NSString *alarmflg, NSError *error))block;
 
 //摄像头画面翻转
 + (void)setCameraPictureRolloverWithDeviceId:(NSString *)deviceId withBlock:(void (^)(NSString *result, NSString *message, NSError *error))block;

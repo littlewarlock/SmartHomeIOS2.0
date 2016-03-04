@@ -10,4 +10,5 @@
 
 @protocol FileHandlerDelegate <NSObject>
 - (void)requestSuccessCallback;
+- (void)sessionTimeOutCallback;
 @end

@@ -19,4 +19,5 @@
 
 + (void) showLoginView:(UIViewController* __nonnull)viewController;
 + (void) showLoginViewWithDelegate:(UIViewController* __nonnull)viewController loginViewDelegate:(nullable id )delegate;
++ (void) showLoginViewWithServerSessionTimeOut:(UIViewController* __nonnull)viewController;
 @end

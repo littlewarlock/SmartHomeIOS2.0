@@ -103,7 +103,7 @@
                                     </segments>
                                     <color key="tintColor" red="0.0" green="0.62745098040000002" blue="0.8862745098" alpha="1" colorSpace="calibratedRGB"/>
                                 </segmentedControl>
-                                <segmentedControl opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="right" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="1" translatesAutoresizingMaskIntoConstraints="NO" id="mJy-Go-pzE">
+                                <segmentedControl opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="right" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="mJy-Go-pzE">
                                     <rect key="frame" x="126" y="159" width="170" height="29"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="28" id="Gfb-Qd-H2h"/>
@@ -152,7 +152,7 @@
                                     <rect key="frame" x="0.0" y="150" width="240" height="1"/>
                                     <color key="backgroundColor" red="0.93854561240000001" green="0.93854561240000001" blue="0.93854561240000001" alpha="1" colorSpace="calibratedRGB"/>
                                 </view>
-                                <segmentedControl opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="right" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="1" translatesAutoresizingMaskIntoConstraints="NO" id="trf-YO-siS">
+                                <segmentedControl opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="right" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="trf-YO-siS">
                                     <rect key="frame" x="126" y="59" width="170" height="29"/>
                                     <constraints>
                                         <constraint firstAttribute="width" constant="170" id="5mg-fW-HfY"/>
@@ -213,11 +213,11 @@
                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                     <nil key="highlightedColor"/>
                                 </label>
-                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HAc-zf-gWD">
+                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="HAc-zf-gWD">
                                     <rect key="frame" x="247" y="159" width="51" height="31"/>
                                     <color key="onTintColor" red="0.0" green="0.62745098040000002" blue="0.8862745098" alpha="1" colorSpace="calibratedRGB"/>
                                 </switch>
-                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xej-ca-wq0">
+                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="xej-ca-wq0">
                                     <rect key="frame" x="247" y="62" width="51" height="31"/>
                                     <color key="onTintColor" red="0.0" green="0.62745098040000002" blue="0.8862745098" alpha="1" colorSpace="calibratedRGB"/>
                                 </switch>

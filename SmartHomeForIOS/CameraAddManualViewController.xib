@@ -267,7 +267,7 @@
                                     </segments>
                                     <color key="tintColor" red="0.01666552273" green="0.66067584999999995" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 </segmentedControl>
-                                <segmentedControl opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="right" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="1" translatesAutoresizingMaskIntoConstraints="NO" id="2dm-MW-tyW">
+                                <segmentedControl opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="right" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="2dm-MW-tyW">
                                     <rect key="frame" x="126" y="159" width="170" height="29"/>
                                     <segments>
                                         <segment title="不录像"/>
@@ -312,7 +312,7 @@
                                     <rect key="frame" x="0.0" y="150" width="240" height="1"/>
                                     <color key="backgroundColor" red="0.93854561240000001" green="0.93854561240000001" blue="0.93854561240000001" alpha="1" colorSpace="calibratedRGB"/>
                                 </view>
-                                <segmentedControl opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="right" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="1" translatesAutoresizingMaskIntoConstraints="NO" id="ntd-f1-yUb">
+                                <segmentedControl opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="right" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="ntd-f1-yUb">
                                     <rect key="frame" x="126" y="59" width="170" height="29"/>
                                     <segments>
                                         <segment title="不录像"/>
@@ -376,7 +376,7 @@
                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                     <nil key="highlightedColor"/>
                                 </label>
-                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cSM-km-ZGw">
+                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="cSM-km-ZGw">
                                     <rect key="frame" x="247" y="62" width="51" height="31"/>
                                     <color key="onTintColor" red="0.0" green="0.62745098039215685" blue="0.88627450980392153" alpha="1" colorSpace="calibratedRGB"/>
                                 </switch>
@@ -405,7 +405,7 @@
                                     <rect key="frame" x="0.0" y="250" width="240" height="1"/>
                                     <color key="backgroundColor" red="0.93854561240000001" green="0.93854561240000001" blue="0.93854561240000001" alpha="1" colorSpace="calibratedRGB"/>
                                 </view>
-                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TlH-Ky-xiG">
+                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="TlH-Ky-xiG">
                                     <rect key="frame" x="247" y="160" width="51" height="31"/>
                                     <color key="onTintColor" red="0.0" green="0.62745098040000002" blue="0.8862745098" alpha="1" colorSpace="calibratedRGB"/>
                                 </switch>

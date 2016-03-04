@@ -37,6 +37,9 @@
 @property (strong, nonatomic) IBOutlet UISlider *sliderSensitivity;
 
 @property BOOL testFlg;
+//2016 03 05
+@property (strong,nonatomic,nullable) NSString *backupUserName;
+@property (strong,nonatomic,nullable) NSString *backupUserPassword;
 
 //
 @property UIActivityIndicatorView *activityIndicator;
@@ -149,12 +152,25 @@
 
 - (void)saveCameraAddAutomatic:(id)sender
 {
+    
     if (self.testFlg == NO) {
         UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"摄像头添加" message:@"请通过连接测试后再试" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [self.view addSubview:alert];
         [alert show];
         return;
     }
+    //测试链接与自动添加数据check 2016 03 05 start
+    if ([self.backupUserName isEqualToString:self.textFieldUserName.text]&&[self.backupUserPassword isEqualToString:self.textFieldUserPassword.text]) {
+        NSLog(@"check ok. go on!");
+    }else{
+//        self.testFlg = NO;
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"摄像头添加" message:@"相关信息已修改,请重新进行连接测试" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [self.view addSubview:alert];
+        [alert show];
+        return;
+    }
+    //end
+    
     if ([DeviceNetworkInterface isNSStringSpacewith:self.textFieldDeviceName.text]) {
         UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"设备名" message:@"设备名不能为空" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [self.view addSubview:alert];
@@ -206,7 +222,7 @@
         NSLog(@"self.deviceInfo.userid=%@",self.deviceInfo.alarmSetInHome);
         NSLog(@"self.deviceInfo.userid=%@",self.deviceInfo.alarmSetOutHome);
         NSLog(@"self.deviceInfo.userid=%@",self.deviceInfo.alarmSetInSleep);
-        
+        NSLog(@"self.deviceInfo.alarmflg=%@",self.deviceInfo.alarmflg);
 //        DeviceInfo *df = self.deviceInfo;
         //
         [self.navigationItem.rightBarButtonItem setEnabled:NO];
@@ -220,9 +236,16 @@
                 NSLog(@"camera getDeviceSettingWithBrand mseeage===%@",message);
                 //alert提示
                 if ([result isEqualToString:@"success"]) {
-                    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"摄像头添加" message:@"摄像头添加成功" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-                    [self.view addSubview:alert];
-                    [alert show];
+                    if ([message isEqualToString:@""]) {
+                        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"摄像头添加" message:@"摄像头添加成功" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                        [self.view addSubview:alert];
+                        [alert show];
+                    }else{
+                        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"摄像头添加" message:message delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                        [self.view addSubview:alert];
+                        [alert show];
+                    }
+                    
                     [self.navigationController popViewControllerAnimated:YES];
                 }else{
                     UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"摄像头添加失败" message:message delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
@@ -366,11 +389,15 @@
     //
     [self.buttonTest setEnabled:NO];
     //
-    [DeviceNetworkInterface newNetworkTestForDeviceAddWithAddition:addition andUserid:userid andPasswd:passwd withBlock:^(NSString *result, NSString *message, NSString *code, NSString *sensitivity, NSString *wifi, NSString *brand, NSString *model, NSString *version, NSError *error) {
+    [DeviceNetworkInterface newNetworkTestForDeviceAddWithAddition:addition andUserid:userid andPasswd:passwd withBlock:^(NSString *result, NSString *message, NSString *code, NSString *sensitivity, NSString *wifi, NSString *brand, NSString *model, NSString *version, NSString *alarmflg, NSError *error) {
         if (!error) {
             NSLog(@"camera getDeviceSettingWithBrand result===%@",result);
             NSLog(@"camera getDeviceSettingWithBrand mseeage===%@",message);
             if ([result isEqualToString:@"success"]) {
+                //2016 03 05 数据check
+                self.backupUserName = self.textFieldUserName.text;
+                self.backupUserPassword = self.textFieldUserPassword.text;
+                // end
                 //hgc 自动添加时不需要网络测试的code
                  self.deviceInfo.code = code;
                 //hgc end
@@ -404,6 +431,28 @@
                 UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"连接测试" message:@"连接测试成功" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
                 [self.view addSubview:alert];
                 [alert show];
+                
+                //2016 03 03 start hgc
+                if ([alarmflg isEqualToString:@"1"]) {
+                    self.deviceInfo.alarmflg = alarmflg;
+                }else{
+                    self.deviceInfo.alarmflg = @"0";
+                }
+                
+                if ([alarmflg isEqualToString:@"0"]) {
+                    [self.switchHomeMode setOn:FALSE animated:YES];
+                    [self.switchOutSideMode setOn:FALSE animated:YES];
+                    [self.swtichSleepMode setOn:FALSE animated:YES];
+                    //
+                    [self.swtichSleepMode setUserInteractionEnabled:NO];
+                    [self.switchOutSideMode setUserInteractionEnabled:NO];
+                    [self.switchHomeMode setUserInteractionEnabled:NO];
+                    //
+                    [self.segmentHomeMode setEnabled:FALSE forSegmentAtIndex:2];
+                    [self.segmentOutsideMode setEnabled:FALSE forSegmentAtIndex:2];
+                    [self.segmentSleepMode setEnabled:FALSE forSegmentAtIndex:2];
+                }
+                //2016 03 03 end hgc
                 
                 self.testFlg = YES;
             }else{

@@ -9,7 +9,6 @@
 #import "CloudRegisterViewController.h"
 #import "CloudLoginViewController.h"
 #import "CloudLoginSuccessViewController.h"
-#import "RegisterSuccessViewController.h"
 #import "DataManager.h"
 
 @interface CloudRegisterViewController (){
@@ -42,10 +41,65 @@
     
     [self.registerButton setEnabled:NO];
     [self.email becomeFirstResponder];
+    
+    
+    self.backgroundView.hidden = YES;
+    self.sendPasswordView.hidden = YES;
 }
 
 
+- (IBAction)confirmCheck:(id)sender {
+    
+    self.backgroundView.hidden = YES;
+    self.sendPasswordView.hidden = YES;
+    [self returnAction];
+}
 
+
+//导航条后退按钮按下
+- (void)returnAction{
+    NSString* url = [NSString stringWithFormat:@"%@/smarty_storage/phone",[g_sDataManager requestHost]];
+    MKNetworkEngine *engine = [[MKNetworkEngine alloc] initWithHostName:url customHeaderFields:nil];
+    [engine useCache];
+    MKNetworkOperation *op = [engine operationWithPath:@"checkshowstatus.php" params:nil httpMethod:@"POST"];
+    //操作返回数据
+    [op addCompletionHandler:^(MKNetworkOperation *completedOperation) {
+
+        NSString *result = completedOperation.responseJSON[@"result"];
+        NSLog(@"op.responseJSON==%@",completedOperation.responseJSON);
+        if([@"0" isEqualToString:result]){
+            UIAlertView* alert=[[UIAlertView alloc]initWithTitle:@"系统提示" message:@"设备上登录信息取得失败。" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
+            [alert show];
+        }else if([@"1" isEqualToString:result]){
+            NSString *cologinflg = completedOperation.responseJSON[@"cologinflg"];
+            NSString *registerflg = completedOperation.responseJSON[@"registerflg"];
+            if([@"0" isEqualToString:cologinflg]&&[@"1" isEqualToString:registerflg]){
+                NSString *cids = completedOperation.responseJSON[@"cid"];
+                NSString *emails = completedOperation.responseJSON[@"email"];
+                NSString *efg = completedOperation.responseJSON[@"emailflg"];
+                NSString *mac2 = completedOperation.responseJSON[@"mac"];
+                CloudLoginViewController* clg = [[CloudLoginViewController alloc]initWithNibName:@"CloudLoginViewController" bundle:nil];
+                clg.email = emails;
+                clg.cid = cids;
+                clg.emailflg = efg;
+                clg.mac = mac2;
+                [self.navigationController pushViewController:clg animated:YES];
+            }else{
+                UIAlertView* alert = [[UIAlertView alloc]initWithTitle:@"系统提示" message:@"设备上登录信息取得失败。" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil];
+                [alert show];
+            }
+        }else{
+            UIAlertView* alert=[[UIAlertView alloc]initWithTitle:@"系统提示" message:@"设备上登录信息取得失败。" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
+            [alert show];
+        }
+    } errorHandler:^(MKNetworkOperation *completedOperation, NSError *error) {
+
+        UIAlertView* alert=[[UIAlertView alloc]initWithTitle:@"系统提示" message:@"中转服务器连接失败。" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
+        [alert show];
+        NSLog(@"MKNetwork request error : %@", [error localizedDescription]);
+    }];
+    [engine enqueueOperation:op];
+}
 //是否同意开关的切换
 - (IBAction)change:(UIButton*)sender{
     sender.selected = !sender.selected;
@@ -163,11 +217,17 @@
             [self.email becomeFirstResponder];
             [alert show];
         }else if([@"1" isEqualToString:results]){
-            RegisterSuccessViewController* ss = [[RegisterSuccessViewController alloc]initWithNibName:@"RegisterSuccessViewController" bundle:nil];
-            ss.texts = self.email.text;
-            ss.cid = self.cocloudid.text;
-            ss.mac = self.mac;
-            [self.navigationController pushViewController:ss animated:YES];
+            
+            
+            self.backgroundView.hidden = NO;
+            self.sendPasswordView.hidden = NO;
+            self.emailLabel.text = self.email.text;
+            
+//            RegisterSuccessViewController* ss = [[RegisterSuccessViewController alloc]initWithNibName:@"RegisterSuccessViewController" bundle:nil];
+//            ss.texts = self.email.text;
+//            ss.cid = self.cocloudid.text;
+//            ss.mac = self.mac;
+//            [self.navigationController pushViewController:ss animated:YES];
         }else{
             UIAlertView* alert=[[UIAlertView alloc]initWithTitle:@"系统提示" message:@"注册失败，请重新输入。" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
             [alert show];
