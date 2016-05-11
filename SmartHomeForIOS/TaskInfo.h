@@ -30,7 +30,7 @@
 @property (nonatomic, strong) NSString *localFileNamePath;
 @property (nonatomic, strong) NSString *ip;
 @property (nonatomic, strong) NSString *port;
-@property (nonatomic, strong) NSDictionary *filesDic;
+
 @property (nonatomic, strong) NSMutableArray *filesArray;//上传或者下载的文件列表
-@property (nonatomic, assign) int *fileIndex;//记录当前正在上传或下载的文件在文件列表的索引
+@property (nonatomic, assign) int fileIndex;//记录当前正在上传或下载的文件在文件列表的索引
 @end

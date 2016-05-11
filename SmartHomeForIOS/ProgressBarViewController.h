@@ -27,12 +27,22 @@
 @property (strong, nonatomic) IBOutlet UIView *leftTabLineView;
 @property (strong, nonatomic) IBOutlet UIView *rightTabLineView;
 
+/**
+ *  判断是否是由“相册控制器”进入到ProgressBarViewController
+ */
+@property (weak, nonatomic) NSString *sourceType;
+/**
+ *  判断是进入到ProgressBarViewController时是“上传”还是“下载”
+ */
+@property (weak, nonatomic) NSString *progressType;
+
 -(void)addProgressBarRow:(TaskInfo *)taskInfo;
 
 -(void)updateProgress:(NSMutableDictionary*) currentProgressDic;
 -(void)setPauseBtnState:(NSMutableDictionary*) btnStateDic;
 -(void)setTaskStatusInfo:(NSMutableDictionary *)taskStatusDic;
 -(void)setPauseBtnStateCaptionAndTaskStatus:(NSMutableDictionary *)taskStatusDic;
+
 #pragma mark 设置progressView的TaskInfo对象
 - (void)setProgressViewTaskInfo:(TaskInfo *)taskInfo;
 + (instancetype)sharedInstance;

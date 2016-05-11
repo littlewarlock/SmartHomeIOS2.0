@@ -14,6 +14,7 @@
 #import "DataManager.h"
 #import "RequestConstant.h"
 #import "ProgressBarViewController.h"
+#import "AlbumCollectionViewController.h"
 @interface FileDialogViewController ()
 {
     NSMutableDictionary * tableDataDic;
@@ -50,10 +51,23 @@
     [self.fileListTableView setTableFooterView:[[UIView alloc] initWithFrame:CGRectZero]];//设置表尾不显示，就不显示多余的横线
     self.filesDic = [[NSMutableDictionary alloc]init];
     self.dirsDic = [[NSMutableDictionary alloc]init];
-    [self loadFileData];
+//    [self loadFileData];
     
+//    //判断下面的按钮的title显示
+//    self.isServerFile ? [self.downBtn setTitle:@"下载" forState:UIControlStateNormal] : [self.downBtn setTitle:@"上传" forState:UIControlStateNormal];
+    
+    
+
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+}
+
+//进入/返回该控制器时，重新加载数据
+- (void)viewDidAppear:(BOOL)animated
+{
     //判断下面的按钮的title显示
-    self.isServerFile ? [self.downBtn setTitle:@"下载" forState:UIControlStateNormal] : [self.downBtn setTitle:@"上传" forState:UIControlStateNormal];
     switch (self.onType) {
         case 1:
             [self.downBtn setTitle:@"下载" forState:UIControlStateNormal];
@@ -68,12 +82,8 @@
             [self.downBtn setTitle:@"移动" forState:UIControlStateNormal];
             break;
     }
-    
 
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
+    [self loadFileData];
 }
 
 - (void)loadFileData
@@ -99,7 +109,7 @@
         }
         if(!self.isServerFile) //
         {
-            tableDataDic=[FileTools getAllFiles:documentsPath skipDescendents:YES isShowAlbum:NO];
+            tableDataDic=[FileTools getAllFiles:documentsPath skipDescendents:YES isShowAlbum:YES];
         }
         [self.fileListTableView reloadData];
     }else if(self.isServerFile){//2.如果是选择服务器端文件夹，则需要发送请求到服务器端
@@ -144,19 +154,33 @@
     if (self.isSelectFileMode && ![fileinfo.fileType isEqualToString:@"folder"]) {// 如果是当前模式是选择文件
         self.selectedFile = fileinfo.fileName;
     }else{
-        if (!self.isServerFile) { // 如果是文件夹的时候，进入下一级文件夹
+        if (!self.isServerFile) {
+            // 如果是文件夹的时候，进入下一级文件夹
             if ([fileinfo.fileType isEqualToString:@"folder"] )
             {
                 if (tableDataDic != nil) {
                     [tableDataDic removeAllObjects];
                 }
-                self.cpath = [self.cpath stringByAppendingPathComponent:fileinfo.fileName];
-                tableDataDic=[FileTools getAllFiles:self.cpath skipDescendents:YES isShowAlbum:NO];
-                self.selectedFile=@"";
-                [self.fileListTableView reloadData];
+                //如果是相机胶卷，进入相机胶卷控制器
+                if([self.cpath isEqualToString:kDocument_Folder] && (indexPath.row==0)){
+                    
+                    AlbumCollectionViewController *localFileView = [[AlbumCollectionViewController alloc] initWithNibName:@"AlbumCollectionViewController" bundle:nil];
+                    localFileView.isOpenFromAppList = YES;
+                    [self.navigationController pushViewController:localFileView  animated:YES];
+                    
+                    
+                }else {
+                    
+                    self.cpath = [self.cpath stringByAppendingPathComponent:fileinfo.fileName];
+                    tableDataDic=[FileTools getAllFiles:self.cpath skipDescendents:YES isShowAlbum:YES];
+                    self.selectedFile=@"";
+                    [self.fileListTableView reloadData];
                 
+                }
+ 
             }
-        }else{
+            
+        }else {
             if ([fileinfo.fileType isEqualToString:@"folder"] )
             {
                 self.cpath =[self.cpath stringByAppendingPathComponent:fileinfo.fileName];
@@ -204,7 +228,7 @@
             if (tableDataDic != nil) {
                 [tableDataDic removeAllObjects];
             }
-            tableDataDic=[FileTools getAllFiles:self.cpath skipDescendents:YES isShowAlbum:NO];
+            tableDataDic=[FileTools getAllFiles:self.cpath skipDescendents:YES isShowAlbum:YES];
             self.selectedFile=@"";
             [self.fileListTableView reloadData];
         }
@@ -259,7 +283,7 @@
             if (tableDataDic != nil) {
                 [tableDataDic removeAllObjects];
             }
-            tableDataDic=[FileTools getAllFiles:self.cpath skipDescendents:YES isShowAlbum:NO];
+            tableDataDic=[FileTools getAllFiles:self.cpath skipDescendents:YES isShowAlbum:YES];
             self.selectedFile=@"";
             [self.fileListTableView reloadData];
         }
@@ -296,7 +320,7 @@
         self.cpath = documentsPath;
         if(self.cpath)
         {
-            tableDataDic=[FileTools getAllFiles:self.cpath skipDescendents:YES isShowAlbum:NO];
+            tableDataDic=[FileTools getAllFiles:self.cpath skipDescendents:YES isShowAlbum:YES];
             [self.fileListTableView reloadData];
         }
     }else{

@@ -123,6 +123,10 @@ BOOL testFlg;
     
     //2016 01 20
     [self.navigationController setToolbarHidden:YES];
+    
+    //2016 03 11
+    self.labelBrand.text = @"ONVIF";
+    self.labelStyle.text = @"Generic_ONVIF";
 }
 
 -(void)getCameraSetting:(id)sender
@@ -348,7 +352,7 @@ BOOL testFlg;
         NSLog(@"check ok. go on!");
     }else{
         //        self.testFlg = NO;
-        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"摄像头添加" message:@"相关信息已修改,请重新进行连接测试" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"摄像头添加" message:@"您更改了摄像头信息，请重新测试连接" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [self.view addSubview:alert];
         [alert show];
         return;

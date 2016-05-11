@@ -45,6 +45,13 @@ extern NSString * const KxMovieParameterDisableDeinterlacing;   // BOOL
 
 //2016 02 26
 @property Boolean isRTSPMovie;
+//2016 03 10
+@property Boolean isAwakeFromLock;
+//2016 03 14
+@property NSString *deviceID;
+//2016 03 17
+- (void)reStartStream;
+@property Boolean isBeRestartStreamByHanded;
 
 
 @end

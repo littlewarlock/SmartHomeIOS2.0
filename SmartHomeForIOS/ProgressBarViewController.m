@@ -36,6 +36,23 @@
 }
 
 
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    //判断是进入“上传”还是“下载”
+    if ([self.progressType isEqualToString:@"upload"]) {
+        
+        [self switchTabActionWithTag:0];
+        
+    }else {
+    
+        [self switchTabActionWithTag:1];
+
+    }
+}
+
+
+
 + (instancetype)sharedInstance
 {
     static dispatch_once_t onceToken;
@@ -84,7 +101,7 @@
             self.uploadViewY = self.uploadViewY+PROGRESSHEIGHT+MARGINTOP;
         }
     }
-    else if([taskInfo.taskType isEqualToString:@"下载"]) {
+    else if([taskInfo.taskType isEqualToString:@"下载"] || [taskInfo.taskType isEqualToString:@"下载文件夹"]) {
         if (self.downloadProgressBarDic.count==0) {
             self.downloadViewY = MARGINTOP;
         }else{
@@ -96,7 +113,7 @@
     progressView.taskInfo = taskInfo;
     if ([taskInfo.taskType isEqualToString:@"上传"] || [taskInfo.taskType isEqualToString:@"备份"]) {
         progressView.frame = CGRectMake(0, self.uploadViewY, viewWidth, PROGRESSHEIGHT);
-    }else if([taskInfo.taskType isEqualToString:@"下载"]){
+    }else if([taskInfo.taskType isEqualToString:@"下载"] || [taskInfo.taskType isEqualToString:@"下载文件夹"]){
         progressView.frame = CGRectMake(0, self.downloadViewY, viewWidth, PROGRESSHEIGHT);
     }
     
@@ -106,8 +123,8 @@
     progressView.taskNameLabel.text = [taskInfo.taskName lastPathComponent];
     progressView.taskNameLabel.lineBreakMode = NSLineBreakByTruncatingTail;
     //  progressView.taskDetailLabel.text = taskInfo.taskType;
-    if ([taskInfo.taskType isEqualToString:@"上传"] || [taskInfo.taskType isEqualToString:@"备份"]) {
-        progressView.pauseBtn.hidden = YES;
+    if ([taskInfo.taskType isEqualToString:@"上传"] || [taskInfo.taskType isEqualToString:@"备份"] || [taskInfo.taskType isEqualToString:@"下载文件夹"]) {
+//        progressView.pauseBtn.hidden = YES;
     }
     progressView.percentLabel.text =@"0%";
     progressView.taskInfo = taskInfo;
@@ -188,9 +205,16 @@
                 long long  totalBytes = progressView.taskInfo.totalBytes;
                 //progressView.taskInfo.transferedBytes+= [sendBytes longLongValue];
                 float currentProgress =(float)progressView.taskInfo.transferedBytes/(float)totalBytes*100;
-                NSLog(@"currentProgress===========================%f,transferedBytes===%lld",currentProgress,progressView.taskInfo.transferedBytes);
+                
                 [progressView.progressBar setProgress:currentProgress/100 animated:NO];
                 progressView.percentLabel.text =[NSString stringWithFormat:@"%d%%",(int)currentProgress];
+            }
+            else if([[currentProgressDic allKeys]containsObject:@"receivedBytes"]){
+                long long  totalBytes = progressView.taskInfo.totalBytes;
+                float currentProgress =(float)progressView.taskInfo.transferedBytes/(float)totalBytes*100;
+                [progressView.progressBar setProgress:currentProgress/100 animated:NO];
+                progressView.percentLabel.text =[NSString stringWithFormat:@"%d%%",(int)currentProgress];
+            NSLog(@"currentProgress===========================%f,transferedBytes===%lld,totalBytes======%lld",currentProgress,progressView.taskInfo.transferedBytes,totalBytes);
             }
             if ([[currentProgressDic allKeys]containsObject:@"fileName"]){
                 NSString *fileName = [currentProgressDic objectForKey:@"fileName"];
@@ -220,7 +244,19 @@
 - (void)setTaskStatusInfo:(NSMutableDictionary *)taskStatusDic{
     if ([[taskStatusDic allKeys]containsObject:@"taskId"]) {
         NSString * taskId = [taskStatusDic objectForKey:@"taskId"];
-        ProgressView* progressView =[self.downloadProgressBarDic objectForKey:taskId];
+        
+        ProgressView *progressView =[self.downloadProgressBarDic objectForKey:taskId];
+
+        //判断是“上传”还是“下载”
+        if ([self.progressType isEqualToString:@"download"]) {
+            
+            progressView = progressView;
+            
+        }else {
+            
+            progressView =[self.uploadProgressBarDic objectForKey:taskId];
+        }
+        
         if ([[taskStatusDic allKeys]containsObject:@"taskStatus"]) {
             NSString * taskStatus = [taskStatusDic objectForKey:@"taskStatus"];
             [progressView setTaskStatusInfo:taskStatus];
@@ -228,11 +264,24 @@
     }
 }
 
+
+
+
 #pragma mark setPauseBtnStateCaptionAndTaskStatus 设置暂停按钮的状态、标题以及任务的当前状态
 - (void)setPauseBtnStateCaptionAndTaskStatus:(NSMutableDictionary *)taskStatusDic{
     if ([[taskStatusDic allKeys]containsObject:@"taskId"]) {
         NSString * taskId = [taskStatusDic objectForKey:@"taskId"];
         ProgressView* progressView =[self.downloadProgressBarDic objectForKey:taskId];
+        
+        //判断是“上传”还是“下载”
+        if ([self.progressType isEqualToString:@"download"]) {
+            
+            progressView = progressView;
+            
+        }else {
+            
+            progressView =[self.uploadProgressBarDic objectForKey:taskId];
+        }
         NSString * taskStatusInfo;
         NSString * caption;
         BOOL enabled;
@@ -254,9 +303,18 @@
     }
 }
 
+
+
 #pragma mark returnAction 返回父页面的方法
 - (void)returnAction:(UIBarButtonItem *)sender {
-    [self.navigationController popViewControllerAnimated:YES];
+    
+    //如果有“相册控制器”进入，则返回到选择文件的控制器
+    if ([self.sourceType isEqualToString:@"album"]) {
+        
+        [self.navigationController popToViewController:[self.navigationController.viewControllers objectAtIndex:2]  animated:YES]; 
+    }else {
+        [self.navigationController popViewControllerAnimated:YES];
+    }
 }
 
 #pragma mark clearProgressBarAction 清除所有进度条方法
@@ -283,8 +341,19 @@
 
 #pragma mark 切换上传进度条和下载进度条
 - (IBAction)switchTabAction:(id)sender{
+    
+    
+    
     UIButton *btn = (UIButton*)sender;
-    if(btn.tag==0){ //上传文件的进度条显示
+    [self switchTabActionWithTag:btn.tag];
+    
+}
+
+/**
+ *  切换上传进度条和下载进度条
+ */
+- (void)switchTabActionWithTag:(NSInteger)tag{
+    if(tag==0){ //上传文件的进度条显示
         self.uploadScrollView.hidden = NO;
         self.downloadScrollView.hidden = YES;
         self.showTabIndex = 0;
@@ -294,8 +363,8 @@
         self.showTabIndex = 1;
     }
     [self setTabBarStyle];
-}
 
+}
 -(void) setTabBarStyle{
     if(self.showTabIndex==0){
         [self.downloadTabBtn setTitleColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:1.0f]forState:UIControlStateNormal];

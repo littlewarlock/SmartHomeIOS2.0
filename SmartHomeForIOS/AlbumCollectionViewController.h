@@ -11,10 +11,12 @@
 #import "FileTools.h"
 #import "CollectionViewCell.h"
 #import "MWPhotoBrowser.h"
+#import "CustomIOSAlertView.h"
 #import "FileDialogViewController.h"
 
 @interface AlbumCollectionViewController : UIViewController<UICollectionViewDataSource,UICollectionViewDelegate,UIGestureRecognizerDelegate,MWPhotoBrowserDelegate,FileDialogDelegate>
 @property (weak, nonatomic) IBOutlet UICollectionView *albumGrid;
+
 @property BOOL isOpenFromAppList;// 从首页进入为no 从app列表进入为yes
 
 @end

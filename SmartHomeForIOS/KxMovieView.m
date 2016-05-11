@@ -745,27 +745,23 @@ static NSMutableDictionary * gHistory;
     [self.reTryView addSubview:label2];
     
     //重试
-    UIButton *reTryButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 55, 72, 55)];
+    UIButton *reTryButton = [[UIButton alloc] initWithFrame:CGRectMake(59, 65, 72, 55)];
     [reTryButton setTitle:@"重试" forState:UIControlStateNormal];
     [reTryButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     reTryButton.titleLabel.font = [UIFont systemFontOfSize:12];
     [self.reTryView addSubview:reTryButton];
+    [reTryButton sizeToFit];
     [reTryButton addTarget:self action:@selector(reTryDlna) forControlEvents:UIControlEventTouchUpInside];
     
-    //关于DLNA
-    UIButton *aboutButton = [[UIButton alloc] initWithFrame:CGRectMake(72, 55, 72, 55)];
-    [aboutButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    [aboutButton setTitle:@"关于DLNA" forState:UIControlStateNormal];
-    aboutButton.titleLabel.font = [UIFont systemFontOfSize:12];
-    [self.reTryView addSubview:aboutButton];
-    [aboutButton addTarget:self action:@selector(aboutDlna) forControlEvents:UIControlEventTouchUpInside];
     
     //取消
-    UIButton *cancelButton = [[UIButton alloc] initWithFrame:CGRectMake(144, 55, 72, 55)];
+    CGFloat cancelButtonX = CGRectGetMaxY(reTryView.frame);
+    UIButton *cancelButton = [[UIButton alloc] initWithFrame:CGRectMake(cancelButtonX - 59, 65, 72, 55)];
     [cancelButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [cancelButton setTitle:@"取消" forState:UIControlStateNormal];
     cancelButton.titleLabel.font = [UIFont systemFontOfSize:12];
     [self.reTryView addSubview:cancelButton];
+    [cancelButton sizeToFit];
     [cancelButton addTarget:self action:@selector(cancelDlna) forControlEvents:UIControlEventTouchUpInside];
     
     

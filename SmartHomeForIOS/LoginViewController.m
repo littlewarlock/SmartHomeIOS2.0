@@ -677,7 +677,7 @@
             }
             if(self.isPushHomeView)
             {
-                DeckTableViewController* leftController = [[DeckTableViewController alloc] initWithNibName:@"DeckTableViewController" bundle:nil];
+                UIViewController *leftController = [[DeckTableViewController alloc] initWithNibName:@"DeckTableViewController" bundle:nil];
                 leftController = [[UINavigationController alloc] initWithRootViewController:leftController];
                 
                 

@@ -17,6 +17,7 @@
 #import "RequestConstant.h"
 #import "DataManager.h"
 #import "AlbumUploadByBlockTool.h"
+#import "TableViewDelegate.h"
 static NSString* _cellId = @"album";
 @interface AlbumCollectionViewController ()
 
@@ -41,6 +42,10 @@ static NSString* _cellId = @"album";
     UIBarButtonItem *leftBtn;
     UIButton* rightBtn;
     NSOperationQueue *uploadQueue;
+    NSMutableArray *duplicateFileNamesArray;//保存上传时发生文件重名时的数组
+    
+    UITableView *uploadDuplicateFileNamesTableView;
+    TableViewDelegate *uploadDuplicateFileNamesTableViewDelegate;
 }
 
 
@@ -126,12 +131,13 @@ static NSString* _cellId = @"album";
     uploadQueue = [[NSOperationQueue alloc]init];
     [uploadQueue setMaxConcurrentOperationCount:1];
     selectedItemsDic   = [[NSMutableDictionary alloc] init];
+    duplicateFileNamesArray =[[NSMutableArray alloc] init];
 }
 
 - (void)uploadFilesAction{
     opType = @"2";
     if (selectedItemsDic.count==0) {
-        UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"请先选择要上传的文件！" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+        UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"请先选择要上传的图片" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
         [alert show];
         return;
     }
@@ -152,7 +158,7 @@ static NSString* _cellId = @"album";
         [self.navigationController pushViewController:fileDialog animated:YES];
         
     }else{
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:@"请先选择图片" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"请先选择图片" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [alert show];
         return;
         
@@ -161,7 +167,7 @@ static NSString* _cellId = @"album";
 - (void)moveFilesAction{
     opType = @"1";
     if (!self.albumGrid.allowsMultipleSelection){
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:@"请先选择图片" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"请先选择图片" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [alert show];
         return;
     }
@@ -174,9 +180,10 @@ static NSString* _cellId = @"album";
        fileDialog.rootUrl =kDocument_Folder;
        fileDialog.isSelectFileMode =NO;
        fileDialog.fileDialogDelegate = self;
+       fileDialog.onType = 4;
        [self.navigationController pushViewController:fileDialog animated:YES];
    }else{
-       UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:@"请先选择图片" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+       UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"请先选择图片" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
        [alert show];
    }
    
@@ -185,6 +192,8 @@ static NSString* _cellId = @"album";
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    [self.albumGrid reloadData];
+    [selectedItemsDic removeAllObjects];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receivedPhotosNotif:) name:@"PhotosFinishedNotify" object:nil];
 
 }
@@ -483,6 +492,7 @@ static NSString* _cellId = @"album";
                 [paramsDic setValue:selectedItemsDic forKey:@"selectedItemsDic"];
                 [NSThread detachNewThreadSelector:@selector(moveAssets:) toTarget:fileTool withObject:paramsDic];
             }
+            [selectedItemsDic removeAllObjects];
             break;
         }
         case 2:{ //upload
@@ -494,31 +504,57 @@ static NSString* _cellId = @"album";
                 [uploadUrl appendString:[NSMutableString stringWithFormat:@"%@",cpath]];
             }
             
-            for (NSString *filePath in [selectedItemsDic allKeys]){
-                NSString *fileName = [filePath lastPathComponent];
-                BOOL operationIsExist = NO;
-//                for (AlbumUploadByBlockTool *operation in [uploadQueue operations]) {
-//                    if ([operation.fileName isEqualToString:fileName]) {
-//                        operationIsExist = YES;
-//                    }
-//                }
-                if (!operationIsExist) {
-                    ALAsset* cellAsset =[selectedItemsDic valueForKey:filePath];
-                    AlbumUploadByBlockTool *operation = [[AlbumUploadByBlockTool alloc] initWithLocalPath:filePath ip:[g_sDataManager requestHost]withServer:uploadUrl withName:[g_sDataManager userName] withPass:[g_sDataManager password] cellAsset:cellAsset];
-                    TaskInfo *taskInfo = [[TaskInfo alloc] init];
-                    taskInfo.taskId = [NSUUIDTool gen_uuid];
-                    taskInfo.taskName =fileName;
-                    taskInfo.taskType = @"上传";
-                    operation.taskId =  taskInfo.taskId;
-                    operation.fileName = fileName;
-                    operation.taskId = taskInfo.taskId;
-                    operation.taskInfo = taskInfo;
-                    [uploadQueue addOperation:operation];
-                    [[ProgressBarViewController sharedInstance].uploadTaskDic  setObject:taskInfo forKey:taskInfo.taskId];
-                    [[ProgressBarViewController sharedInstance] addProgressBarRow:taskInfo];
+            [duplicateFileNamesArray removeAllObjects];
+            for (NSString *fileNamePath in [selectedItemsDic allKeys]) {
+                NSString *fileName = [fileNamePath lastPathComponent];
+                if ([fileDialog.filesDic objectForKey:fileName]) {
+                    //[duplicateFileNamesArray addObject:fileName ];
+                    [duplicateFileNamesArray addObject:fileNamePath ];
                 }
             }
-            [self.navigationController pushViewController:[ProgressBarViewController sharedInstance] animated:YES];
+            if(duplicateFileNamesArray.count>0){//如果目标路径下包含重名的文件，提示用户是否需要覆盖
+                NSMutableArray* fileNamesArrayLastComponent = [[NSMutableArray alloc] init];
+                for (int i =0; i<duplicateFileNamesArray.count; i++) {
+                    if([[[duplicateFileNamesArray objectAtIndex:i] copy] isKindOfClass:[NSString class]]){
+                        NSString *str = [[duplicateFileNamesArray objectAtIndex:i] copy];
+                        [fileNamesArrayLastComponent addObject: [str lastPathComponent]];
+                    }
+                }
+                [self launchDialog:fileNamesArrayLastComponent];
+                
+            }else {
+            
+                for (NSString *filePath in [selectedItemsDic allKeys]){
+                    NSString *fileName = [filePath lastPathComponent];
+                    BOOL operationIsExist = NO;
+    //                for (AlbumUploadByBlockTool *operation in [uploadQueue operations]) {
+    //                    if ([operation.fileName isEqualToString:fileName]) {
+    //                        operationIsExist = YES;
+    //                    }
+    //                }
+
+                        if (!operationIsExist) {
+                            ALAsset* cellAsset =[selectedItemsDic valueForKey:filePath];
+                            AlbumUploadByBlockTool *operation = [[AlbumUploadByBlockTool alloc] initWithLocalPath:filePath ip:[g_sDataManager requestHost]withServer:uploadUrl withName:[g_sDataManager userName] withPass:[g_sDataManager password] cellAsset:cellAsset];
+                            TaskInfo *taskInfo = [[TaskInfo alloc] init];
+                            taskInfo.taskId = [NSUUIDTool gen_uuid];
+                            taskInfo.taskName =fileName;
+                            taskInfo.taskType = @"上传";
+                            operation.taskId =  taskInfo.taskId;
+                            operation.fileName = fileName;
+                            operation.taskId = taskInfo.taskId;
+                            operation.taskInfo = taskInfo;
+                            [uploadQueue addOperation:operation];
+                            [[ProgressBarViewController sharedInstance].uploadTaskDic  setObject:taskInfo forKey:taskInfo.taskId];
+                            [[ProgressBarViewController sharedInstance] addProgressBarRow:taskInfo];
+                        }
+                }
+                [ProgressBarViewController sharedInstance].sourceType = @"album";
+                [ProgressBarViewController sharedInstance].progressType = @"upload";
+                [self.navigationController pushViewController:[ProgressBarViewController sharedInstance] animated:YES];
+                [selectedItemsDic removeAllObjects];
+                
+            }
             break;
         }
         default:
@@ -577,4 +613,93 @@ static NSString* _cellId = @"album";
         }
     }
 }
+
+//自定义alertView相关的代码
+- (void)launchDialog:(NSArray*)fileNamesArray
+{
+    // Here we need to pass a full frame
+    CustomIOSAlertView *alertView = [[CustomIOSAlertView alloc] init];
+    // Add some custom content to the alert view
+    [alertView setContainerView:[self createAlertView:fileNamesArray]];
+    // Modify the parameters
+    [alertView setButtonTitles:[NSMutableArray arrayWithObjects:@"确定", @"取消", nil]];
+    [alertView setDelegate:self];
+    // You may use a Block, rather than a delegate.
+    [alertView setOnButtonTouchUpInside:^(CustomIOSAlertView *alertView, int buttonIndex) {
+        NSLog(@"Block: Button at position %d is clicked on alertView %d.", buttonIndex, (int)[alertView tag]);
+        [alertView close];
+    }];
+    
+    [alertView setUseMotionEffects:true];
+    // And launch the dialog
+    [alertView show];
+}
+
+- (UIView *)createAlertView:(NSArray*)fileNamesArray
+{
+    UIView *alertView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 290, 270)];
+    
+    UILabel *label= [[UILabel alloc] initWithFrame:CGRectMake(10, 10, 270, 60)];
+    label.lineBreakMode = UILineBreakModeWordWrap;
+    label.numberOfLines = 0;
+    label.text = [NSString stringWithFormat:@"目标路径下存在以下%d个同名的文件，确定覆盖吗",fileNamesArray.count];
+    [alertView addSubview:label];
+    uploadDuplicateFileNamesTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 70, 290, 200)];
+    [uploadDuplicateFileNamesTableView setTableFooterView:[[UIView alloc] initWithFrame:CGRectZero]];
+    uploadDuplicateFileNamesTableViewDelegate = [[TableViewDelegate alloc]init];
+    uploadDuplicateFileNamesTableViewDelegate.fileNamesArray = fileNamesArray;
+    uploadDuplicateFileNamesTableView.delegate = uploadDuplicateFileNamesTableViewDelegate;
+    uploadDuplicateFileNamesTableView.dataSource = uploadDuplicateFileNamesTableViewDelegate;
+    uploadDuplicateFileNamesTableView.allowsMultipleSelectionDuringEditing = YES;
+    [uploadDuplicateFileNamesTableView setEditing:YES animated:YES];
+    [alertView addSubview:uploadDuplicateFileNamesTableView];
+    
+    return alertView;
+}
+
+- (void)customIOS7dialogButtonTouchUpInside: (CustomIOSAlertView *)alertView clickedButtonAtIndex: (NSInteger)buttonIndex
+{
+    if(buttonIndex==0){//按下确定按钮
+        for (int i=0; i<duplicateFileNamesArray.count; i++) {
+            if ([uploadDuplicateFileNamesTableViewDelegate.selectedFileNamesDic objectForKey:[duplicateFileNamesArray[i] lastPathComponent]]==nil) {
+                [selectedItemsDic removeObjectForKey:duplicateFileNamesArray[i]];
+            }
+        }
+        
+        NSString* cpath = fileDialog.cpath;
+        NSMutableString * uploadUrl =[NSMutableString stringWithFormat:@"/%@",[g_sDataManager userName]];
+        
+        if (![cpath isEqualToString:@"/"]) {
+            [uploadUrl appendString:[NSMutableString stringWithFormat:@"%@",cpath]];
+        }
+        
+        //上传代码
+        for (NSString *filePath in [selectedItemsDic allKeys]){
+            NSString *fileName = [filePath lastPathComponent];
+        
+            ALAsset* cellAsset =[selectedItemsDic valueForKey:filePath];
+            AlbumUploadByBlockTool *operation = [[AlbumUploadByBlockTool alloc] initWithLocalPath:filePath ip:[g_sDataManager requestHost]withServer:uploadUrl withName:[g_sDataManager userName] withPass:[g_sDataManager password] cellAsset:cellAsset];
+            TaskInfo *taskInfo = [[TaskInfo alloc] init];
+            taskInfo.taskId = [NSUUIDTool gen_uuid];
+            taskInfo.taskName =fileName;
+            taskInfo.taskType = @"上传";
+            operation.taskId =  taskInfo.taskId;
+            operation.fileName = fileName;
+            operation.taskId = taskInfo.taskId;
+            operation.taskInfo = taskInfo;
+            [uploadQueue addOperation:operation];
+            [[ProgressBarViewController sharedInstance].uploadTaskDic  setObject:taskInfo forKey:taskInfo.taskId];
+            [[ProgressBarViewController sharedInstance] addProgressBarRow:taskInfo];
+        }
+        
+        [ProgressBarViewController sharedInstance].sourceType = @"album";
+        [ProgressBarViewController sharedInstance].progressType = @"upload";
+        [self.navigationController pushViewController:[ProgressBarViewController sharedInstance] animated:YES];
+        [selectedItemsDic removeAllObjects];
+    }
+    
+}
+
+
+
 @end

@@ -11,6 +11,7 @@
 #import "NSOperationDownloadQueue.h"
 #import "FileDownloadOperation.h"
 #import "NSOperationUploadQueue.h"
+#import "FileUploadByBlockOperation.h"
 
 @interface ProgressView :UIView
 @property (weak, nonatomic) IBOutlet UILabel *taskNameLabel;
@@ -29,6 +30,8 @@
 - (void)setTaskStatusInfo:(NSString *)taskStatus;
 //设置按钮的状态、标题 以及任务的状态
 - (void)setPauseBtnStateCaptionAndTaskStatus:(BOOL) btnState caption:(NSString*)caption taskStatus:(NSString*)taskStatus;
+
+
 
 //设置进度条icon的图片
 - (void)setTaskTypeImageViewByTaskType:(NSString *)taskType;

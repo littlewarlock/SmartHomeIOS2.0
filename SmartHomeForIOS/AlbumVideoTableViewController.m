@@ -158,6 +158,7 @@ static NSString* cellIdentifier = @"cellId";
     fileDialog.rootUrl =kDocument_Folder;
     fileDialog.isSelectFileMode =NO;
     fileDialog.fileDialogDelegate = self;
+    fileDialog.onType = 4;
     [self.navigationController pushViewController:fileDialog animated:YES];
 }
 

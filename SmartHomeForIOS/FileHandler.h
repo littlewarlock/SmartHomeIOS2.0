@@ -18,6 +18,7 @@
 @property (copy, nonatomic) NSString *selectedFileName;
 @property (strong, nonatomic) NSMutableDictionary * tableDataDic;
 @property (strong, nonatomic) NSCondition *condition;
+@property (assign, nonatomic) BOOL isServerSessionTimeOut; //是否连接超时(防止复制移动操作重复跳转login)
 - (id) init;
 #pragma mark -
 #pragma mark uploadFile 上传单个文件的处理

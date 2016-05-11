@@ -42,7 +42,7 @@
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     <items>
                         <tabBarItem title="首页" image="home" id="Dmj-wy-7gc"/>
-                        <tabBarItem title="上传" image="download" id="WVX-bT-sYq"/>
+                        <tabBarItem title="上传" image="upload" id="WVX-bT-sYq"/>
                         <tabBarItem title="刷新" image="refurbish" id="YAD-UN-nWM"/>
                         <tabBarItem title="新建目录" image="new-folder" id="jpa-jf-AG1"/>
                     </items>
@@ -87,15 +87,21 @@
             </constraints>
             <point key="canvasLocation" x="326" y="272"/>
         </view>
+        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="N3C-Fi-Lfo">
+            <rect key="frame" x="0.0" y="0.0" width="46" height="30"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <animations/>
+            <state key="normal" title="Button"/>
+        </button>
     </objects>
     <resources>
         <image name="copy" width="17" height="24"/>
         <image name="delete" width="22" height="22"/>
-        <image name="download" width="22" height="24"/>
         <image name="home" width="23" height="24"/>
         <image name="move" width="24" height="24"/>
         <image name="new-folder" width="23" height="24"/>
         <image name="rechristen" width="24" height="22"/>
         <image name="refurbish" width="24" height="24"/>
+        <image name="upload" width="23" height="24"/>
     </resources>
 </document>

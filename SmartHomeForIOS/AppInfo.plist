@@ -90,7 +90,7 @@
 		</dict>
 		<dict>
 			<key>appName</key>
-			<string>路由管理</string>
+			<string>路由器管理</string>
 			<key>appIconName</key>
 			<string>router</string>
 			<key>appKey</key>

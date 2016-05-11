@@ -18,7 +18,10 @@
 
 //#include "avformat.h"
 
-@interface CameraDetailViewController ()
+@interface CameraDetailViewController (){
+
+    CGRect _imageViewModeRecordRect;
+}
 //label
 @property (strong, nonatomic) IBOutlet UILabel *labelControl;
 @property (strong, nonatomic) IBOutlet UILabel *lableSnapshot;
@@ -95,16 +98,13 @@ typedef NS_ENUM(NSUInteger, cameraControlDirection) {
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    _imageViewModeRecordRect = CGRectMake(10, 10, 24, 32);
+    
     //2016 02 24 category
 //    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(checkServerSessionOutOfTime) name:@"letuserlogout" object:nil];
     
     // Do any additional setup after loading the view from its nib.
-    //
-    // 2016 01 14 start
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(rtspPauseToPlay) name:@"CameraDetailGoOnPlay" object:nil];
-    //test
-    // 2015 01 14 end
-    //
+    
 // 2015 1111
     self.isFullScreen = NO;
     self.isControl = NO;
@@ -332,6 +332,10 @@ typedef NS_ENUM(NSUInteger, cameraControlDirection) {
                 
                 self.kxvc = [KxMovieViewController movieViewControllerWithContentPath:stream parameters:parameters];
                 
+                //2016 03 14 start
+                self.kxvc.deviceID = self.deviceID;
+                //2016 03 14 end
+                
                 [self addChildViewController:self.kxvc];
                 self.kxvc.view.frame = CGRectMake(8, 72, self.view.bounds.size.width - 16, 202);
                 [self.movieView setFrame:self.kxvc.view.frame];
@@ -363,7 +367,7 @@ typedef NS_ENUM(NSUInteger, cameraControlDirection) {
                 NSLog(@"self.recording==%@",self.recording);
                 if (![self.recording isEqualToString:@""]){
                     if (self.imageViewModeRecord == NULL) {
-                        self.imageViewModeRecord = [[UIImageView alloc]initWithFrame:CGRectMake(10, 10, 37, 37)];
+                        self.imageViewModeRecord = [[UIImageView alloc]initWithFrame:_imageViewModeRecordRect];
                     }
                     //
                     if (![self.recording isEqualToString:@"0"]) {
@@ -494,7 +498,7 @@ typedef NS_ENUM(NSUInteger, cameraControlDirection) {
         //imageViewRecord
         self.imageViewRecord.frame = CGRectMake(self.kxvc.view.frame.size.width - 50, 10, 40, 20);
         //imageViewModeRecord
-        self.imageViewModeRecord.frame = CGRectMake(10, 10, 37, 37);
+        self.imageViewModeRecord.frame = _imageViewModeRecordRect;
         //1112 GeestureRecognizerPan
         [self.kxvc.view removeGestureRecognizer:self.panGestureRecognizer];
         //topView
@@ -558,7 +562,7 @@ typedef NS_ENUM(NSUInteger, cameraControlDirection) {
         //
         //imageViewModeRecord
         //2016 03 01
-        self.imageViewModeRecord.frame = CGRectMake(10, 10 , 37, 37);
+        self.imageViewModeRecord.frame = _imageViewModeRecordRect;
 //        self.imageViewModeRecord.frame = CGRectMake(10, 10 + 40 , 37, 37);
         //1112 GeestureRecognizerPan
         self.panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlerPanGesture:)];
@@ -762,6 +766,16 @@ typedef NS_ENUM(NSUInteger, cameraControlDirection) {
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
+    //
+    // 2016 01 14 start
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(rtspPauseToPlay) name:@"CameraDetailGoOnPlay" object:nil];
+    NSLog(@"CameraDetailGoOnPlay willAppear");
+    //test
+    // 2015 01 14 end
+    //
+    
+    
     //2015 12 31 hgc start
 //    [self.navigationController setToolbarHidden:YES animated:NO];
 
@@ -837,6 +851,15 @@ typedef NS_ENUM(NSUInteger, cameraControlDirection) {
 
 - (void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
+    
+    //
+    // 2016 01 14 start
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"CameraDetailGoOnPlay" object:nil];
+    NSLog(@"CameraDetailGoOnPlay Disappear");
+    //test
+    // 2015 01 14 end
+    //
+    
     //
     if (self.isFullScreen) {
         [self fullScreen];
@@ -1258,6 +1281,7 @@ typedef NS_ENUM(NSUInteger, cameraControlDirection) {
     NSLog(@"i am back");
 //    if (![self.kxvc playing]) {
 //        [self.kxvc play];
+    self.kxvc.isAwakeFromLock = YES;
     [self.kxvc awakeFromLocking];
 //    }
     
@@ -1269,5 +1293,37 @@ typedef NS_ENUM(NSUInteger, cameraControlDirection) {
     return (self.isViewLoaded && self.view.window);
     
 }
+
+//for test restartmovie 2016 03 16
+- (IBAction)buttonRestartPressed:(id)sender {
+    //
+    [sender setUserInteractionEnabled:NO];
+    self.kxvc.isBeRestartStreamByHanded = YES;
+    [self.kxvc.view removeFromSuperview];
+    [self.kxvc removeFromParentViewController];
+    [self getRealTimeStream];
+    [sender setUserInteractionEnabled:YES];
+}
+- (IBAction)buttonHGCTestPressed:(id)sender {
+//    [DeviceNetworkInterface realTimeCameraStreamWithDeviceId:_deviceID withBlock:^(NSString *result, NSString *message, NSString *stream, NSString *ptz, NSString *monitoring, NSString *recording, NSString *mode, NSString *onlining, NSError *error) {
+//        //
+//        NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
+//        parameters[KxMovieParameterDisableDeinterlacing] = @(YES);
+//        //
+//        [self.kxvc.view removeFromSuperview];
+//        [self.kxvc removeFromParentViewController];
+//
+////        self.kxvc = [KxMovieViewController movieViewControllerWithContentPath:stream parameters:parameters];
+//        [self getRealTimeStream];
+//        
+////        [self addChildViewController:self.kxvc];
+////        [self.view addSubview:self.kxvc.view];
+//    }];
+    
+    [self.kxvc reStartStream];
+}
+
+
+
 
 @end

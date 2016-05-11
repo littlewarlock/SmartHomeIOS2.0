@@ -29,7 +29,6 @@
     [encoder encodeObject: self.localFileNamePath forKey:@"localFileNamePath"];
     [encoder encodeObject: self.password forKey:@"password"];
     [encoder encodeObject: self.serverPath forKey:@"serverPath"];
-    [encoder encodeObject: self.filesDic forKey:@"filesDic"];
     [encoder encodeObject: self.filesArray forKey:@"filesArray"];
 }
 
@@ -55,7 +54,6 @@
         self.localFileNamePath = [decoder decodeObjectForKey:@"localFileNamePath"];
         self.password = [decoder decodeObjectForKey:@"password"];
         self.serverPath = [decoder decodeObjectForKey:@"serverPath"];
-        self.filesDic = [decoder decodeObjectForKey:@"filesDic"];//上传文件夹时，filesDic存储所有的文件列表
         self.filesArray = [decoder decodeObjectForKey:@"filesArray"];
     }
     return self;

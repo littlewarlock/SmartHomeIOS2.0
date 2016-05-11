@@ -85,5 +85,5 @@
 
 +(Boolean)isServerSessionOutOfTime;
 
-
++(NSString*) getRequestUrl;
 @end

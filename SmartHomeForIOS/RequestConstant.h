@@ -52,8 +52,12 @@
 #define DOWNLOAD_FILE_SIZE          32768
 #define DOWNLOAD_STREAM_SIZE        (1024 * 1024)
 
-#define REQUEST_THUNDER_ON_URL [NSString stringWithFormat:@"%@",@"/smarthome/lib/emmc/L1.php"]
-#define REQUEST_THUNDER_OFF_URL [NSString stringWithFormat:@"%@",@"/smarthome/lib/emmc/L9.php"]
-#define REQUEST_THUNDER_KEY_URL [NSString stringWithFormat:@"%@",@"/smarthome/lib/emmc/N2.php"]
-#define REQUEST_THUNDER_ISON_URL [NSString stringWithFormat:@"%@",@"/smarthome/lib/emmc/L10.php"]
+#define REQUEST_THUNDER_ON_URL [NSString stringWithFormat:@"%@",@"/smarthome/lib/thunder/L1.php"]
+#define REQUEST_THUNDER_OFF_URL [NSString stringWithFormat:@"%@",@"/smarthome/lib/thunder/L9.php"]
+#define REQUEST_THUNDER_KEY_URL [NSString stringWithFormat:@"%@",@"/smarthome/lib/thunder/N2.php"]
+#define REQUEST_THUNDER_ISON_URL [NSString stringWithFormat:@"%@",@"/smarthome/lib/thunder/L10.php"]
+
+#define REQUEST_ROUTER_SETROUTER_URL [NSString stringWithFormat:@"%@",@"/smarthome/lib/router/SetRouter.php"]
+#define REQUEST_ROUTER_GEROUTER_URL [NSString stringWithFormat:@"%@",@"/smarthome/lib/router/getSetting.php"]
+#define REQUEST_SESSIONCHECK_URL [NSString stringWithFormat:@"%@%@", REQUEST_URL, @"/uploadSessionCheck.php"]
 #endif /* RequestConstant_h */

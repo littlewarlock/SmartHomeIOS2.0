@@ -231,7 +231,7 @@
             }
             
         }
-
+        
         
     }errorHandler:^(MKNetworkOperation *errorOp, NSError* err) {
         NSLog(@"MKNetwork request error : %@", [err localizedDescription]);
@@ -677,6 +677,10 @@
         sourcePath =[paramsDic objectForKey:@"sourcePath"];
     }
     if(selectedItemsDic.count>0){
+        int copyCount = 0;
+        
+        
+        BOOL isSuccess =YES;
         for (NSString *fileNameTmp in [selectedItemsDic allKeys]){
             NSDictionary * filesDic = [self getAllFilesByPath:targetPath];
             if (filesDic && [[filesDic allKeys] containsObject:fileNameTmp]) { //如果目标目录下已存在该文件，则等待
@@ -688,6 +692,7 @@
                 });
                 [self.condition wait];
                 if ([self.flag isEqualToString:@"0"]) {
+                    copyCount++;//如果提示目标路径下有重名文件后，用户按下取消按钮，表示不覆盖该文件，因此需要将已复制的文件总数加1
                     continue;
                 }
             }
@@ -720,21 +725,27 @@
                 NSLog(@"responseJSON。。。。。=======%@",responseJSON);
                 if([[NSString stringWithFormat:@"%@",[responseJSON objectForKey:@"result"]] isEqualToString: @"1"])//操作成功
                 {
-                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:@"复制成功" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil] ;
-                    [alert show];
-                }else if([[NSString stringWithFormat:@"%@",[responseJSON objectForKey:@"result"]] isEqualToString: @"200"])//session time out
+                    copyCount++;
+                }else if([[NSString stringWithFormat:@"%@",[responseJSON objectForKey:@"result"]] isEqualToString: @"200"] && !self.isServerSessionTimeOut)//session time out
                 {
+                    isSuccess = NO;
                     if ([self.fileHandlerDelegate respondsToSelector:@selector(sessionTimeOutCallback)]) {
                         [self.fileHandlerDelegate sessionTimeOutCallback];//调用委托方法
                     }
                 }else{
-                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:@"复制失败" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil] ;
-                    [alert show];
+                    isSuccess = NO;
+                    
                 }
             }
+            
         }
-
-
+        if(isSuccess && copyCount==selectedItemsDic.count){
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:@"复制成功" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil] ;
+            [alert show];
+        }else{
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:@"复制失败" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil] ;
+            [alert show];
+        }
     }
     [self.condition unlock];
 }
@@ -756,6 +767,9 @@
         sourcePath =[paramsDic objectForKey:@"sourcePath"];
     }
     if(selectedItemsDic.count>0){
+        int moveCount = 0;
+        
+        BOOL isSuccess = YES;
         for (NSString *fileNameTmp in [selectedItemsDic allKeys]){
             NSDictionary * filesDic = [self getAllFilesByPath:targetPath];
             if (filesDic && [[filesDic allKeys] containsObject:fileNameTmp]) { //如果目标目录下已存在该文件，则等待
@@ -767,6 +781,7 @@
                 });
                 [self.condition wait];
                 if ([self.flag isEqualToString:@"0"]) {
+                    moveCount++;//如果提示目标路径下有重名文件后，用户按下取消按钮，表示不覆盖该文件，因此需要将已移动的文件总数加1
                     continue;
                 }
             }
@@ -788,34 +803,42 @@
             NSURL *copyFileUrl = [NSURL URLWithString:[requestUrl stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
             NSMutableURLRequest *request = [[NSMutableURLRequest alloc]initWithURL:copyFileUrl cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:100];
             [request setHTTPMethod:@"POST"];//设置请求方式为POST，默认为GET
-            NSError * copyFileError = nil;
+            NSError * moveFileError = nil;
             NSString* post=[NSString stringWithFormat:@"uname=%@&upasswd=%@&sourcepath=%@&targetpath=%@",[g_sDataManager userName],[g_sDataManager password],postSourcePath,postTargetPath];
             NSData *postData = [post dataUsingEncoding:NSUTF8StringEncoding];//设置参数
             [request setHTTPBody:postData];
-            NSData *received = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:&copyFileError];
-            if (!copyFileError) {
+            NSData *received = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:&moveFileError];
+            if (!moveFileError) {
                 NSError * jsonError=nil;
                 NSDictionary *responseJSON=[NSJSONSerialization JSONObjectWithData:received options:kNilOptions error:&jsonError];
                 NSLog(@"responseJSON。。。。。=======%@",responseJSON);
                 if([[NSString stringWithFormat:@"%@",[responseJSON objectForKey:@"result"]] isEqualToString: @"1"])//移动成功
                 {
-                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:@"移动成功" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil] ;
-                    [alert show];
-                    if ([self.fileHandlerDelegate respondsToSelector:@selector(requestSuccessCallback)]) {
-                        [self.fileHandlerDelegate requestSuccessCallback];//调用委托方法
-                    }
-                }else if([[NSString stringWithFormat:@"%@",[responseJSON objectForKey:@"result"]] isEqualToString: @"200"])//session time out
+                    moveCount++;
+                    //   if ([self.fileHandlerDelegate respondsToSelector:@selector(requestSuccessCallback)]) {
+                    //       [self.fileHandlerDelegate requestSuccessCallback];//调用委托方法
+                    //  }
+                    
+                }else if([[NSString stringWithFormat:@"%@",[responseJSON objectForKey:@"result"]] isEqualToString: @"200"] && !self.isServerSessionTimeOut)//session time out
                 {
+                    isSuccess = NO;
                     if ([self.fileHandlerDelegate respondsToSelector:@selector(sessionTimeOutCallback)]) {
                         [self.fileHandlerDelegate sessionTimeOutCallback];//调用委托方法
                     }
                 }else{
-                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:@"移动失败" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil] ;
-                    [alert show];
+                    isSuccess = NO;
                 }
             }
         }
-
+        
+        
+        if(isSuccess && moveCount==selectedItemsDic.count){
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:@"移动成功" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil] ;
+            [alert show];
+        }else{
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:@"移动失败" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil] ;
+            [alert show];
+        }
     }
     [self.condition unlock];
 }
@@ -860,6 +883,7 @@
                 }
             }];
         }else if([[NSString stringWithFormat:@"%@",[responseJSON objectForKey:@"value"]] isEqualToString: @"200"]){
+            self.isServerSessionTimeOut =YES;
             if ([self.fileHandlerDelegate respondsToSelector:@selector(sessionTimeOutCallback)]) {
                 [self.fileHandlerDelegate sessionTimeOutCallback];//调用委托方法
             }
@@ -880,7 +904,7 @@
     NSURL *fileSizeUrl = [NSURL URLWithString:[fileSizeString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc]initWithURL:fileSizeUrl cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:10];
     [request setHTTPMethod:@"POST"];//设置请求方式为POST，默认为GET
-    NSError * fileSizeError=nil;
+    NSError * fileSizeError = nil;
     long long int fileLength = 0;
     NSString* post=[NSString stringWithFormat:@"uname=%@&upasswd=%@&filePath=%@&fileName=%@",[g_sDataManager userName],[g_sDataManager password],filePath,fileName];
     NSData *postData = [post dataUsingEncoding:NSUTF8StringEncoding];//设置参数
@@ -893,7 +917,6 @@
             NSDictionary *dictionary = (NSDictionary *)jsonObject;
             NSString* result =[NSString stringWithFormat:@"%@",[jsonObject objectForKey:@"result"]];
             if([result isEqualToString: @"1"]){
-                
                 fileLength = [[dictionary objectForKey:@"size"] intValue];
             }
         }

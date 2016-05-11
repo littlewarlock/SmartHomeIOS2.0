@@ -173,8 +173,8 @@ NSString *stringAlarmValue;
     //
     _recordToggleValue = stringRecordValue;
     _alarmToggleValue = stringAlarmValue;
-    _recordValue = [NSString stringWithFormat:@"%f",self.recondByte.text.doubleValue] ;
-    _alarmValue = self.alarmByte.text;
+    _recordValue = [NSString stringWithFormat:@"%.2f",self.recondByte.text.doubleValue];
+    _alarmValue = [NSString stringWithFormat:@"%.2f",self.alarmByte.text.doubleValue];
     NSLog(@"1_recordValue==%@",_recordValue);
     NSLog(@"2_recordToggleValue==%@",_recordToggleValue);
     NSLog(@"3_alarmValue==%@",_alarmValue);

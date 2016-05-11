@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2000ECD61C97E6720019E02F /* DirsHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 2000ECD51C97E6720019E02F /* DirsHandler.m */; };
+		2000ECDA1C97E79F0019E02F /* DirsDownloadOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 2000ECD91C97E79F0019E02F /* DirsDownloadOperation.m */; };
+		2000ECDD1C97E7CA0019E02F /* NSOperationDirsDownloadQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 2000ECDC1C97E7CA0019E02F /* NSOperationDirsDownloadQueue.m */; };
 		2002B11B1BF1E5AF008743B5 /* FunctionManageTools.m in Sources */ = {isa = PBXBuildFile; fileRef = 2002B11A1BF1E5AF008743B5 /* FunctionManageTools.m */; };
 		2002B95E1C4F77830024EADD /* ValidateTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 2002B95D1C4F77830024EADD /* ValidateTool.m */; };
 		2002B9611C4F7ADD0024EADD /* alarmBackground.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 2002B9601C4F7ADD0024EADD /* alarmBackground.jpg */; };
@@ -288,7 +291,6 @@
 		22C352DB1BE222B700C48F86 /* labalan.png in Resources */ = {isa = PBXBuildFile; fileRef = 22C352D21BE222B700C48F86 /* labalan.png */; };
 		22C352DC1BE222B700C48F86 /* left.png in Resources */ = {isa = PBXBuildFile; fileRef = 22C352D31BE222B700C48F86 /* left.png */; };
 		22C352DD1BE222B700C48F86 /* leftan.png in Resources */ = {isa = PBXBuildFile; fileRef = 22C352D41BE222B700C48F86 /* leftan.png */; };
-		22C352DE1BE222B700C48F86 /* play.png in Resources */ = {isa = PBXBuildFile; fileRef = 22C352D51BE222B700C48F86 /* play.png */; };
 		22C352DF1BE222B700C48F86 /* right.png in Resources */ = {isa = PBXBuildFile; fileRef = 22C352D61BE222B700C48F86 /* right.png */; };
 		22C352E01BE222B700C48F86 /* rightan.png in Resources */ = {isa = PBXBuildFile; fileRef = 22C352D71BE222B700C48F86 /* rightan.png */; };
 		22C352E11BE222B700C48F86 /* stop.png in Resources */ = {isa = PBXBuildFile; fileRef = 22C352D81BE222B700C48F86 /* stop.png */; };
@@ -569,6 +571,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2000ECD41C97E6720019E02F /* DirsHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DirsHandler.h; sourceTree = "<group>"; };
+		2000ECD51C97E6720019E02F /* DirsHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DirsHandler.m; sourceTree = "<group>"; };
+		2000ECD81C97E79F0019E02F /* DirsDownloadOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DirsDownloadOperation.h; sourceTree = "<group>"; };
+		2000ECD91C97E79F0019E02F /* DirsDownloadOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DirsDownloadOperation.m; sourceTree = "<group>"; };
+		2000ECDB1C97E7CA0019E02F /* NSOperationDirsDownloadQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSOperationDirsDownloadQueue.h; sourceTree = "<group>"; };
+		2000ECDC1C97E7CA0019E02F /* NSOperationDirsDownloadQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSOperationDirsDownloadQueue.m; sourceTree = "<group>"; };
 		2002B1191BF1E5AF008743B5 /* FunctionManageTools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FunctionManageTools.h; sourceTree = "<group>"; };
 		2002B11A1BF1E5AF008743B5 /* FunctionManageTools.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FunctionManageTools.m; sourceTree = "<group>"; };
 		2002B95C1C4F77830024EADD /* ValidateTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ValidateTool.h; sourceTree = "<group>"; };
@@ -1118,7 +1126,6 @@
 		22C352D21BE222B700C48F86 /* labalan.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = labalan.png; sourceTree = "<group>"; };
 		22C352D31BE222B700C48F86 /* left.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = left.png; sourceTree = "<group>"; };
 		22C352D41BE222B700C48F86 /* leftan.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = leftan.png; sourceTree = "<group>"; };
-		22C352D51BE222B700C48F86 /* play.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = play.png; sourceTree = "<group>"; };
 		22C352D61BE222B700C48F86 /* right.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = right.png; sourceTree = "<group>"; };
 		22C352D71BE222B700C48F86 /* rightan.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = rightan.png; sourceTree = "<group>"; };
 		22C352D81BE222B700C48F86 /* stop.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = stop.png; sourceTree = "<group>"; };
@@ -2117,7 +2124,6 @@
 				22C352D21BE222B700C48F86 /* labalan.png */,
 				22C352D31BE222B700C48F86 /* left.png */,
 				22C352D41BE222B700C48F86 /* leftan.png */,
-				22C352D51BE222B700C48F86 /* play.png */,
 				22C352D61BE222B700C48F86 /* right.png */,
 				22C352D71BE222B700C48F86 /* rightan.png */,
 				22C352D81BE222B700C48F86 /* stop.png */,
@@ -2667,6 +2673,12 @@
 		483F537D1B96CDE90011E153 /* Login */ = {
 			isa = PBXGroup;
 			children = (
+				2000ECDB1C97E7CA0019E02F /* NSOperationDirsDownloadQueue.h */,
+				2000ECDC1C97E7CA0019E02F /* NSOperationDirsDownloadQueue.m */,
+				2000ECD81C97E79F0019E02F /* DirsDownloadOperation.h */,
+				2000ECD91C97E79F0019E02F /* DirsDownloadOperation.m */,
+				2000ECD41C97E6720019E02F /* DirsHandler.h */,
+				2000ECD51C97E6720019E02F /* DirsHandler.m */,
 				20CA72AD1C63463B005D65A6 /* NSOperationBackupQueue.h */,
 				20CA72AE1C63463B005D65A6 /* NSOperationBackupQueue.m */,
 				20CA72AA1C63462F005D65A6 /* BackupOperation.h */,
@@ -3587,7 +3599,6 @@
 				20EC766D1C17C28C0026C91B /* H264ViewController.xib in Resources */,
 				48D8A94F1B9EBA8D00DC0D97 /* avi.png in Resources */,
 				48D8A98D1B9EBA8D00DC0D97 /* jpg.png in Resources */,
-				22C352DE1BE222B700C48F86 /* play.png in Resources */,
 				22775E931BEA170900470D28 /* AlarmMessageDetailViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -3608,6 +3619,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2069DFF11BF1E3CE00EAFAF7 /* DeckTableViewController.m in Sources */,
+				2000ECD61C97E6720019E02F /* DirsHandler.m in Sources */,
 				2088BE081C0ED63200FDBE35 /* CameraSnapshotHistoryCollectionViewCell.m in Sources */,
 				22C3524B1BE21C3200C48F86 /* FileDownloadTools.m in Sources */,
 				48F4A2E31BACF4EA007F13D9 /* UIButton+WebCache.m in Sources */,
@@ -3684,6 +3696,7 @@
 				48F4A31A1BACF9A9007F13D9 /* DACircularProgressView.m in Sources */,
 				226498CD1BDA098B00E080A2 /* JTCalendar.m in Sources */,
 				2289589F1BE8BD2500EE86F7 /* KxMovieDecoder.m in Sources */,
+				2000ECDD1C97E7CA0019E02F /* NSOperationDirsDownloadQueue.m in Sources */,
 				200563D21C20FEA70062B193 /* KxMovieDecoderVer2.m in Sources */,
 				2002B95E1C4F77830024EADD /* ValidateTool.m in Sources */,
 				2095E2211BFD6B68008507E8 /* HSK_CFUtilities.m in Sources */,
@@ -3723,6 +3736,7 @@
 				20D497151C47417000D2C6C9 /* SDBaseProgressView.m in Sources */,
 				20548E171C08012700E19F66 /* MJRefreshBackGifFooter.m in Sources */,
 				22775E7A1BEA170900470D28 /* CameraListSetSingleViewController.m in Sources */,
+				2000ECDA1C97E79F0019E02F /* DirsDownloadOperation.m in Sources */,
 				228958A61BE8BDA200EE86F7 /* DeviceCurrentVariable.m in Sources */,
 				22C352C51BE21D3500C48F86 /* AppViewController.m in Sources */,
 				22C352301BE21BCC00C48F86 /* UIHelper.m in Sources */,

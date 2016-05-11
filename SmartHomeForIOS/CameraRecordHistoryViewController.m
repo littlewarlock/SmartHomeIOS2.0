@@ -505,9 +505,11 @@ static NSString *footerId = @"footerId";
         //添加完成处理程序
         [operation addCompletionHandler:^(MKNetworkOperation *completedOperation) {
             //请求成功,为_imgView添加图片
-            UIImage * testImageMK = [UIImage imageWithData:[completedOperation responseData]];
-            //
-            [cell.image setImage:testImageMK];
+            if (self.isSnapshotPressing) {
+                UIImage * testImageMK = [UIImage imageWithData:[completedOperation responseData]];
+                //
+                [cell.image setImage:testImageMK];
+            }
             //
         } errorHandler:^(MKNetworkOperation *completedOperation, NSError *error) {
             //请求出错

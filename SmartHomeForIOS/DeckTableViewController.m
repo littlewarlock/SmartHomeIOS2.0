@@ -38,7 +38,7 @@
     menuItemArray = [NSMutableArray new];
     [menuItemArray addObject:@"用户管理"];
     [menuItemArray addObject:@"修改密码"];
-    [menuItemArray addObject:@"路由管理器"];
+    [menuItemArray addObject:@"路由器管理"];
     [menuItemArray addObject:@"AP管理"];
     [menuItemArray addObject:@"更多功能"];
     [menuItemArray addObject:@"注销"];
@@ -84,7 +84,7 @@
             break;
         }
         case 2:
-            NSLog(@"路由管理");
+            NSLog(@"路由器管理");
             break;
         case 3:{
             NSLog(@"ap管理");
@@ -107,6 +107,11 @@
             loginView.isPushHomeView =YES;
             loginView.isShowLocalFileBtn =YES;
             self.viewDeckController.toggleLeftView;
+            
+            //注销时，不显示密码，不记住密码
+            [FileTools removeUserPasswordFromPliset];
+            
+            
             [self.viewDeckController presentViewController:loginView animated:YES completion:nil];
             break;
         }

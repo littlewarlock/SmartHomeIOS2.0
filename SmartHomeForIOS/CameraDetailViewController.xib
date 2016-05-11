@@ -178,13 +178,30 @@
                         <action selector="buttonUpPressing:" destination="-1" eventType="touchDown" id="zqm-Vb-NGu"/>
                     </connections>
                 </button>
+                <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5Ar-pL-HD6">
+                    <rect key="frame" x="19" y="288" width="67" height="30"/>
+                    <state key="normal" title="刷新视频"/>
+                    <connections>
+                        <action selector="buttonRestartPressed:" destination="-1" eventType="touchUpInside" id="Kya-um-ugH"/>
+                    </connections>
+                </button>
+                <button hidden="YES" opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="clm-rP-lWs">
+                    <rect key="frame" x="22" y="520" width="41" height="30"/>
+                    <state key="normal" title="HTest"/>
+                    <connections>
+                        <action selector="buttonHGCTestPressed:" destination="-1" eventType="touchUpInside" id="qLH-9f-bi8"/>
+                    </connections>
+                </button>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <constraints>
                 <constraint firstItem="eot-UW-eqM" firstAttribute="top" secondItem="PtC-7K-bo8" secondAttribute="bottom" constant="15" id="0qy-VP-ZRw"/>
+                <constraint firstAttribute="bottom" secondItem="clm-rP-lWs" secondAttribute="bottom" constant="18" id="8Lm-nN-yT1"/>
                 <constraint firstItem="9yA-rc-8of" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="30" id="C06-cS-hcU"/>
                 <constraint firstItem="DVN-6Q-utR" firstAttribute="top" secondItem="PtC-7K-bo8" secondAttribute="bottom" constant="56" id="DIZ-Ug-Rwj"/>
                 <constraint firstItem="rGh-3T-KLB" firstAttribute="top" secondItem="PtC-7K-bo8" secondAttribute="bottom" constant="50" id="E0T-at-UO3"/>
+                <constraint firstItem="clm-rP-lWs" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="19" id="Jdb-jz-iWd"/>
+                <constraint firstItem="5Ar-pL-HD6" firstAttribute="top" secondItem="PtC-7K-bo8" secondAttribute="bottom" constant="8" id="Lg2-tz-nga"/>
                 <constraint firstItem="cC6-Fs-Co1" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="MUN-aM-bKR"/>
                 <constraint firstItem="OeX-fh-c1f" firstAttribute="leading" secondItem="yOv-U5-jDz" secondAttribute="trailing" id="Mjs-B1-FLG"/>
                 <constraint firstItem="BST-Mn-2Yk" firstAttribute="centerX" secondItem="9yA-rc-8of" secondAttribute="centerX" id="OBs-Dj-TEc"/>
@@ -198,6 +215,7 @@
                 <constraint firstItem="PtC-7K-bo8" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="8" id="gC4-vI-oCh"/>
                 <constraint firstItem="y8v-84-6bv" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="9yA-rc-8of" secondAttribute="trailing" constant="24" id="kMI-dr-jDC"/>
                 <constraint firstItem="787-ty-W6K" firstAttribute="leading" secondItem="OeX-fh-c1f" secondAttribute="trailing" id="kh3-uH-FKS"/>
+                <constraint firstItem="5Ar-pL-HD6" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="19" id="kjE-C5-IHe"/>
                 <constraint firstItem="yOv-U5-jDz" firstAttribute="top" secondItem="PtC-7K-bo8" secondAttribute="bottom" constant="115" id="m4P-5i-va7"/>
                 <constraint firstItem="9yA-rc-8of" firstAttribute="top" secondItem="PtC-7K-bo8" secondAttribute="bottom" constant="56" id="mI1-bJ-gJU"/>
                 <constraint firstAttribute="trailing" secondItem="DVN-6Q-utR" secondAttribute="trailing" constant="30" id="nbr-Os-s2P"/>

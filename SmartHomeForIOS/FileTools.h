@@ -30,6 +30,11 @@
 + (NSString*)getUserDataFilePath;
 +(void) saveIPInPlist:(NSString *) textFieldIp;
 +(void) removeUserFromPliset;
+
+/**
+ *  注销时显示用户名称不显示密码
+ */
++ (void)removeUserPasswordFromPliset;
 + (void) saveUserInPlist: (NSString *) userName passWord:(NSString *)passWord isAutoLogin:(BOOL *)isAutoLogin;
 +(long long)getFileSize:(NSString*)fileNamePath;
 
@@ -49,4 +54,6 @@
 +(NSMutableArray*)getDuplicateFileNames:(NSString*)path fileNames:(NSArray*)fileNamesArray;
 //获取path目录下的所有文件，不递归
 + (NSArray *)getFilesByPath:(NSString *)path;
+
++ (void) createDirectoryAtPath:(NSString*)path;
 @end

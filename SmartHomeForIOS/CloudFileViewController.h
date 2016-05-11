@@ -25,8 +25,7 @@
 @property (strong, nonatomic) IBOutlet UITableView *fileListTableView;
 @property (weak, nonatomic) IBOutlet UITabBar *tabbar;
 
-@property (nonatomic, strong) UISwipeGestureRecognizer *leftSwipeGestureRecognizer;
-@property (nonatomic, strong) UISwipeGestureRecognizer *rightSwipeGestureRecognizer;
+
 @property (weak, nonatomic) IBOutlet UITabBarItem *item1;
 @property (weak, nonatomic) IBOutlet UITabBarItem *item2;
 @property (weak, nonatomic) IBOutlet UITabBarItem *item3;
@@ -40,5 +39,6 @@
 @property (weak, nonatomic) IBOutlet UITabBarItem *moreItem4;
 
 @property (weak, nonatomic) FDTableViewCell *curCel;
+
 
 @end

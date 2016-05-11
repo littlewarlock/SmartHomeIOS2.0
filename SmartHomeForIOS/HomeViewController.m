@@ -33,6 +33,7 @@
 #import "CameraPhotoViewController.h"
 #import "CameraSnapshotHistoryViewController.h"
 #import "ThunderViewController.h"
+#import "RouterViewController.h"
 
 #define kMainScreenHeight [[UIScreen mainScreen] bounds].size.height
 #define kMainScreenWidth  [[UIScreen mainScreen] bounds].size.width
@@ -445,9 +446,9 @@ AppDelegate *appDelegate ;
             
         }
         case 10:{
-            //            UIAlertView* alert=[[UIAlertView alloc]initWithTitle:@"" message:@"功能升级中..." delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
-            //            [alert show];
-            //            break;
+            RouterViewController *outer = [[RootLoginViewController alloc] initWithNibName:@"RouterViewController" bundle:nil];
+            [self.navigationController pushViewController:outer animated:YES];
+            break;
         }
         case 11:{
             //进度管理

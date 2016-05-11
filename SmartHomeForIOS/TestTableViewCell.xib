@@ -63,8 +63,8 @@
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="at_home_prohibt" translatesAutoresizingMaskIntoConstraints="NO" id="Usp-7H-JVM">
                         <rect key="frame" x="34" y="37" width="37" height="37"/>
                         <constraints>
-                            <constraint firstAttribute="width" constant="37" id="4SD-54-KKf"/>
-                            <constraint firstAttribute="height" constant="37" id="kQT-Sv-4ny"/>
+                            <constraint firstAttribute="width" constant="24" id="4SD-54-KKf"/>
+                            <constraint firstAttribute="height" constant="32" id="kQT-Sv-4ny"/>
                         </constraints>
                     </imageView>
                 </subviews>
@@ -99,7 +99,7 @@
     </objects>
     <resources>
         <image name="alarm-open" width="29" height="27"/>
-        <image name="at_home_prohibt" width="25" height="25"/>
+        <image name="at_home_prohibt" width="15" height="21"/>
         <image name="list-setting" width="28" height="29"/>
         <image name="rec" width="48" height="23"/>
     </resources>

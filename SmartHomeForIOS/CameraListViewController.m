@@ -49,6 +49,7 @@ static NSString *CellTableIdentifier = @"CellTableIdentifier";
     
     //2016 02 24 category
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(checkServerSessionOutOfTime) name:@"letuserlogout" object:nil];
+    //for test 2016 02 24
 //    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(SMTnetWorkError) name:@"SMTnetworkerror" object:nil];
     
     //2016 01 05 hgc channels

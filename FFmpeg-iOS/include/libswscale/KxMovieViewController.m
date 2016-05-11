@@ -16,6 +16,7 @@
 #import "KxAudioManager.h"
 #import "KxMovieGLView.h"
 #import "KxLogger.h"
+#import "DeviceNetworkInterface.h"
 
 NSString * const KxMovieParameterMinBufferedDuration = @"KxMovieParameterMinBufferedDuration";
 NSString * const KxMovieParameterMaxBufferedDuration = @"KxMovieParameterMaxBufferedDuration";
@@ -66,15 +67,15 @@ enum {
 static NSMutableDictionary * gHistory;
 
 //2016 01 21 hgc
-//#define LOCAL_MIN_BUFFERED_DURATION   0.2
-//#define LOCAL_MAX_BUFFERED_DURATION   0.4
-//#define NETWORK_MIN_BUFFERED_DURATION 0.2
-//#define NETWORK_MAX_BUFFERED_DURATION 0.4
-//2016 01 21 hgc
 #define LOCAL_MIN_BUFFERED_DURATION   1.0
 #define LOCAL_MAX_BUFFERED_DURATION   2.0
-#define NETWORK_MIN_BUFFERED_DURATION 2.0
-#define NETWORK_MAX_BUFFERED_DURATION 4.0
+#define NETWORK_MIN_BUFFERED_DURATION 1.0
+#define NETWORK_MAX_BUFFERED_DURATION 2.0
+//2016 01 21 hgc
+//#define LOCAL_MIN_BUFFERED_DURATION   1.0
+//#define LOCAL_MAX_BUFFERED_DURATION   2.0
+//#define NETWORK_MIN_BUFFERED_DURATION 2.0
+//#define NETWORK_MAX_BUFFERED_DURATION 4.0
 
 @interface KxMovieViewController () {
 
@@ -146,6 +147,10 @@ static NSMutableDictionary * gHistory;
 //hgc add start
 @property (strong,nonatomic)NSString *hgcPath;
 @property (strong,nonatomic)NSDictionary *hgcParam;
+//count
+@property (nonatomic)int countOfRestart;
+@property (nonatomic)int countOfTickForReDecoder;
+@property (nonatomic) Boolean isInReStartStream;
 //hgc add end
 
 @end
@@ -534,6 +539,12 @@ _messageLabel.hidden = YES;
 - (void) viewDidAppear:(BOOL)animated
 {
     // LoggerStream(1, @"viewDidAppear");
+    //hgc 2016 03 10
+    self.countOfRestart = 0;
+    self.countOfTickForReDecoder = 0;
+    //
+    self.isAwakeFromLock = NO;
+    //
     
     
     [super viewDidAppear:animated];
@@ -603,6 +614,10 @@ _messageLabel.hidden = YES;
 
 - (void) applicationWillResignActive: (NSNotification *)notification
 {
+    //2016 03 10
+    self.isAwakeFromLock = YES;
+    //
+    
     [self showHUD:YES];
     [self pause];
     
@@ -710,9 +725,11 @@ _messageLabel.hidden = YES;
 
 - (void) pause
 {
+    NSLog(@"into pause");
     if (!self.playing)
         return;
 
+    NSLog(@"what happened");
     self.playing = NO;
     //_interrupted = YES;
     [self enableAudio:NO];
@@ -720,9 +737,37 @@ _messageLabel.hidden = YES;
     LoggerStream(1, @"pause movie");
     //2016 02 26
     if (self.isRTSPMovie) {
-        [self awakeFromLocking];
+        if (self.isAwakeFromLock) {
+            NSLog(@"do nothing.");
+            if (self.isAwakeFromLock == YES) {
+                NSLog(@"is yes ==%hhu",self.isAwakeFromLock);
+            }
+            self.isAwakeFromLock = NO;
+            NSLog(@"is no==%hhu",self.isAwakeFromLock);
+        }else
+        {
+            [self awakeFromLocking];
+            //
+//            if (_decoder) {
+//                _moviePosition = 0.0f;
+//                [_decoder setPosition:0.0f];
+//                _parameters = self.hgcParam;
+//                NSError *error = nil;
+//                [_decoder closeFile];
+//                [_decoder openFile:self.hgcPath error:&error];
+//                NSLog(@"indecoder");
+//            }
+//            NSLog(@"out of if");
+//            //
+//            if (self.playing){
+//                [self pause];
+//            }
+//            else
+//            {
+//                [self play];
+//            }
+        }
     }
-    
 }
 
 - (void) setMoviePosition: (CGFloat) position
@@ -1253,11 +1298,41 @@ _messageLabel.hidden = YES;
 
 - (void) tick
 {
+    //test 2016 03 16 hgc
+    //
+//    NSLog(@"_buffered== %hhd",_buffered);
+//    NSLog(@"_minBufferedDuration == %d",_bufferedDuration > _minBufferedDuration);
+//    NSLog(@"_bufferedDuration == %f,_minBufferedDuration ==%f",_bufferedDuration , _minBufferedDuration);
+    //
+    if ((_buffered == 1) && (_bufferedDuration > _minBufferedDuration == 0)) {
+        //hgc 2016 03 16 start
+        if (self.countOfTickForReDecoder <= 1000) {
+            self.countOfTickForReDecoder ++;
+            NSLog(@"countOfTickForReDecoder == %d",self.countOfTickForReDecoder);
+        }else{
+            self.countOfTickForReDecoder = 0;
+            //2016 03 18 start
+            if (self.isInReStartStream) {
+                NSLog(@"ReStartStreaming ");
+            }else{
+                [self reStartStream];
+            }
+            //end
+        }
+        NSLog(@"hahahaha stop");
+        //hgc 2016 03 16 end
+    }
+    
+    
     if (_buffered && ((_bufferedDuration > _minBufferedDuration) || _decoder.isEOF)) {
         
         _tickCorrectionTime = 0;
         _buffered = NO;
-        [_activityIndicatorView stopAnimating];        
+        [_activityIndicatorView stopAnimating];
+        //2016 03 18 start
+        self.countOfTickForReDecoder = 0;
+        //end
+        
     }
     
     CGFloat interval = 0;
@@ -1284,9 +1359,12 @@ _messageLabel.hidden = YES;
             }
             
             if (_minBufferedDuration > 0 && !_buffered) {
-                                
+                NSLog(@"_buffered==%hhd",_buffered);
                 _buffered = YES;
+                NSLog(@"_buffered==%hhd",_buffered);
                 [_activityIndicatorView startAnimating];
+                NSLog(@"rolling here , haha");
+                
             }
         }
         
@@ -1749,20 +1827,107 @@ _messageLabel.hidden = YES;
 
 - (void) handleDecoderMovieError: (NSError *) error
 {
-// merged by hgc 2015 12 03 start
-//    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Failure", nil)
-//                                                        message:[error localizedDescription]
-//                                                       delegate:nil
-//                                              cancelButtonTitle:NSLocalizedString(@"Close", nil)
-//                                              otherButtonTitles:nil];
+    //
+    self.countOfRestart ++;
     
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"播放错误", nil)
-                                                        message:NSLocalizedString(@"文件打开失败", nil)
-                                                       delegate:nil
-                                              cancelButtonTitle:NSLocalizedString(@"关闭", nil)
-                                              otherButtonTitles:nil];
-// merged by hgc 2015 12 03 end
-    [alertView show];
+    if (self.countOfRestart >= 3) {
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"播放错误3", nil)
+                                                            message:NSLocalizedString(@"文件打开失败", nil)
+                                                           delegate:nil
+                                                  cancelButtonTitle:NSLocalizedString(@"关闭", nil)
+                                                  otherButtonTitles:nil];
+        [alertView show];
+        return;
+    }
+    //
+    
+    // 2016 03 12 hgc start
+    NSDictionary *requestParam = @{@"session_id":@"session_id",@"opt":@"restartlive"};
+    
+    //请求php
+    NSString* url = [DeviceNetworkInterface getRequestUrl];
+    //2016 03 14 start
+    if ([url rangeOfString:@"123.57.223.91"].location != NSNotFound) {
+        //use cocloudId , please go on;
+    }else{
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"播放错误4", nil)
+                                                            message:NSLocalizedString(@"文件打开失败", nil)
+                                                           delegate:nil
+                                                  cancelButtonTitle:NSLocalizedString(@"关闭", nil)
+                                                  otherButtonTitles:nil];
+        [alertView show];
+        return;
+    }
+    //2016 03 14 end
+    
+    MKNetworkEngine *engine = [[MKNetworkEngine alloc] initWithHostName:url customHeaderFields:nil];
+//    [engine useCache];
+    
+    MKNetworkOperation *op = [engine operationWithPath:@"camera.php" params:requestParam httpMethod:@"POST"];
+    //操作返回数据
+    [op onCompletion:^(MKNetworkOperation *operation) {
+        
+        if([operation isCachedResponse]) {
+            NSLog(@"Data from cache %@", [operation responseString]);
+        }
+        else {
+            NSLog(@"Data from server %@", [operation responseString]);
+        }
+        //2016 02 23 hgc
+//        [self checkServerSessionOutOfTimeWithOpertion:operation];
+        // hgc
+        //get data
+        NSString *result = operation.responseJSON[@"result"];
+        NSString *message = operation.responseJSON[@"message"];
+        //
+        NSLog(@"server restartlive result = %@",result);
+        //
+        if ([[op.responseJSON objectForKey:@"result"] isEqualToString:@"success"]) {
+            
+            //2016 03 18 start
+            if (self.isInReStartStream) {
+                NSLog(@"ReStartStreaming ");
+            }else{
+                [self reStartStream];
+            }
+            //end
+ 
+        }else{
+            //
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"播放错误", nil)
+                                                                message:NSLocalizedString(@"文件打开失败", nil)
+                                                               delegate:nil
+                                                      cancelButtonTitle:NSLocalizedString(@"关闭", nil)
+                                                      otherButtonTitles:nil];
+            [alertView show];
+        }
+        
+        
+    } onError:^(NSError *error) {
+        // 2016 02 24
+//        [DeviceNetworkInterface checkNetWorkError];
+        //
+        NSLog(@"MKNetwork request error : %@", [error localizedDescription]);
+        
+        // merged by hgc 2015 12 03 start
+        //    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Failure", nil)
+        //                                                        message:[error localizedDescription]
+        //                                                       delegate:nil
+        //                                              cancelButtonTitle:NSLocalizedString(@"Close", nil)
+        //                                              otherButtonTitles:nil];
+        
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"播放错误5", nil)
+                                                            message:NSLocalizedString(@"文件打开失败", nil)
+                                                           delegate:nil
+                                                  cancelButtonTitle:NSLocalizedString(@"关闭", nil)
+                                                  otherButtonTitles:nil];
+        // merged by hgc 2015 12 03 end
+        [alertView show];
+    }];
+    
+    [engine enqueueOperation:op];
+    
+    // 2016 03 12 hgc end
 }
 
 - (BOOL) interruptDecoder
@@ -1972,27 +2137,206 @@ _messageLabel.hidden = YES;
 //hgc 2016 01 28
 - (void) awakeFromLocking
 {
+    //2016 03 11
+//    self.isAwakeFromLock = NO;
+    
     //2015 11 06 hgc add
     if (YES) {
         [self pause];
-        _moviePosition = 0.0f;
-        [_decoder setPosition:0.0f];
-        _parameters = self.hgcParam;
-        NSError *error = nil;
-        [_decoder closeFile];
-        [_decoder openFile:self.hgcPath error:&error];
+        self.isAwakeFromLock = NO;
+        NSLog(@"awakeFromLocking");
+        NSLog(@"is==%hhu",self.isAwakeFromLock);
+        if (_decoder) {
+            _moviePosition = 0.0f;
+            _parameters = self.hgcParam;
+            
+            //
+//            [_decoder setPosition:0.0f];
+//            NSError *error = nil;
+//            [_decoder closeFile];
+//            [_decoder openFile:self.hgcPath error:&error];
+//            NSLog(@"indecoder");
+            
+            //
+            [_activityIndicatorView startAnimating];
+            
+            dispatch_async(_dispatchQueue, ^{
+                //
+                [_decoder setPosition:0.0f];
+                NSError *error = nil;
+                [_decoder closeFile];
+//                [_decoder openFile:self.hgcPath error:&error];
+
+                if ([_decoder openFile:self.hgcPath error:&error]) {
+                    NSLog(@"ok first reopen OK");
+                }else{
+                    if ([_decoder openFile:self.hgcPath error:&error]) {
+                        NSLog(@"ok second reopen OK");
+                    }else{
+                        NSLog(@"Game Over awakeFromLocking");
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            if (!self.isBeRestartStreamByHanded) {
+                                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"播放错误1", nil)
+                                                                                    message:NSLocalizedString(@"文件打开失败", nil)
+                                                                                   delegate:nil
+                                                                          cancelButtonTitle:NSLocalizedString(@"关闭", nil)
+                                                                          otherButtonTitles:nil];
+                                [alertView show];
+                            }else{
+                                self.isBeRestartStreamByHanded = !self.isBeRestartStreamByHanded;
+                            }
+                        });
+                    }
+                }
+                NSLog(@"indecoder");
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [_activityIndicatorView stopAnimating];
+                    if (self.playing){
+                        [self pause];
+                    }else
+                    {
+                        [self play];
+                    }
+                });
+            });
+            //2016 03 14 hgc start
+//            __weak KxMovieViewController *weakSelf = self;
+//            
+//            KxMovieDecoder *decoder = [[KxMovieDecoder alloc] init];
+//            
+//            decoder.interruptCallback = ^BOOL(){
+//                
+//                __strong KxMovieViewController *strongSelf = weakSelf;
+//                return strongSelf ? [strongSelf interruptDecoder] : YES;
+//            };
+//            
+//            dispatch_async(dispatch_get_global_queue(0, 0), ^{
+//                
+//                NSError *error = nil;
+//                [decoder openFile:self.hgcPath error:&error];
+//                
+//                __strong KxMovieViewController *strongSelf = weakSelf;
+//                if (strongSelf) {
+//                    
+//                    dispatch_sync(dispatch_get_main_queue(), ^{
+//                        
+//                        [strongSelf setMovieDecoder:decoder withError:error];
+//                    });
+//                }
+//            });
+            //2016 03 14 hgc end
+            
+        }else{
+            NSLog(@"no decoder");
+        }
+        
+        
+        NSLog(@"out of if");
     }
     
-    //2015 11 06 hgc add
-    if (self.playing){
-        [self pause];
-    }
-    else
-    {
-        [self play];
-    }
-    
+//    if (self) {
+//
+//        dispatch_async(dispatch_get_global_queue(0, 0), ^{
+//
+//            NSError *error = nil;
+//            [decoder openFile:path error:&error];
+//            
+//            __strong KxMovieViewController *strongSelf = weakSelf;
+//            if (strongSelf) {
+//                
+//                dispatch_sync(dispatch_get_main_queue(), ^{
+//                    
+//                    [strongSelf setMovieDecoder:decoder withError:error];
+//                });
+//            }
+//        });
+//    }
+
 }
+
+- (void)reStartStream
+{
+    self.isInReStartStream = YES;
+    NSLog(@"reStartStream");
+    [DeviceNetworkInterface realTimeCameraStreamWithDeviceId:self.deviceID withBlock:^(NSString *result, NSString *message, NSString *stream, NSString *ptz, NSString *monitoring, NSString *recording, NSString *mode, NSString *onlining, NSError *error) {
+        //
+        //2016 03 14 start hgc
+        
+        if ([result isEqualToString:@"success"]) {
+            //
+            NSLog(@"testtestmessage is %@",stream);
+            
+            //2016 03 17 start hgc
+            NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
+            parameters[KxMovieParameterDisableDeinterlacing] = @(YES);
+            
+            //
+            _moviePosition = 0;
+            
+            _parameters = parameters;
+            
+            __weak KxMovieViewController *weakSelf = self;
+            
+            KxMovieDecoder *decoder = [[KxMovieDecoder alloc] init];
+            
+            decoder.interruptCallback = ^BOOL(){
+                
+                __strong KxMovieViewController *strongSelf = weakSelf;
+                return strongSelf ? [strongSelf interruptDecoder] : YES;
+            };
+            
+            dispatch_async(dispatch_get_global_queue(0, 0), ^{
+                
+                NSError *error = nil;
+                [decoder openFile:stream error:&error];
+                
+                __strong KxMovieViewController *strongSelf = weakSelf;
+                if (strongSelf) {
+                    
+                    dispatch_sync(dispatch_get_main_queue(), ^{
+                        
+                        NSLog(@"1==%@",_decoder);
+                        
+                        //wtf,搞了这么个梗 ^_^ 2016 03 16 start
+                        [_activityIndicatorView startAnimating];
+                        //2016 03 18 start
+                        //self.countOfRestart = 0;
+                        self.countOfTickForReDecoder = 0;
+                        //end
+                        sleep(5);
+                        //2016 03 16 end
+                        _decoder = nil;
+                        
+                        self.playing = NO;
+                        
+                        
+                        [strongSelf setMovieDecoder:decoder withError:error];
+                        
+                        NSLog(@"2==%@",decoder);
+                        NSLog(@"3==%@",_decoder);
+                        
+                        self.isInReStartStream = NO;
+                        NSLog(@"in dispatch_get_main_queue");
+                    });
+                }
+            });
+            NSLog(@"out dispatch_get_main_queue");
+            //2016 03 17 end hgc
+            
+        }else{
+            NSLog(@"stream error.");
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"播放错误2", nil)
+                                                                message:NSLocalizedString(@"文件打开失败", nil)
+                                                               delegate:nil
+                                                      cancelButtonTitle:NSLocalizedString(@"关闭", nil)
+                                                      otherButtonTitles:nil];
+            [alertView show];
+            self.isInReStartStream = NO;
+            return;
+        }
+    }];
+}
+
 
 @end
 

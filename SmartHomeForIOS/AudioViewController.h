@@ -14,7 +14,7 @@
 
     UIButton* leftButton;
     UIButton* rightButton;
-    
+    UIButton* playButton;
     double      volume;
     UILabel*    nameLabel;
     UILabel*    timeLabel;
@@ -22,7 +22,7 @@
     //UISlider*   volumeSlider;
     MPVolumeView        *volumeView;
     NSTimer*    processTimer;
-    
+    NSTimer*    volumeHideTimer;
     id playbackTimeObserver;
 }
      ;

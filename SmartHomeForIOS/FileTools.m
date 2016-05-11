@@ -418,6 +418,7 @@
     int result = [dictionary writeToFile:ipListPath atomically:YES];
     NSLog(@"result===%d",result);
 }
+
 +(void) removeUserFromPliset{
     
     NSString *documentsDirectory = [FileTools getUserDataFilePath];
@@ -434,6 +435,25 @@
     [oldAdressArr removeAllObjects];
     [dictionary setObject:oldAdressArr forKey:@"UserInfo"];
     [dictionary writeToFile:ipListPath atomically:YES];
+    
+}
+/**
+ *  注销时显示用户名称不显示密码
+ */
++ (void)removeUserPasswordFromPliset{
+    
+    //获取UserInfo.plist文件
+    NSString *documentsDirectory = [FileTools getUserDataFilePath];
+    NSString *ipListPath = [documentsDirectory stringByAppendingPathComponent:@"UserInfo.plist"];
+    NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] initWithContentsOfFile:ipListPath];
+    NSMutableArray *oldAdressArr  =  [dictionary objectForKey:@"UserInfo"];
+
+    [oldAdressArr[0] setObject:@"" forKey:@"userPassword"];
+    [oldAdressArr[0] setObject:@"false" forKey:@"isAutoLogin"];
+
+    [dictionary setObject:oldAdressArr forKey:@"UserInfo"];
+    [dictionary writeToFile:ipListPath atomically:YES];
+
     
 }
 
@@ -477,7 +497,6 @@
     NSDictionary *dic = [fm attributesOfItemAtPath:fileNamePath error:nil];
     long long fileSize = [[dic objectForKey:@"NSFileSize"] longLongValue];
     if (fileSize>=0) {
-        NSLog(@"getFileSize===========%lld",fileSize);
         return fileSize;
     }
     return 0;
@@ -640,6 +659,13 @@
         }
     }
     return duplicateFileNamesArray;
+}
+
+
+#pragma mark createDirectoryAtPath 创建目录
++ (void) createDirectoryAtPath:(NSString*)path{
+    NSFileManager *fm = [NSFileManager defaultManager];
+    [fm createDirectoryAtPath:path withIntermediateDirectories:YES attributes:nil error:nil];
 }
 
 @end

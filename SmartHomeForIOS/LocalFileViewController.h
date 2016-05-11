@@ -41,6 +41,9 @@
 @property KxMovieView *kxvc;
 
 @property (strong, nonatomic) FDTableViewCell *curCel;
-
+/**
+ *  是否处于编辑状态
+ */
+@property (assign, nonatomic) BOOL isMultipleEdit;
 
 @end

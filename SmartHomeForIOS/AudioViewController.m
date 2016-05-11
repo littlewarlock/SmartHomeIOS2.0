@@ -22,7 +22,7 @@
         if (image) {
             [self.picURL addObject:image];
         }else{
-            [self.picURL addObject:[UIImage imageNamed:@"audio_default"]];
+            [self.picURL addObject:[UIImage imageNamed:@"music-icon"]];
         }
     }
     
@@ -61,13 +61,7 @@
             rootImageView.image = [self.picURL objectAtIndex:self.songIndex];
         }
     }else{
-        
-//        NSURL *imgURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"sea" ofType:@"png"]];
-//        
-//        
-//        
-//        NSData * data = [NSData dataWithContentsOfURL:imgURL];
-        rootImageView.image =[UIImage imageNamed:@"sea"];
+        rootImageView.image =[UIImage imageNamed:@"music-icon"];
     }
     
     [self.view addSubview:rootImageView];
@@ -77,26 +71,23 @@
     UIButton* button= [UIButton buttonWithType:UIButtonTypeCustom];
     button.frame=CGRectMake(10, 30, 32, 32);
     [button addTarget:self action:@selector(backAction:) forControlEvents:UIControlEventTouchUpInside];
-    //[button setTitle:@"返回" forState:UIControlStateNormal];
     [button setBackgroundImage:[UIImage imageNamed:@"back"] forState:UIControlStateNormal];
     [button setTitleColor:[UIColor colorWithRed:48.0/255 green:131.0/255 blue:251.0/255 alpha:1] forState:UIControlStateNormal];
     [button setBackgroundColor:[UIColor colorWithRed:255.0/255 green:255.0/255 blue:255.0/255 alpha:0.5]];
     [button.layer setMasksToBounds:YES];
     [button.layer setCornerRadius:10.0];
-//    [button setImage:[UIImage imageNamed:@"back"] forState:UIControlStateNormal];
     [self.view addSubview:button];
     
     button= [UIButton buttonWithType:UIButtonTypeCustom];
     button.frame=CGRectMake(SCREEN_WIDTH/2 -30, SCREEN_HEIGHT*7/8, 60, 50);
-    //[button setTitle:@"播放" forState:UIControlStateNormal];
     [button addTarget:self action:@selector(play:) forControlEvents:UIControlEventTouchUpInside];
     [button setImage:[UIImage imageNamed:@"stop"] forState:UIControlStateNormal];
+    playButton = button;
     [self.view addSubview:button];
     
     
     button= [UIButton buttonWithType:UIButtonTypeCustom];
     button.frame=CGRectMake(SCREEN_WIDTH*2/8 -30, SCREEN_HEIGHT*7/8, 60, 50);
-    //[button setTitle:@"上一首" forState:UIControlStateNormal];
     [button addTarget:self action:@selector(prier) forControlEvents:UIControlEventTouchUpInside];
     [button setImage:[UIImage imageNamed:@"left"] forState:UIControlStateNormal];
     leftButton=button;
@@ -105,7 +96,6 @@
     
     button= [UIButton buttonWithType:UIButtonTypeCustom];
     button.frame=CGRectMake(SCREEN_WIDTH*6/8-30,SCREEN_HEIGHT*7/8, 60, 50);
-    //[button setTitle:@"下一首" forState:UIControlStateNormal];
     [button addTarget:self action:@selector(next) forControlEvents:UIControlEventTouchUpInside];
     [button setImage:[UIImage imageNamed:@"right"] forState:UIControlStateNormal];
     rightButton=button;
@@ -178,7 +168,7 @@
         
 //        NSURL *imgURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"sea" ofType:@"png"]];
 //        NSData * data = [NSData dataWithContentsOfURL:imgURL];
-        rootImageView.image =[UIImage imageNamed:@"sea"];
+        rootImageView.image =[UIImage imageNamed:@"music-icon"];
     }
     
     UILongPressGestureRecognizer* rightLongPress= [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(rightLongPress:)];
@@ -186,7 +176,6 @@
     
     UILongPressGestureRecognizer* leftLongPress= [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(leftLongPress:)];
     [leftButton addGestureRecognizer:leftLongPress];
-    
     [audioPlayer play];
 }
 -(void)processSet:(UISlider*)slider
@@ -372,13 +361,18 @@
 }
 -(void)showVolume
 {
-    volumeView.hidden=NO;
+    volumeView.hidden=!volumeView.hidden;
     //volumeSlider.hidden=NO;
-    [NSTimer scheduledTimerWithTimeInterval:5.0 target:self selector:@selector(hideVolume) userInfo:nil repeats:NO];
+    if(![volumeHideTimer isValid]){
+        volumeHideTimer = [NSTimer scheduledTimerWithTimeInterval:5.0 target:self selector:@selector(hideVolume) userInfo:nil repeats:NO];
+    }else{
+        [volumeHideTimer invalidate];
+    }
 }
 -(void)hideVolume
 {
     volumeView.hidden=YES;
+    [volumeHideTimer invalidate];
     //volumeSlider.hidden=YES;
 }
 //歌曲进度
@@ -394,7 +388,7 @@
     
     if(audioPlayer.playing)
     {
-        [button setImage:[UIImage imageNamed:@"play.png"] forState:UIControlStateNormal];
+        [button setImage:[UIImage imageNamed:@"audio_play.png"] forState:UIControlStateNormal];
         [audioPlayer pause];
     }
     
@@ -408,15 +402,9 @@
 //上一首
 -(void)prier
 {
-    BOOL playFlag;
     if(audioPlayer.playing)
     {
-        playFlag=YES;
         [audioPlayer stop];
-    }
-    else
-    {
-        playFlag=NO;
     }
     _songIndex--;
     if(_songIndex<0){
@@ -440,29 +428,20 @@
             rootImageView.image = [_picURL objectAtIndex:_songIndex];
         }
     }else{
-        
-//        NSURL *imgURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"sea" ofType:@"png"]];
-//        NSData * data = [NSData dataWithContentsOfURL:imgURL];
-        rootImageView.image =[UIImage imageNamed:@"sea"];
+        rootImageView.image =[UIImage imageNamed:@"music-icon"];
     }
     
-    if(playFlag==YES)
-    {
-        [audioPlayer play];
-    }
+    [audioPlayer play];
+    [playButton setImage:[UIImage imageNamed:@"stop"] forState:UIControlStateNormal];
     
 }
 //下一首
 -(void)next
 {
-    BOOL playFlag;
+
     if(audioPlayer.playing)
     {
-        playFlag=YES;
         [audioPlayer stop];
-    }
-    else{
-        playFlag=NO;
     }
     _songIndex++;
     if(_songIndex==_playerURL.count){
@@ -485,16 +464,11 @@
             rootImageView.image = [_picURL objectAtIndex:_songIndex];
         }
     }else{
-        
-//        NSURL *imgURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"sea" ofType:@"png"]];
-//        NSData * data = [NSData dataWithContentsOfURL:imgURL];
-        rootImageView.image =[UIImage imageNamed:@"sea"];
+        rootImageView.image =[UIImage imageNamed:@"music-icon"];
     }
-    if(playFlag==YES)
-    {
-        [audioPlayer play];
-        
-    }
+    [audioPlayer play];
+    [playButton setImage:[UIImage imageNamed:@"stop"] forState:UIControlStateNormal];
+
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation {    return (toInterfaceOrientation == UIInterfaceOrientationPortrait);
